@@ -155,7 +155,8 @@
       },
       "sales": {
         "title": "Sales",
-        "description": "This page will show recorded sales and their details."
+        "description": "This page will show recorded sales and their details.",
+        "newTitle": "New sale"
       },
       "stock": {
         "title": "Stock",
@@ -408,6 +409,133 @@
       "created": "Client created.",
       "updated": "Client updated.",
       "deleted": "Client deleted."
+    }
+  },
+  "sales": {
+    "history": {
+      "fields": {
+        "number": "No.",
+        "date": "Date",
+        "client": "Client",
+        "items": "Items",
+        "amount": "Amount"
+      },
+      "filters": {
+        "label": "Sales history filters",
+        "search": "Search by client name",
+        "searchPlaceholder": "Client name",
+        "client": "Client",
+        "allClients": "All clients",
+        "from": "From",
+        "to": "To",
+        "reset": "Reset"
+      },
+      "summary": {
+        "label": "Number of sales",
+        "count": "{count}",
+        "amount": "Total amount",
+        "selection": "For this selection"
+      },
+      "number": "Sale no. {id}",
+      "itemCount": "{count} item(s)",
+      "sortBy": "Sort by {field}",
+      "openSale": "Open details for sale {id}",
+      "pagination": "Page {current} of {total}",
+      "previousPage": "Previous page",
+      "nextPage": "Next page",
+      "states": {
+        "loadErrorTitle": "Could not load sales history",
+        "loadError": "Check your connection and try again.",
+        "emptyTitle": "No sales recorded",
+        "empty": "Record a sale to see it here.",
+        "noResultsTitle": "No sales match these filters",
+        "noResults": "Try a wider date range or different filters."
+      },
+      "actions": {
+        "retry": "Try again",
+        "cancelSale": "Cancel sale"
+      },
+      "detail": {
+        "title": "Sale no. {id} details",
+        "loading": "Loading sale details…",
+        "loadError": "Could not load this sale’s details.",
+        "retry": "Try again",
+        "fields": {
+          "product": "Product",
+          "quantity": "Quantity",
+          "unitPrice": "Unit price",
+          "subtotal": "Subtotal"
+        }
+      },
+      "cancel": {
+        "title": "Cancel this sale?",
+        "message": "This cancels the sale and returns its product quantities to stock.",
+        "keep": "Keep sale",
+        "pending": "Cancelling…",
+        "error": "Could not cancel the sale."
+      },
+      "toast": {
+        "cancelled": "Sale no. {id} cancelled. Stock has been restored."
+      }
+    },
+    "new": {
+      "title": "New sale",
+      "description": "Choose a client and add the sold products to the cart.",
+      "actions": {
+        "newSale": "New sale",
+        "submit": "Record sale",
+        "sending": "Saving…",
+        "retry": "Try again",
+        "viewProducts": "View products"
+      },
+      "states": {
+        "loadErrorTitle": "Could not load the data",
+        "loadError": "Check your connection and try again.",
+        "noProductsTitle": "No products available",
+        "noProducts": "Add products before recording a sale."
+      },
+      "catalog": {
+        "title": "Catalogue",
+        "description": "Select a product to add it to the cart.",
+        "searchLabel": "Search products",
+        "searchPlaceholder": "Name or reference",
+        "outOfStock": "Out of stock",
+        "stock": "Stock: {stock}",
+        "noResults": "No products match your search."
+      },
+      "cart": {
+        "title": "Cart",
+        "itemCount": "{count} item(s)",
+        "empty": "Select a product from the catalogue.",
+        "unitPrice": "each",
+        "availableStock": "Available stock: {stock}",
+        "remove": "Remove {name} from cart",
+        "decrease": "Decrease quantity of {name}",
+        "increase": "Increase quantity of {name}",
+        "quantity": "Quantity of {name}"
+      },
+      "client": {
+        "label": "Client",
+        "searchPlaceholder": "Search clients",
+        "selectLabel": "Select a client",
+        "selectPlaceholder": "Choose a client",
+        "noResults": "No clients match your search.",
+        "none": "No clients have been added.",
+        "goToClients": "Create a client",
+        "new": "+ New client"
+      },
+      "required": "(required)",
+      "date": {
+        "label": "Sale date"
+      },
+      "total": {
+        "label": "Estimated total",
+        "note": "The final amount is calculated by the server."
+      },
+      "success": "Sale recorded: {amount}.",
+      "errors": {
+        "submit": "Could not record the sale. Check the details and try again."
+      }
     }
   },
   "categories": {

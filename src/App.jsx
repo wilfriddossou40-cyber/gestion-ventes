@@ -7,6 +7,7 @@ import ProduitsPage from "./pages/app/ProduitsPage";
 import CategoriesPage from "./pages/app/CategoriesPage";
 import ClientsPage from "./pages/app/ClientsPage";
 import VentesPage from "./pages/app/VentesPage";
+import NouvelleVentePage from "./pages/app/NouvelleVentePage";
 import StockPage from "./pages/app/StockPage";
 import NotFoundPage from "./pages/app/NotFoundPage";
 import LandingPage from "./pages/LandingPage";
@@ -23,6 +24,7 @@ function App() {
               <Route path="produits" element={<ProduitsPage />} />
               <Route path="categories" element={<CategoriesPage />} />
               <Route path="clients" element={<ClientsPage />} />
+              <Route path="ventes/nouvelle" element={<NouvelleVentePage />} />
               <Route path="ventes" element={<VentesPage />} />
               <Route path="stock" element={<StockPage />} />
               <Route path="*" element={<NotFoundPage />} />

@@ -155,7 +155,8 @@
       },
       "sales": {
         "title": "Ventes",
-        "description": "Vous retrouverez ici les ventes enregistrées et leurs détails."
+        "description": "Vous retrouverez ici les ventes enregistrées et leurs détails.",
+        "newTitle": "Nouvelle vente"
       },
       "stock": {
         "title": "Stock",
@@ -408,6 +409,133 @@
       "created": "Client créé.",
       "updated": "Client modifié.",
       "deleted": "Client supprimé."
+    }
+  },
+  "sales": {
+    "history": {
+      "fields": {
+        "number": "N°",
+        "date": "Date",
+        "client": "Client",
+        "items": "Articles",
+        "amount": "Montant"
+      },
+      "filters": {
+        "label": "Filtres de l’historique des ventes",
+        "search": "Rechercher par nom de client",
+        "searchPlaceholder": "Nom du client",
+        "client": "Client",
+        "allClients": "Tous les clients",
+        "from": "Du",
+        "to": "Au",
+        "reset": "Réinitialiser"
+      },
+      "summary": {
+        "label": "Nombre de ventes",
+        "count": "{count}",
+        "amount": "Montant total",
+        "selection": "Sur la sélection"
+      },
+      "number": "Vente n° {id}",
+      "itemCount": "{count} article(s)",
+      "sortBy": "Trier par {field}",
+      "openSale": "Ouvrir le détail de la vente {id}",
+      "pagination": "Page {current} sur {total}",
+      "previousPage": "Page précédente",
+      "nextPage": "Page suivante",
+      "states": {
+        "loadErrorTitle": "Impossible de charger l’historique",
+        "loadError": "Vérifiez votre connexion puis réessayez.",
+        "emptyTitle": "Aucune vente enregistrée",
+        "empty": "Enregistrez une vente pour la retrouver ici.",
+        "noResultsTitle": "Aucune vente pour ces filtres",
+        "noResults": "Essayez d’élargir la période ou de modifier les filtres."
+      },
+      "actions": {
+        "retry": "Réessayer",
+        "cancelSale": "Annuler la vente"
+      },
+      "detail": {
+        "title": "Détail de la vente n° {id}",
+        "loading": "Chargement du détail…",
+        "loadError": "Impossible de charger le détail de cette vente.",
+        "retry": "Réessayer",
+        "fields": {
+          "product": "Produit",
+          "quantity": "Quantité",
+          "unitPrice": "Prix unitaire",
+          "subtotal": "Sous-total"
+        }
+      },
+      "cancel": {
+        "title": "Annuler cette vente ?",
+        "message": "Cette action annule la vente et remet en stock les quantités de ses produits.",
+        "keep": "Garder la vente",
+        "pending": "Annulation…",
+        "error": "Impossible d’annuler la vente."
+      },
+      "toast": {
+        "cancelled": "Vente n° {id} annulée. Le stock a été remis à jour."
+      }
+    },
+    "new": {
+      "title": "Nouvelle vente",
+      "description": "Choisissez un client et ajoutez les produits vendus au panier.",
+      "actions": {
+        "newSale": "Nouvelle vente",
+        "submit": "Enregistrer la vente",
+        "sending": "Enregistrement…",
+        "retry": "Réessayer",
+        "viewProducts": "Voir les produits"
+      },
+      "states": {
+        "loadErrorTitle": "Impossible de charger les données",
+        "loadError": "Vérifiez votre connexion puis réessayez.",
+        "noProductsTitle": "Aucun produit disponible",
+        "noProducts": "Ajoutez des produits avant d’enregistrer une vente."
+      },
+      "catalog": {
+        "title": "Catalogue",
+        "description": "Sélectionnez un produit pour l’ajouter au panier.",
+        "searchLabel": "Rechercher un produit",
+        "searchPlaceholder": "Nom ou référence",
+        "outOfStock": "En rupture",
+        "stock": "Stock : {stock}",
+        "noResults": "Aucun produit ne correspond à la recherche."
+      },
+      "cart": {
+        "title": "Panier",
+        "itemCount": "{count} produit(s)",
+        "empty": "Sélectionnez un produit dans le catalogue.",
+        "unitPrice": "l’unité",
+        "availableStock": "Stock disponible : {stock}",
+        "remove": "Retirer {name} du panier",
+        "decrease": "Réduire la quantité de {name}",
+        "increase": "Augmenter la quantité de {name}",
+        "quantity": "Quantité de {name}"
+      },
+      "client": {
+        "label": "Client",
+        "searchPlaceholder": "Rechercher un client",
+        "selectLabel": "Sélectionner un client",
+        "selectPlaceholder": "Choisir un client",
+        "noResults": "Aucun client ne correspond à la recherche.",
+        "none": "Aucun client enregistré.",
+        "goToClients": "Créer un client",
+        "new": "+ Nouveau client"
+      },
+      "required": "(obligatoire)",
+      "date": {
+        "label": "Date de la vente"
+      },
+      "total": {
+        "label": "Total estimé",
+        "note": "Le montant final est calculé par le serveur."
+      },
+      "success": "Vente enregistrée : {amount}.",
+      "errors": {
+        "submit": "Impossible d’enregistrer la vente. Vérifiez les informations et réessayez."
+      }
     }
   },
   "categories": {

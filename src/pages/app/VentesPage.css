@@ -1,0 +1,367 @@
+.sales-page {
+  width: 100%;
+  min-width: 0;
+}
+
+.sales-filters {
+  align-items: end;
+}
+
+.sales-filters .products-search {
+  min-width: min(230px, 100%);
+  flex-basis: 210px;
+}
+
+.sales-filter-field {
+  display: grid;
+  min-width: 120px;
+  flex: 1 1 130px;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.sales-filter-field select,
+.sales-filter-field input {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  padding: 0 9px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+}
+
+.sales-reset-button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.sales-selection-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px 34px;
+  margin-bottom: 16px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--surface);
+}
+
+.sales-selection-summary > div {
+  display: grid;
+  gap: 4px;
+}
+
+.sales-selection-summary span,
+.sales-selection-summary small {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.sales-selection-summary strong {
+  color: var(--text);
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+
+.sales-history-table th,
+.sales-history-table td {
+  padding-inline: 16px;
+}
+
+.sales-history-row {
+  cursor: pointer;
+}
+
+.sales-history-row:hover,
+.sales-history-row:focus {
+  outline: none;
+  background: var(--page);
+}
+
+.sales-history-row:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.sales-history-row td:first-child {
+  font-weight: 680;
+}
+
+.sales-history-amount {
+  font-variant-numeric: tabular-nums;
+  font-weight: 680;
+}
+
+.sales-history-mobile {
+  display: none;
+}
+
+.sale-history-card {
+  display: grid;
+  width: 100%;
+  gap: 10px;
+  padding: 15px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.sale-history-card:last-child {
+  border-bottom: 0;
+}
+
+.sale-history-card:hover,
+.sale-history-card:focus-visible {
+  background: var(--page);
+}
+
+.sale-history-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.sale-history-card-heading,
+.sale-history-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.sale-history-card-heading strong {
+  font-size: 13px;
+}
+
+.sale-history-card-heading span,
+.sale-history-card-footer > span {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.sale-history-card-client {
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}
+
+.sale-history-card-footer strong {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.sale-detail-dialog {
+  width: min(100%, 900px);
+}
+
+.sale-detail-content {
+  padding: 18px 22px 22px;
+}
+
+.sale-detail-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0 0 20px;
+}
+
+.sale-detail-meta dt {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.sale-detail-meta dd {
+  margin: 5px 0 0;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 630;
+}
+
+.sale-detail-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.sale-detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.sale-detail-table th,
+.sale-detail-table td {
+  padding: 11px 9px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.sale-detail-table th {
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.sale-detail-table td:first-child {
+  min-width: 120px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.sale-detail-total {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  padding: 17px 4px;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.sale-detail-total strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.sale-detail-actions {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border);
+  padding-top: 15px;
+}
+
+.sale-detail-state {
+  display: grid;
+  min-height: 200px;
+  place-content: center;
+  justify-items: center;
+  gap: 12px;
+  padding: 24px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.sale-detail-state p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.sale-detail-skeleton {
+  display: grid;
+  width: min(320px, 80vw);
+  gap: 10px;
+}
+
+.sale-detail-skeleton span {
+  height: 14px;
+  border-radius: 5px;
+  background: var(--border);
+  animation: products-pulse 1.2s ease-in-out infinite alternate;
+}
+
+.sale-detail-skeleton span:nth-child(2) {
+  width: 74%;
+}
+
+.sale-detail-skeleton span:nth-child(3) {
+  width: 52%;
+}
+
+@media (max-width: 767px) {
+  .sales-page .products-page-header {
+    align-items: stretch;
+  }
+
+  .sales-filters {
+    align-items: stretch;
+  }
+
+  .sales-filter-field {
+    flex-basis: calc(50% - 8px);
+  }
+
+  .sales-reset-button {
+    width: 100%;
+  }
+
+  .sales-history-table {
+    display: none;
+  }
+
+  .sales-page .products-table-wrap {
+    display: none;
+  }
+
+  .sales-history-mobile {
+    display: block;
+  }
+
+  .sale-detail-content {
+    padding: 16px;
+  }
+
+  .sale-detail-table-wrap {
+    margin-inline: -16px;
+    width: calc(100% + 32px);
+    padding-inline: 12px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 900px) {
+  .sales-page .products-page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sales-page .products-header-actions {
+    justify-content: flex-start;
+  }
+
+  .sales-page .products-table-wrap {
+    display: none;
+  }
+
+  .sales-history-mobile {
+    display: block;
+  }
+}
+
+@media (max-width: 420px) {
+  .sales-selection-summary {
+    gap: 14px 22px;
+    padding: 14px;
+  }
+
+  .sales-selection-summary > div {
+    flex: 1 1 100px;
+  }
+
+  .sales-selection-summary strong {
+    font-size: 14px;
+  }
+
+  .sales-filter-field {
+    flex-basis: 100%;
+  }
+
+  .sale-detail-meta {
+    gap: 10px;
+  }
+
+  .sale-detail-total {
+    justify-content: space-between;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sale-detail-skeleton span {
+    animation: none;
+  }
+}

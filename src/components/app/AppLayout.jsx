@@ -34,10 +34,13 @@ function AppLayout() {
   );
   const drawerRef = useRef(null);
   const menuButtonRef = useRef(null);
+  const isNewSalePage = location.pathname === "/app/ventes/nouvelle";
   const currentTitleKey = navigation.find(({ path }) => path === location.pathname)?.key;
-  const currentTitle = currentTitleKey
-    ? t(`app.pages.${currentTitleKey}.title`)
-    : t("app.notFound.title");
+  const currentTitle = isNewSalePage
+    ? t("app.pages.sales.newTitle")
+    : currentTitleKey
+      ? t(`app.pages.${currentTitleKey}.title`)
+      : t("app.notFound.title");
 
   useEffect(() => {
     document.title = `${currentTitle} | ${t("brand.name")}`;
