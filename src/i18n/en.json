@@ -111,10 +111,9 @@
     "button": "Open the app"
   },
   "footer": {
-    "project": "Final-year degree project",
-    "repository": "GitHub repository",
-    "completeLink": "Link to be added",
-    "note": "Sales and inventory management"
+    "description": "Manage products, track stock, and record sales.",
+    "navigation": "Navigation",
+    "copyright": "© {year} {appName}. All rights reserved."
   },
   "dashboard": {
     "title": "Dashboard",

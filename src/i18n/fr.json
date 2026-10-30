@@ -108,13 +108,12 @@
     "eyebrow": "À vous de jouer",
     "title": "Moins de calculs. Plus de visibilité.",
     "description": "Accédez à l’application pour commencer à suivre votre activité.",
-    "button": "Ouvrir l'application"
+    "button": "Accéder à l'application"
   },
   "footer": {
-    "project": "Projet de fin de licence",
-    "repository": "Dépôt GitHub",
-    "completeLink": "Lien à compléter",
-    "note": "Gestion des ventes et des stocks"
+    "description": "Gérez vos produits, suivez les stocks et enregistrez vos ventes.",
+    "navigation": "Navigation",
+    "copyright": "© {year} {appName}. Tous droits réservés."
   },
   "dashboard": {
     "title": "Tableau de bord",
