@@ -5,10 +5,11 @@ import { Toaster, toast } from "react-hot-toast";
 import { deleteCategorie } from "../../api/categories";
 import CategoryFormDialog from "../../components/categories/CategoryFormDialog";
 import ConfirmDialog from "../../components/produits/ConfirmDialog";
-import ProductsSkeleton from "../../components/produits/ProductsSkeleton";
+import DataTable from "../../components/ui/DataTable";
 import { useLanguage } from "../../context/useLanguage";
 import useCategories from "../../hooks/useCategories";
 import useProduits from "../../hooks/useProduits";
+import { normalizeApiError } from "../../lib/apiErrors";
 import "./CategoriesPage.css";
 
 function CategoriesPage() {
@@ -34,6 +35,83 @@ function CategoriesPage() {
       `${category.nom} ${category.description ?? ""}`.toLocaleLowerCase().includes(query),
     );
   }, [categories.data, search]);
+  const columns = useMemo(() => [
+    {
+      id: "nom",
+      accessorFn: (category) => category.nom,
+      header: t("categories.fields.name"),
+      cell: ({ row }) => <span className="category-table-name">{row.original.nom}</span>,
+      enableSorting: false,
+    },
+    {
+      id: "description",
+      accessorFn: (category) => category.description ?? "",
+      header: t("categories.fields.description"),
+      cell: ({ row }) => row.original.description || t("categories.noDescription"),
+      enableSorting: false,
+      meta: { truncate: true },
+    },
+    {
+      id: "productCount",
+      accessorFn: (category) => productCounts.get(String(category.id)) ?? 0,
+      header: t("categories.fields.productCount"),
+      cell: ({ row }) => {
+        const count = productCounts.get(String(row.original.id)) ?? 0;
+        return t(count === 1 ? "categories.productCountOne" : "categories.productCountMany", { count });
+      },
+      enableSorting: false,
+      meta: { numeric: true },
+    },
+    {
+      id: "actions",
+      accessorFn: () => "",
+      header: t("categories.fields.actions"),
+      enableSorting: false,
+      cell: ({ row }) => {
+        const category = row.original;
+        const count = productCounts.get(String(category.id)) ?? 0;
+        return (
+          <CategoryActions
+            category={category}
+            count={count}
+            t={t}
+            onEdit={() => setDialog({ type: "form", category })}
+            onDelete={() => setDialog({ type: "confirm", category })}
+          />
+        );
+      },
+      meta: { actions: true },
+    },
+  ], [productCounts, t]);
+
+  function renderCategoryCard(category) {
+    const count = productCounts.get(String(category.id)) ?? 0;
+    return (
+      <>
+        <div className="ui-data-table-card-heading">
+          <strong className="ui-data-table-card-title" title={category.nom}>{category.nom}</strong>
+          <span className="ui-data-table-card-status category-card-count">
+            {t(count === 1 ? "categories.productCountOne" : "categories.productCountMany", { count })}
+          </span>
+        </div>
+        <dl className="ui-data-table-card-fields">
+          <div>
+            <dt>{t("categories.fields.description")}</dt>
+            <dd title={category.description}>{category.description || t("categories.noDescription")}</dd>
+          </div>
+        </dl>
+        <div className="ui-data-table-card-actions">
+          <CategoryActions
+            category={category}
+            count={count}
+            t={t}
+            onEdit={() => setDialog({ type: "form", category })}
+            onDelete={() => setDialog({ type: "confirm", category })}
+          />
+        </div>
+      </>
+    );
+  }
 
   async function reload() {
     await Promise.all([categories.reload(), produits.reload()]);
@@ -48,7 +126,6 @@ function CategoriesPage() {
     try {
       await deleteCategorie(dialog.category.id);
       toast.success(t("categories.toast.deleted"));
-      setDialog(null);
       await categories.reload();
     } finally {
       setDeleting(false);
@@ -92,13 +169,13 @@ function CategoriesPage() {
           <div className="products-state categories-state">
             <CircleAlert className="products-state-error" size={26} aria-hidden="true" />
             <h2>{t("categories.states.loadErrorTitle")}</h2>
-            <p>{requestError.response?.data?.message ?? t("categories.states.loadError")}</p>
+            <p>{normalizeApiError(requestError, t).message}</p>
             <button className="product-button product-button-primary" type="button" onClick={reload}>
               {t("products.actions.retry")}
             </button>
           </div>
         ) : categories.loading || produits.loading ? (
-          <ProductsSkeleton />
+          <DataTable data={[]} columns={columns} loading />
         ) : categories.data.length === 0 ? (
           <div className="products-state categories-state">
             <h2>{t("categories.states.emptyTitle")}</h2>
@@ -117,74 +194,12 @@ function CategoriesPage() {
             <p>{t("categories.states.noResults")}</p>
           </div>
         ) : (
-          <>
-            <div className="categories-table-wrap">
-              <table className="categories-table">
-                <thead>
-                  <tr>
-                    <th>{t("categories.fields.name")}</th>
-                    <th>{t("categories.fields.description")}</th>
-                    <th>{t("categories.fields.productCount")}</th>
-                    <th>{t("categories.fields.actions")}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredCategories.map((category) => {
-                    const count = productCounts.get(String(category.id)) ?? 0;
-                    return (
-                      <tr key={category.id}>
-                        <td className="category-table-name">{category.nom}</td>
-                        <td className="category-table-description">
-                          {category.description || t("categories.noDescription")}
-                        </td>
-                        <td className="category-product-count">
-                          {t(count === 1 ? "categories.productCountOne" : "categories.productCountMany", { count })}
-                        </td>
-                        <td>
-                          <CategoryActions
-                            category={category}
-                            count={count}
-                            t={t}
-                            onEdit={() => setDialog({ type: "form", category })}
-                            onDelete={() => setDialog({ type: "confirm", category })}
-                          />
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-            <div className="categories-mobile-list">
-              {filteredCategories.map((category) => {
-                const count = productCounts.get(String(category.id)) ?? 0;
-                return (
-                  <article className="category-card" key={category.id}>
-                    <div className="category-card-heading">
-                      <div>
-                        <h2>{category.nom}</h2>
-                        <p className="category-card-description">
-                          {category.description || t("categories.noDescription")}
-                        </p>
-                      </div>
-                      <span className="category-card-count">
-                        {t(count === 1 ? "categories.productCountOne" : "categories.productCountMany", { count })}
-                      </span>
-                    </div>
-                    <div className="category-card-actions">
-                      <CategoryActions
-                        category={category}
-                        count={count}
-                        t={t}
-                        onEdit={() => setDialog({ type: "form", category })}
-                        onDelete={() => setDialog({ type: "confirm", category })}
-                      />
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-          </>
+          <DataTable
+            data={filteredCategories}
+            columns={columns}
+            pageSize={10}
+            renderCard={renderCategoryCard}
+          />
         )}
       </section>
 
@@ -203,7 +218,6 @@ function CategoriesPage() {
           confirmLabel={t("categories.actions.delete")}
           cancelLabel={t("products.actions.cancel")}
           deletingLabel={t("categories.actions.deleting")}
-          errorFallbackKey="categories.errors.delete"
           busy={deleting}
           onClose={() => setDialog(null)}
           onConfirm={removeCategory}

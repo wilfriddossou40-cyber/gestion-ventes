@@ -11,12 +11,9 @@ import { useLanguage } from "../../context/useLanguage";
 import useAlertesStock from "../../hooks/useAlertesStock";
 import useMouvementsStock from "../../hooks/useMouvementsStock";
 import useProduits from "../../hooks/useProduits";
+import { normalizeApiError } from "../../lib/apiErrors";
 import "./ProduitsPage.css";
 import "./StockPage.css";
-
-function getErrorMessage(error, fallback) {
-  return error?.response?.data?.message ?? fallback;
-}
 
 function StockPage() {
   const { language, t } = useLanguage();
@@ -59,7 +56,6 @@ function StockPage() {
     try {
       await createMouvementStock(payload);
       toast.success(t("stock.form.toast.created"));
-      setDialog(null);
       await Promise.all([movements.reload(), alerts.reload(), products.reload()]);
     } finally {
       setMutating(false);
@@ -99,7 +95,7 @@ function StockPage() {
           <div className="products-data-panel stock-panel-error">
             <AlertCircle className="products-state-error" size={24} aria-hidden="true" />
             <h3>{t("stock.alerts.errorTitle")}</h3>
-            <p>{getErrorMessage(alerts.error, t("stock.alerts.error"))}</p>
+            <p>{normalizeApiError(alerts.error, t).message}</p>
             <button className="product-button product-button-primary" type="button" onClick={alerts.reload}>
               {t("stock.actions.retry")}
             </button>
@@ -191,7 +187,7 @@ function StockPage() {
         </div>
         {products.error && (
           <div className="stock-products-error" role="alert">
-            <span>{getErrorMessage(products.error, t("stock.filters.productsError"))}</span>
+            <span>{normalizeApiError(products.error, t).message}</span>
             <button className="product-button product-button-secondary" type="button" onClick={products.reload}>
               {t("stock.actions.retry")}
             </button>
@@ -201,13 +197,15 @@ function StockPage() {
           <div className="products-data-panel stock-panel-error">
             <AlertCircle className="products-state-error" size={24} aria-hidden="true" />
             <h3>{t("stock.journal.errorTitle")}</h3>
-            <p>{getErrorMessage(movements.error, t("stock.journal.error"))}</p>
+            <p>{normalizeApiError(movements.error, t).message}</p>
             <button className="product-button product-button-primary" type="button" onClick={movements.reload}>
               {t("stock.actions.retry")}
             </button>
           </div>
         ) : movements.loading ? (
-          <div className="products-data-panel"><ProductsSkeleton /></div>
+          <div className="products-data-panel stock-journal-panel">
+            <MouvementsTable movements={[]} language={language} loading />
+          </div>
         ) : movements.data.length === 0 ? (
           <div className="products-data-panel">
             <div className="products-state">

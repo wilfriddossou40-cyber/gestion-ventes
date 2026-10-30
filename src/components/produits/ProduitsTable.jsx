@@ -1,165 +1,133 @@
-import { ChevronDown, ChevronLeft, ChevronRight, ChevronsUpDown, ChevronUp, Pencil, Trash2 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { Pencil, Trash2 } from "lucide-react";
+import { useMemo } from "react";
 import { useLanguage } from "../../context/useLanguage";
 import { formatCurrency } from "../../lib/format";
-import ProduitCard from "./ProduitCard";
+import DataTable from "../ui/DataTable";
 import StockBadge from "./StockBadge";
 
-const pageSize = 10;
+function ProductActions({ product, onEdit, onDelete, t }) {
+  return (
+    <div className="product-row-actions">
+      <button
+        className="product-icon-action"
+        type="button"
+        aria-label={t("products.actions.editNamed", { name: product.nom })}
+        onClick={(event) => {
+          event.stopPropagation();
+          onEdit(product);
+        }}
+      >
+        <Pencil size={16} aria-hidden="true" />
+      </button>
+      <button
+        className="product-icon-action product-icon-danger"
+        type="button"
+        aria-label={t("products.actions.deleteNamed", { name: product.nom })}
+        onClick={(event) => {
+          event.stopPropagation();
+          onDelete(product);
+        }}
+      >
+        <Trash2 size={16} aria-hidden="true" />
+      </button>
+    </div>
+  );
+}
 
-function ProduitsTable({ produits, language, onEdit, onDelete }) {
+function ProduitsTable({ produits, language, onEdit, onDelete, loading = false }) {
   const { t } = useLanguage();
-  const [sorting, setSorting] = useState({ column: "nom", direction: "asc" });
-  const [pageIndex, setPageIndex] = useState(0);
-
   const columns = useMemo(() => [
-    { id: "nom", label: t("products.fields.name"), value: (product) => product.nom },
-    { id: "reference", label: t("products.fields.reference"), value: (product) => product.reference },
-    { id: "categorie", label: t("products.fields.category"), value: (product) => product.categorie?.nom ?? "" },
-    { id: "prix", label: t("products.fields.price"), value: (product) => Number(product.prix) },
-    { id: "quantite_stock", label: t("products.fields.stock"), value: (product) => Number(product.quantite_stock) },
-    { id: "statut", label: t("products.fields.status"), value: (product) => Number(product.quantite_stock) },
-    { id: "actions", label: t("products.fields.actions"), sortable: false },
-  ], [t]);
+    {
+      id: "nom",
+      accessorFn: (product) => product.nom,
+      header: t("products.fields.name"),
+      cell: ({ row }) => <span className="product-table-name">{row.original.nom}</span>,
+      sortFn: (left, right, id) => String(left.getValue(id) ?? "").localeCompare(
+        String(right.getValue(id) ?? ""),
+        language,
+        { sensitivity: "base" },
+      ),
+    },
+    {
+      id: "reference",
+      accessorFn: (product) => product.reference ?? "",
+      header: t("products.fields.reference"),
+      cell: ({ row }) => row.original.reference || "—",
+      meta: { truncate: true },
+      sortFn: (left, right, id) => String(left.getValue(id) ?? "").localeCompare(
+        String(right.getValue(id) ?? ""),
+        language,
+        { sensitivity: "base" },
+      ),
+    },
+    {
+      id: "categorie",
+      accessorFn: (product) => product.categorie?.nom ?? "",
+      header: t("products.fields.category"),
+      cell: ({ row }) => row.original.categorie?.nom ?? t("products.categoryMissing"),
+      meta: { truncate: true },
+    },
+    {
+      id: "prix",
+      accessorFn: (product) => Number(product.prix),
+      header: t("products.fields.price"),
+      cell: ({ row }) => formatCurrency(Number(row.original.prix), language),
+      meta: { numeric: true },
+    },
+    {
+      id: "quantite_stock",
+      accessorFn: (product) => Number(product.quantite_stock),
+      header: t("products.fields.stock"),
+      cell: ({ row }) => <span className="product-table-quantity">{row.original.quantite_stock}</span>,
+      meta: { numeric: true },
+    },
+    {
+      id: "statut",
+      accessorFn: (product) => Number(product.quantite_stock),
+      header: t("products.fields.status"),
+      cell: ({ row }) => <StockBadge produit={row.original} showLevel={false} />,
+    },
+    {
+      id: "actions",
+      accessorFn: () => "",
+      header: t("products.fields.actions"),
+      enableSorting: false,
+      cell: ({ row }) => (
+        <ProductActions product={row.original} onEdit={onEdit} onDelete={onDelete} t={t} />
+      ),
+      meta: { actions: true },
+    },
+  ], [language, onDelete, onEdit, t]);
 
-  const sortedProducts = useMemo(() => {
-    const column = columns.find((item) => item.id === sorting.column);
-    if (!column?.value) return produits;
-
-    return [...produits].sort((a, b) => {
-      const left = column.value(a);
-      const right = column.value(b);
-      const comparison = typeof left === "number" && typeof right === "number"
-        ? left - right
-        : String(left).localeCompare(String(right), language, { sensitivity: "base" });
-      return sorting.direction === "asc" ? comparison : -comparison;
-    });
-  }, [columns, language, produits, sorting]);
-
-  const pageCount = Math.max(1, Math.ceil(sortedProducts.length / pageSize));
-  const activePageIndex = Math.min(pageIndex, pageCount - 1);
-  const pageProducts = sortedProducts.slice(activePageIndex * pageSize, (activePageIndex + 1) * pageSize);
-
-  function sortBy(column) {
-    setSorting((current) => ({
-      column,
-      direction: current.column === column && current.direction === "asc" ? "desc" : "asc",
-    }));
-    setPageIndex(0);
+  function renderCard(product) {
+    return (
+      <>
+        <div className="ui-data-table-card-heading">
+          <strong className="ui-data-table-card-title" title={product.nom}>{product.nom}</strong>
+          <span className="ui-data-table-card-status"><StockBadge produit={product} showLevel={false} /></span>
+        </div>
+        <dl className="ui-data-table-card-fields">
+          <div><dt>{t("products.fields.reference")}</dt><dd title={product.reference}>{product.reference || "—"}</dd></div>
+          <div><dt>{t("products.fields.category")}</dt><dd title={product.categorie?.nom}>{product.categorie?.nom ?? t("products.categoryMissing")}</dd></div>
+          <div><dt>{t("products.fields.price")}</dt><dd>{formatCurrency(Number(product.prix), language)}</dd></div>
+          <div><dt>{t("products.fields.stock")}</dt><dd>{product.quantite_stock}</dd></div>
+        </dl>
+        <div className="ui-data-table-card-actions">
+          <ProductActions product={product} onEdit={onEdit} onDelete={onDelete} t={t} />
+        </div>
+      </>
+    );
   }
 
-  const cells = (product) => ({
-    nom: <span className="product-table-name">{product.nom}</span>,
-    reference: product.reference,
-    categorie: product.categorie?.nom ?? t("products.categoryMissing"),
-    prix: formatCurrency(Number(product.prix), language),
-    quantite_stock: <span className="product-table-quantity">{product.quantite_stock}</span>,
-    statut: <StockBadge produit={product} showLevel={false} />,
-    actions: (
-      <div className="product-row-actions">
-        <button
-          className="product-icon-action"
-          type="button"
-          aria-label={t("products.actions.editNamed", { name: product.nom })}
-          onClick={() => onEdit(product)}
-        >
-          <Pencil size={16} aria-hidden="true" />
-        </button>
-        <button
-          className="product-icon-action product-icon-danger"
-          type="button"
-          aria-label={t("products.actions.deleteNamed", { name: product.nom })}
-          onClick={() => onDelete(product)}
-        >
-          <Trash2 size={16} aria-hidden="true" />
-        </button>
-      </div>
-    ),
-  });
-
   return (
-    <>
-      <div className="products-table-wrap">
-        <table className="products-table">
-          <thead>
-            <tr>
-              {columns.map((column) => {
-                const sorted = sorting.column === column.id;
-                return (
-                  <th key={column.id} scope="col">
-                    {column.sortable === false ? column.label : (
-                      <button
-                        className="product-sort-button"
-                        type="button"
-                        onClick={() => sortBy(column.id)}
-                        aria-label={t("products.sortBy", { field: column.label })}
-                        aria-sort={sorted ? (sorting.direction === "asc" ? "ascending" : "descending") : "none"}
-                      >
-                        {column.label}
-                        {sorted
-                          ? sorting.direction === "asc"
-                            ? <ChevronUp size={14} aria-hidden="true" />
-                            : <ChevronDown size={14} aria-hidden="true" />
-                          : <ChevronsUpDown size={14} aria-hidden="true" />}
-                      </button>
-                    )}
-                  </th>
-                );
-              })}
-            </tr>
-          </thead>
-          <tbody>
-            {pageProducts.map((product) => {
-              const productCells = cells(product);
-              return (
-                <tr key={product.id}>
-                  {columns.map((column) => <td key={column.id}>{productCells[column.id]}</td>)}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-      <div className="products-mobile-list">
-        {pageProducts.map((product) => (
-          <ProduitCard
-            key={product.id}
-            produit={product}
-            language={language}
-            onEdit={onEdit}
-            onDelete={onDelete}
-          />
-        ))}
-      </div>
-      <div className="products-pagination">
-        <span>
-          {t("products.pagination", {
-            current: String(activePageIndex + 1),
-            total: String(pageCount),
-          })}
-        </span>
-        <div>
-          <button
-            className="product-icon-action"
-            type="button"
-            aria-label={t("products.previousPage")}
-            disabled={activePageIndex === 0}
-            onClick={() => setPageIndex((current) => Math.max(0, current - 1))}
-          >
-            <ChevronLeft size={18} aria-hidden="true" />
-          </button>
-          <button
-            className="product-icon-action"
-            type="button"
-            aria-label={t("products.nextPage")}
-            disabled={activePageIndex >= pageCount - 1}
-            onClick={() => setPageIndex((current) => Math.min(pageCount - 1, current + 1))}
-          >
-            <ChevronRight size={18} aria-hidden="true" />
-          </button>
-        </div>
-      </div>
-    </>
+    <DataTable
+      data={produits}
+      columns={columns}
+      pageSize={10}
+      initialSorting={[{ id: "nom", desc: false }]}
+      renderCard={renderCard}
+      loading={loading}
+    />
   );
 }
 

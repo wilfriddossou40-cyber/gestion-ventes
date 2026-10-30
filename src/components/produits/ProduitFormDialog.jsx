@@ -3,19 +3,10 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useLanguage } from "../../context/useLanguage";
-import Dialog from "./Dialog";
+import Dialog from "../ui/Dialog";
+import Field from "../ui/Field";
+import { normalizeApiError } from "../../lib/apiErrors";
 import CategoryFormDialog from "../categories/CategoryFormDialog";
-import { Plus } from "lucide-react";
-
-function ProductFormField({ label, error, id, children }) {
-  return (
-    <div className="products-form-field">
-      <label htmlFor={id}>{label}</label>
-      {children}
-      {error && <span className="products-field-error" role="alert">{error}</span>}
-    </div>
-  );
-}
 
 function ProduitFormDialog({ produit, categories, busy, onClose, onSave, onCategorySaved }) {
   const { t } = useLanguage();
@@ -54,7 +45,7 @@ function ProduitFormDialog({ produit, categories, busy, onClose, onSave, onCateg
     }),
   });
 
-  async function submit(values) {
+  async function submit(values, closeDialog) {
     const parsed = schema.safeParse(values);
     if (!parsed.success) {
       for (const issue of parsed.error.issues) {
@@ -77,20 +68,16 @@ function ProduitFormDialog({ produit, categories, busy, onClose, onSave, onCateg
 
     try {
       await onSave(payload);
+      closeDialog();
     } catch (requestError) {
-      const response = requestError.response?.data;
-      if (requestError.response?.status === 422 && response?.errors) {
-        for (const [field, messages] of Object.entries(response.errors)) {
-          if (field in values && Array.isArray(messages)) {
-            setError(field, { type: "server", message: messages.join(" ") });
-          }
-        }
-        const hasFieldErrors = Object.keys(response.errors).some((field) => field in values);
-        if (!hasFieldErrors) {
-          setError("root.server", { type: "server", message: response.message ?? t("products.errors.save") });
-        }
-      } else {
-        setError("root.server", { type: "server", message: response?.message ?? t("products.errors.save") });
+      const normalized = normalizeApiError(requestError, t);
+      const knownFields = Object.keys(values);
+      const fieldEntries = Object.entries(normalized.fieldErrors);
+      for (const [field, message] of fieldEntries) {
+        if (knownFields.includes(field)) setError(field, { type: "server", message });
+      }
+      if (!fieldEntries.some(([field]) => knownFields.includes(field))) {
+        setError("root.server", { type: "server", message: normalized.message });
       }
     }
   }
@@ -100,17 +87,30 @@ function ProduitFormDialog({ produit, categories, busy, onClose, onSave, onCateg
       title={t(editing ? "products.form.editTitle" : "products.form.createTitle")}
       onClose={onClose}
       className="products-form-dialog"
+      error={errors.root?.server?.message}
+      busy={busy || isSubmitting}
+      actions={(closeDialog) => (
+        <>
+          <button className="product-button product-button-secondary" type="button" onClick={closeDialog} disabled={busy || isSubmitting}>
+            {t("products.actions.cancel")}
+          </button>
+          <button className="product-button product-button-primary" type="submit" form="product-form" disabled={busy || isSubmitting}>
+            {busy || isSubmitting ? t("products.actions.saving") : t(editing ? "products.actions.save" : "products.actions.create")}
+          </button>
+        </>
+      )}
     >
-      <form className="products-form" onSubmit={handleSubmit(submit)} noValidate>
-        <ProductFormField id="product-name" label={t("products.fields.name")} error={errors.nom?.message}>
-          <input id="product-name" autoComplete="off" {...register("nom")} />
-        </ProductFormField>
-        <ProductFormField id="product-reference" label={t("products.fields.reference")} error={errors.reference?.message}>
-          <input id="product-reference" autoComplete="off" {...register("reference")} />
-        </ProductFormField>
-        <ProductFormField id="product-category" label={t("products.fields.category")} error={errors.categorie_id?.message}>
-          <select
+      {(closeDialog) => (
+      <>
+      <form id="product-form" className="products-form" onSubmit={handleSubmit((values) => submit(values, closeDialog))} noValidate>
+        <Field id="product-name" label={t("products.fields.name")} required autoComplete="off" error={errors.nom?.message} {...register("nom")} />
+        <Field id="product-reference" label={t("products.fields.reference")} required autoComplete="off" error={errors.reference?.message} {...register("reference")} />
+        <Field
+            as="select"
             id="product-category"
+            label={t("products.fields.category")}
+            required
+            error={errors.categorie_id?.message}
             {...categoryRegistration}
             onChange={(event) => {
               if (event.target.value === "__new_category__") {
@@ -126,35 +126,17 @@ function ProduitFormDialog({ produit, categories, busy, onClose, onSave, onCateg
               <option value={category.id} key={category.id}>{category.nom}</option>
             ))}
             <option value="__new_category__">{`+ ${t("categories.actions.new")}`}</option>
-          </select>
-        </ProductFormField>
-        <ProductFormField id="product-price" label={t("products.fields.price")} error={errors.prix?.message}>
-          <input id="product-price" type="number" min="0" step="any" inputMode="decimal" {...register("prix")} />
-        </ProductFormField>
+        </Field>
+        <Field id="product-price" label={t("products.fields.price")} required type="number" min="0" step="any" inputMode="decimal" error={errors.prix?.message} {...register("prix")} />
         {editing ? (
           <div className="products-readonly-stock">
             <strong>{t("products.fields.stock")}: {produit.quantite_stock}</strong>
             <p>{t("products.form.stockReadonly")}</p>
           </div>
         ) : (
-          <ProductFormField id="product-stock" label={t("products.form.initialStock")} error={errors.quantite_stock?.message}>
-            <input id="product-stock" type="number" min="0" step="1" inputMode="numeric" {...register("quantite_stock")} />
-          </ProductFormField>
+          <Field id="product-stock" label={t("products.form.initialStock")} type="number" min="0" step="1" inputMode="numeric" error={errors.quantite_stock?.message} {...register("quantite_stock")} />
         )}
-        <ProductFormField id="product-threshold" label={t("products.form.alertThreshold")} error={errors.seuil_alerte?.message}>
-          <input id="product-threshold" type="number" min="0" step="1" inputMode="numeric" {...register("seuil_alerte")} />
-        </ProductFormField>
-        {errors.root?.server?.message && (
-          <p className="products-form-error" role="alert">{errors.root.server.message}</p>
-        )}
-        <div className="products-dialog-actions">
-          <button className="product-button product-button-secondary" type="button" onClick={onClose} disabled={busy || isSubmitting}>
-            {t("products.actions.cancel")}
-          </button>
-          <button className="product-button product-button-primary" type="submit" disabled={busy || isSubmitting}>
-            {busy || isSubmitting ? t("products.actions.saving") : t(editing ? "products.actions.save" : "products.actions.create")}
-          </button>
-        </div>
+        <Field id="product-threshold" label={t("products.form.alertThreshold")} type="number" min="0" step="1" inputMode="numeric" error={errors.seuil_alerte?.message} {...register("seuil_alerte")} />
       </form>
       {categoryDialogOpen && (
         <CategoryFormDialog
@@ -168,6 +150,8 @@ function ProduitFormDialog({ produit, categories, busy, onClose, onSave, onCateg
           }}
           notify={(message) => toast.success(message)}
         />
+      )}
+      </>
       )}
     </Dialog>
   );

@@ -5,16 +5,12 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { createProduit, deleteProduit, updateProduit } from "../../api/produits";
 import ConfirmDialog from "../../components/produits/ConfirmDialog";
 import ProduitFormDialog from "../../components/produits/ProduitFormDialog";
-import ProductsSkeleton from "../../components/produits/ProductsSkeleton";
 import ProduitsTable from "../../components/produits/ProduitsTable";
 import { useLanguage } from "../../context/useLanguage";
 import useCategories from "../../hooks/useCategories";
 import useProduits from "../../hooks/useProduits";
+import { normalizeApiError } from "../../lib/apiErrors";
 import "./ProduitsPage.css";
-
-function getErrorMessage(error, fallback) {
-  return error?.response?.data?.message ?? fallback;
-}
 
 function ProduitsPage() {
   const { language, t } = useLanguage();
@@ -65,7 +61,6 @@ function ProduitsPage() {
       if (dialog.product) await updateProduit(dialog.product.id, payload);
       else await createProduit(payload);
       toast.success(t(dialog.product ? "products.toast.updated" : "products.toast.created"));
-      setDialog(null);
       await produits.reload();
     } finally {
       setMutating(false);
@@ -78,7 +73,6 @@ function ProduitsPage() {
     try {
       await deleteProduit(dialog.product.id);
       toast.success(t("products.toast.deleted"));
-      setDialog(null);
       await produits.reload();
     } finally {
       setMutating(false);
@@ -155,13 +149,19 @@ function ProduitsPage() {
           <div className="products-state">
             <CircleAlert className="products-state-error" size={26} aria-hidden="true" />
             <h2>{t("products.states.loadErrorTitle")}</h2>
-            <p>{getErrorMessage(requestError, t("products.states.loadError"))}</p>
+            <p>{normalizeApiError(requestError, t).message}</p>
             <button className="product-button product-button-primary" type="button" onClick={retry}>
               {t("products.actions.retry")}
             </button>
           </div>
         ) : produits.loading || categories.loading ? (
-          <ProductsSkeleton />
+          <ProduitsTable
+            produits={[]}
+            language={language}
+            onEdit={() => {}}
+            onDelete={() => {}}
+            loading
+          />
         ) : produits.data.length === 0 ? (
           <div className="products-state">
             <h2>{t("products.states.emptyTitle")}</h2>

@@ -1,0 +1,174 @@
+.ui-dialog-backdrop {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgb(18 19 16 / 48%);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  animation: ui-dialog-backdrop-in 180ms ease both;
+}
+
+.ui-dialog-backdrop.is-closing {
+  animation: ui-dialog-backdrop-out 180ms ease both;
+}
+
+.ui-dialog {
+  display: flex;
+  width: min(100%, 520px);
+  max-height: min(90dvh, 850px);
+  min-height: 0;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  animation: ui-dialog-panel-in 180ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+}
+
+.ui-dialog-backdrop.is-closing .ui-dialog {
+  animation: ui-dialog-panel-out 180ms ease both;
+}
+
+.ui-dialog.ui-dialog-sm { width: min(100%, 400px); }
+.ui-dialog.ui-dialog-md { width: min(100%, 520px); }
+.ui-dialog.ui-dialog-lg { width: min(100%, 720px); }
+
+.ui-dialog-header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: 64px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 18px 8px 22px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.ui-dialog-header h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 680;
+  letter-spacing: -0.04em;
+}
+
+.ui-dialog-handle { display: none; }
+
+.ui-dialog-body {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.ui-dialog-error {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: flex-start;
+  gap: 9px;
+  margin: 14px 22px 0;
+  padding: 11px 12px;
+  border: 1px solid color-mix(in srgb, var(--warning) 35%, var(--border));
+  border-radius: 9px;
+  background: var(--warning-soft);
+  color: var(--warning);
+  font-size: 12px;
+  line-height: 1.5;
+  animation: ui-dialog-error-in 160ms ease both;
+}
+
+.ui-dialog-error svg { flex: 0 0 auto; margin-top: 1px; }
+.ui-dialog-error span { overflow-wrap: anywhere; }
+
+.ui-dialog-footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: 68px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 9px;
+  padding: 11px 22px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.ui-dialog-footer .product-button { min-width: 100px; }
+.ui-dialog-footer .product-button-secondary { margin-right: auto; }
+
+.ui-dialog-spinner {
+  animation: ui-dialog-spin 800ms linear infinite;
+}
+
+.ui-dialog-error + .ui-dialog-body > .products-form {
+  padding-top: 14px;
+}
+
+@keyframes ui-dialog-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ui-dialog-backdrop-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes ui-dialog-panel-in { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: scale(1); } }
+@keyframes ui-dialog-panel-out { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(.96); } }
+@keyframes ui-dialog-error-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes ui-dialog-spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 639px) {
+  .ui-dialog-backdrop {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .ui-dialog,
+  .ui-dialog.ui-dialog-sm,
+  .ui-dialog.ui-dialog-md,
+  .ui-dialog.ui-dialog-lg {
+    width: 100%;
+    max-height: 90dvh;
+    border-radius: 18px 18px 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
+    animation-name: ui-dialog-sheet-in;
+  }
+
+  .ui-dialog-backdrop.is-closing .ui-dialog {
+    animation-name: ui-dialog-sheet-out;
+  }
+
+  .ui-dialog-handle {
+    display: block;
+    width: 36px;
+    height: 4px;
+    flex: 0 0 auto;
+    align-self: center;
+    margin: 9px auto 0;
+    border-radius: 99px;
+    background: var(--border-strong);
+  }
+
+  .ui-dialog-header { min-height: 56px; padding-inline: 18px 12px; }
+  .ui-dialog-footer { padding-inline: 18px; }
+  .ui-dialog-error { margin-inline: 18px; }
+  .products-form, .products-confirm-body { padding-inline: 18px; }
+}
+
+@keyframes ui-dialog-sheet-in { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes ui-dialog-sheet-out { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(28px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-dialog-backdrop,
+  .ui-dialog-backdrop.is-closing,
+  .ui-dialog,
+  .ui-dialog-backdrop.is-closing .ui-dialog,
+  .ui-dialog-error,
+  .ui-dialog-spinner {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

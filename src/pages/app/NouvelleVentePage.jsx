@@ -6,9 +6,12 @@ import { createVente } from "../../api/ventes";
 import { createClient } from "../../api/clients";
 import ClientFormDialog from "../../components/clients/ClientFormDialog";
 import ProductsSkeleton from "../../components/produits/ProductsSkeleton";
+import ApiErrorBanner from "../../components/ui/ApiErrorBanner";
+import Field from "../../components/ui/Field";
 import { useLanguage } from "../../context/useLanguage";
 import useClients from "../../hooks/useClients";
 import useProduits from "../../hooks/useProduits";
+import { normalizeApiError } from "../../lib/apiErrors";
 import { formatCurrency } from "../../lib/format";
 import "./NouvelleVentePage.css";
 import "./ProduitsPage.css";
@@ -114,27 +117,19 @@ function NouvelleVentePage() {
       });
       navigate("/app/ventes", { state: { successMessage } });
     } catch (error) {
-      const response = error.response?.data;
-      if (error.response?.status === 422 && response?.errors) {
-        const messages = Object.fromEntries(
-          Object.entries(response.errors).map(([field, entries]) => [
-            field,
-            Array.isArray(entries) ? entries.join(" ") : String(entries),
-          ]),
-        );
-        if (messages.lignes) {
-          setLinesError(messages.lignes);
-          await products.reload();
-        }
-        setFieldErrors({
-          client_id: messages.client_id,
-          date_vente: messages.date_vente,
-        });
-        const hasHandledErrors = messages.lignes || messages.client_id || messages.date_vente;
-        if (!hasHandledErrors) setRequestError(response.message ?? t("sales.new.errors.submit"));
-      } else {
-        setRequestError(response?.message ?? t("sales.new.errors.submit"));
+      const normalized = normalizeApiError(error, t);
+      if (normalized.fieldErrors.lignes) {
+        setLinesError(normalized.fieldErrors.lignes);
+        await products.reload();
       }
+      setFieldErrors({
+        client_id: normalized.fieldErrors.client_id,
+        date_vente: normalized.fieldErrors.date_vente,
+      });
+      const hasHandledErrors = normalized.fieldErrors.lignes
+        || normalized.fieldErrors.client_id
+        || normalized.fieldErrors.date_vente;
+      setRequestError(hasHandledErrors ? "" : normalized.message);
     } finally {
       setSubmitting(false);
     }
@@ -146,7 +141,6 @@ function NouvelleVentePage() {
     await clients.reload();
     setSelectedClientId(String(client.id));
     setClientQuery("");
-    setClientDialogOpen(false);
   }
 
   async function retryLoading() {
@@ -171,7 +165,7 @@ function NouvelleVentePage() {
           <div className="products-state">
             <AlertCircle className="products-state-error" size={26} aria-hidden="true" />
             <h2>{t("sales.new.states.loadErrorTitle")}</h2>
-            <p>{loadError.response?.data?.message ?? t("sales.new.states.loadError")}</p>
+            <p>{normalizeApiError(loadError, t).message}</p>
             <button className="product-button product-button-primary" type="button" onClick={retryLoading}>
               {t("sales.new.actions.retry")}
             </button>
@@ -197,16 +191,18 @@ function NouvelleVentePage() {
                 <h2 id="sale-catalog-title">{t("sales.new.catalog.title")}</h2>
                 <p>{t("sales.new.catalog.description")}</p>
               </div>
-              <label className="products-search sale-product-search">
+              <div className="products-search sale-product-search">
                 <Search size={17} aria-hidden="true" />
-                <span className="sr-only">{t("sales.new.catalog.searchLabel")}</span>
-                <input
+                <Field
+                  className="ui-field--visually-hidden-label"
+                  id="sale-product-search"
+                  label={t("sales.new.catalog.searchLabel")}
                   type="search"
                   value={query}
                   placeholder={t("sales.new.catalog.searchPlaceholder")}
                   onChange={(event) => setQuery(event.target.value)}
                 />
-              </label>
+              </div>
             </div>
             <div className="sale-product-list">
               {filteredProducts.map((product) => {
@@ -245,14 +241,11 @@ function NouvelleVentePage() {
               <span>{t("sales.new.cart.itemCount", { count: cart.length })}</span>
             </div>
 
-            {linesError && <p className="sale-alert" role="alert">{linesError}</p>}
-            {requestError && <p className="sale-alert" role="alert">{requestError}</p>}
+            {linesError && <ApiErrorBanner message={linesError} className="sale-alert" />}
+            {requestError && <ApiErrorBanner message={requestError} className="sale-alert" />}
 
             <div className="sale-fields">
-              <div className="products-form-field">
-                <label htmlFor="sale-client-search">
-                  {t("sales.new.client.label")} <span>{t("sales.new.required")}</span>
-                </label>
+              <div className="sale-client-field">
                 {clients.data.length === 0 ? (
                   <p className="sale-no-clients">
                     {t("sales.new.client.none")} <Link to="/app/clients">{t("sales.new.client.goToClients")}</Link>
@@ -260,19 +253,24 @@ function NouvelleVentePage() {
                 ) : (
                   <>
                     <div className="sale-client-controls">
-                      <input
+                      <Field
                         id="sale-client-search"
+                        label={t("sales.new.client.searchPlaceholder")}
+                        className="ui-field--visually-hidden-label"
                         type="search"
                         autoComplete="off"
                         placeholder={t("sales.new.client.searchPlaceholder")}
                         value={clientQuery}
                         onChange={(event) => setClientQuery(event.target.value)}
                       />
-                      <select
+                      <Field
+                        as="select"
+                        id="sale-client"
+                        label={t("sales.new.client.label")}
+                        required
+                        error={fieldErrors.client_id}
                         aria-label={t("sales.new.client.selectLabel")}
                         value={selectedClientId}
-                        required
-                        aria-invalid={Boolean(fieldErrors.client_id)}
                         onChange={(event) => {
                           setSelectedClientId(event.target.value);
                           setFieldErrors((current) => ({ ...current, client_id: undefined }));
@@ -282,34 +280,30 @@ function NouvelleVentePage() {
                         {filteredClients.map((client) => (
                           <option value={client.id} key={client.id}>{client.nom}</option>
                         ))}
-                      </select>
+                      </Field>
                     </div>
                     {filteredClients.length === 0 && clientQuery && (
                       <span className="products-field-error">{t("sales.new.client.noResults")}</span>
                     )}
-                    {fieldErrors.client_id && <span className="products-field-error" role="alert">{fieldErrors.client_id}</span>}
                     <button className="sale-new-client" type="button" onClick={() => setClientDialogOpen(true)}>
                       <Plus size={15} aria-hidden="true" />{t("sales.new.client.new")}
                     </button>
                   </>
                 )}
               </div>
-              <div className="products-form-field">
-                <label htmlFor="sale-date">
-                  {t("sales.new.date.label")} <span>{t("sales.new.required")}</span>
-                </label>
-                <input
+              <div className="sale-date-field">
+                <Field
                   id="sale-date"
                   type="date"
+                  label={t("sales.new.date.label")}
                   required
                   value={date}
-                  aria-invalid={Boolean(fieldErrors.date_vente)}
+                  error={fieldErrors.date_vente}
                   onChange={(event) => {
                     setDate(event.target.value);
                     setFieldErrors((current) => ({ ...current, date_vente: undefined }));
                   }}
                 />
-                {fieldErrors.date_vente && <span className="products-field-error" role="alert">{fieldErrors.date_vente}</span>}
               </div>
             </div>
 
@@ -349,13 +343,14 @@ function NouvelleVentePage() {
                         >
                           <Minus size={16} aria-hidden="true" />
                         </button>
-                        <input
+                        <Field
+                          className="sale-quantity-field ui-field--visually-hidden-label"
+                          label={t("sales.new.cart.quantity", { name: product.nom })}
                           type="number"
                           min="1"
                           max={stock}
                           step="1"
                           inputMode="numeric"
-                          aria-label={t("sales.new.cart.quantity", { name: product.nom })}
                           value={quantity}
                           onChange={(event) => changeQuantity(product.id, event.target.value)}
                         />

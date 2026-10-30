@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import { AlertCircle, RotateCw } from "lucide-react";
+import { RotateCw } from "lucide-react";
 import { getVente } from "../../api/ventes";
 import { useLanguage } from "../../context/useLanguage";
 import { formatCurrency, formatDateOnly } from "../../lib/format";
+import { normalizeApiError } from "../../lib/apiErrors";
 import ConfirmDialog from "../produits/ConfirmDialog";
-import Dialog from "../produits/Dialog";
+import Dialog from "../ui/Dialog";
 
 function VenteDetailDialog({ saleId, language, busy, onClose, onCancelSale }) {
   const { t } = useLanguage();
@@ -17,24 +18,23 @@ function VenteDetailDialog({ saleId, language, busy, onClose, onCancelSale }) {
     try {
       setSale(await getVente(saleId));
     } catch (requestError) {
-      setError(requestError);
+      setError(normalizeApiError(requestError, t));
     } finally {
       setLoading(false);
     }
-  }, [saleId]);
+  }, [saleId, t]);
 
   useEffect(() => {
     loadSale();
   }, [loadSale]);
-
-  const errorMessage = error?.response?.data?.message ?? t("sales.history.detail.loadError");
 
   return (
     <>
       <Dialog
         title={t("sales.history.detail.title", { id: saleId })}
         onClose={onClose}
-        className="products-form-dialog sale-detail-dialog"
+        className="products-form-dialog sale-detail-dialog ui-dialog-lg"
+        error={error?.message}
       >
         {loading ? (
           <div className="sale-detail-state" aria-live="polite">
@@ -43,8 +43,6 @@ function VenteDetailDialog({ saleId, language, busy, onClose, onCancelSale }) {
           </div>
         ) : error ? (
           <div className="sale-detail-state">
-            <AlertCircle size={25} className="products-state-error" aria-hidden="true" />
-            <p role="alert">{errorMessage}</p>
             <button
               className="product-button product-button-primary"
               type="button"
@@ -115,10 +113,12 @@ function VenteDetailDialog({ saleId, language, busy, onClose, onCancelSale }) {
           confirmLabel={t("sales.history.actions.cancelSale")}
           cancelLabel={t("sales.history.cancel.keep")}
           deletingLabel={t("sales.history.cancel.pending")}
-          errorFallbackKey="sales.history.cancel.error"
           busy={busy}
           onClose={() => setConfirming(false)}
-          onConfirm={() => onCancelSale(sale)}
+          onConfirm={async () => {
+            await onCancelSale(sale);
+            window.setTimeout(onClose, 180);
+          }}
         />
       )}
     </>

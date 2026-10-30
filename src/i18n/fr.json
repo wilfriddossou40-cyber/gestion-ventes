@@ -1,4 +1,17 @@
 {
+  "dataTable": {
+    "range": "{from}–{to} sur {total}",
+    "page": "Page {current} sur {total}",
+    "sortBy": "Trier par {field}",
+    "previousPage": "Page précédente",
+    "nextPage": "Page suivante"
+  },
+  "errors": {
+    "validation": "Vérifiez les champs signalés.",
+    "network": "Impossible de joindre le serveur.",
+    "server": "Le serveur a rencontré une erreur. Réessayez plus tard.",
+    "generic": "Une erreur est survenue. Réessayez."
+  },
   "meta": {
     "title": "Stock & ventes — Gérez votre activité sans cahier"
   },
@@ -136,10 +149,63 @@
       "sales": "Ventes",
       "stock": "Stock"
     },
+    "dashboard": {
+      "actionTitle": "À traiter",
+      "actionDescription": "Les produits qui nécessitent votre attention.",
+      "viewStock": "Voir tout et réapprovisionner",
+      "noAlerts": "Aucun produit sous son seuil d’alerte.",
+      "stockValue": "Stock : {stock}",
+      "thresholdValue": "Seuil : {threshold}",
+      "overviewTitle": "Votre activité",
+      "overviewDescription": "Les chiffres clés pour suivre votre activité.",
+      "errorTitle": "Données indisponibles",
+      "retry": "Réessayer",
+      "alertsError": "Impossible de charger les alertes de stock.",
+      "dashboardError": "Impossible de charger les indicateurs.",
+      "salesError": "Impossible de charger les dernières ventes.",
+      "kpi": {
+        "revenue": "Chiffre d’affaires total",
+        "todaySales": "Ventes aujourd’hui",
+        "lowStock": "Produits en stock faible",
+        "products": "Produits",
+        "clients": "Clients"
+      },
+      "variation": "{variation} par rapport au mois précédent",
+      "emptyTitle": "Bienvenue dans votre espace de gestion",
+      "emptyDescription": "Ajoutez vos premiers produits et clients pour commencer à suivre votre activité.",
+      "addProducts": "Ajouter des produits",
+      "addClients": "Ajouter des clients",
+      "startSale": "Enregistrer une vente",
+      "chart": {
+        "title": "Ventes par mois",
+        "description": "Chiffre d’affaires des six derniers mois disponibles.",
+        "empty": "Les ventes mensuelles apparaîtront ici dès qu’une vente sera enregistrée.",
+        "accessibleLabel": "Graphique du chiffre d’affaires mensuel",
+        "month": "Mois",
+        "revenue": "Chiffre d’affaires",
+        "salesCount": "Nombre de ventes"
+      },
+      "currencyShort": "FCFA",
+      "activityTitle": "Classement des produits et ventes récentes",
+      "topProducts": {
+        "title": "Meilleurs produits",
+        "description": "Classés selon les quantités vendues.",
+        "empty": "Aucune vente de produit pour le moment.",
+        "barLabel": "{product} : {quantity} vendus",
+        "sold": "{count} vendus"
+      },
+      "recent": {
+        "title": "Dernières ventes",
+        "description": "Les cinq ventes les plus récentes.",
+        "viewAll": "Voir l’historique",
+        "empty": "Aucune vente enregistrée pour le moment."
+      },
+      "unknownClient": "Client"
+    },
     "pages": {
       "dashboard": {
         "title": "Tableau de bord",
-        "description": "Vous retrouverez ici une vue d’ensemble de vos ventes et de votre stock."
+        "description": "Repérez les priorités et suivez les résultats de votre activité."
       },
       "products": {
         "title": "Produits",

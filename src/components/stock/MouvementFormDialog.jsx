@@ -3,7 +3,9 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { createMouvementStock } from "../../api/mouvementsStock";
 import { useLanguage } from "../../context/useLanguage";
-import Dialog from "../produits/Dialog";
+import Dialog from "../ui/Dialog";
+import Field from "../ui/Field";
+import { normalizeApiError } from "../../lib/apiErrors";
 
 function MouvementFormDialog({ products, initialProduct, initialType = "entree", busy, onClose, onSaved }) {
   const { t } = useLanguage();
@@ -46,7 +48,7 @@ function MouvementFormDialog({ products, initialProduct, initialType = "entree",
     && Number(quantity) > Number(selectedProduct.quantite_stock)
   ), [quantity, selectedProduct, type]);
 
-  async function submit(values) {
+  async function submit(values, closeDialog) {
     clearErrors();
     const parsed = schema.safeParse(values);
     if (!parsed.success) {
@@ -65,19 +67,16 @@ function MouvementFormDialog({ products, initialProduct, initialType = "entree",
         motif: parsed.data.motif.trim() || null,
       });
       await onSaved(movement);
+      closeDialog();
     } catch (requestError) {
-      const response = requestError.response?.data;
-      if (requestError.response?.status === 422 && response?.errors) {
-        for (const [field, messages] of Object.entries(response.errors)) {
-          if (["produit_id", "type", "quantite", "motif"].includes(field) && Array.isArray(messages)) {
-            setError(field, { type: "server", message: messages.join(" ") });
-          }
-        }
-        if (!Object.keys(response.errors).some((field) => ["produit_id", "type", "quantite", "motif"].includes(field))) {
-          setError("root.server", { type: "server", message: response.message ?? t("stock.form.errors.save") });
-        }
-      } else {
-        setError("root.server", { type: "server", message: response?.message ?? t("stock.form.errors.save") });
+      const normalized = normalizeApiError(requestError, t);
+      const knownFields = ["produit_id", "type", "quantite", "motif"];
+      const fieldEntries = Object.entries(normalized.fieldErrors);
+      for (const [field, message] of fieldEntries) {
+        if (knownFields.includes(field)) setError(field, { type: "server", message });
+      }
+      if (!fieldEntries.some(([field]) => knownFields.includes(field))) {
+        setError("root.server", { type: "server", message: normalized.message });
       }
     }
   }
@@ -87,20 +86,35 @@ function MouvementFormDialog({ products, initialProduct, initialType = "entree",
       title={t("stock.form.title")}
       onClose={onClose}
       className="products-form-dialog"
+      error={errors.root?.server?.message}
+      busy={isSubmitting || busy}
+      actions={(closeDialog) => (
+        <>
+          <button className="product-button product-button-secondary" type="button" onClick={closeDialog} disabled={isSubmitting || busy}>
+            {t("stock.form.cancel")}
+          </button>
+          <button className="product-button product-button-primary" type="submit" form="movement-form" disabled={isSubmitting || busy}>
+            {isSubmitting || busy ? t("stock.form.saving") : t("stock.form.submit")}
+          </button>
+        </>
+      )}
     >
-      <form className="products-form stock-movement-form" onSubmit={handleSubmit(submit)} noValidate>
-        <div className="products-form-field">
-          <label htmlFor="movement-product">{t("stock.form.product")}</label>
-          <input
+      {(closeDialog) => (
+      <form id="movement-form" className="products-form stock-movement-form" onSubmit={handleSubmit((values) => submit(values, closeDialog))} noValidate>
+        <Field
             type="search"
             className="stock-product-search"
-            placeholder={t("stock.form.productSearch")}
-            aria-label={t("stock.form.productSearch")}
+            label={t("stock.form.productSearch")}
+            help={t("stock.form.product")}
             value={productSearch}
             onChange={(event) => setProductSearch(event.target.value)}
           />
-          <select
+          <Field
+            as="select"
             id="movement-product"
+            label={t("stock.form.product")}
+            required
+            error={errors.produit_id?.message}
             aria-invalid={Boolean(errors.produit_id)}
             {...productRegistration}
             onChange={(event) => {
@@ -117,57 +131,35 @@ function MouvementFormDialog({ products, initialProduct, initialType = "entree",
                 {product.nom} · {product.reference}
               </option>
             ))}
-          </select>
-          {errors.produit_id?.message && <span className="products-field-error" role="alert">{errors.produit_id.message}</span>}
+          </Field>
           {selectedProduct && (
             <span className="stock-current-quantity">
               {t("stock.form.currentStock", { stock: selectedProduct.quantite_stock })}
             </span>
           )}
-        </div>
-        <div className="products-form-field">
-          <label htmlFor="movement-type">{t("stock.form.type")}</label>
-          <select id="movement-type" aria-invalid={Boolean(errors.type)} {...register("type")}>
+        <Field as="select" id="movement-type" label={t("stock.form.type")} required error={errors.type?.message} {...register("type")}>
             <option value="entree">{t("stock.types.entry")}</option>
             <option value="sortie">{t("stock.types.exit")}</option>
-          </select>
-          {errors.type?.message && <span className="products-field-error" role="alert">{errors.type.message}</span>}
-        </div>
-        <div className="products-form-field">
-          <label htmlFor="movement-quantity">{t("stock.form.quantity")}</label>
-          <input
+        </Field>
+        <Field
             id="movement-quantity"
+            label={t("stock.form.quantity")}
+            required
             type="number"
             min="1"
             step="1"
             inputMode="numeric"
-            aria-invalid={Boolean(errors.quantite)}
+            error={errors.quantite?.message}
             {...register("quantite")}
           />
-          {errors.quantite?.message && <span className="products-field-error" role="alert">{errors.quantite.message}</span>}
           {stockWarning && (
             <span className="stock-quantity-warning" role="status">
               {t("stock.form.exceedsStock", { stock: selectedProduct.quantite_stock })}
             </span>
           )}
-        </div>
-        <div className="products-form-field">
-          <label htmlFor="movement-reason">{t("stock.form.reason")}</label>
-          <textarea id="movement-reason" rows="3" maxLength={255} aria-invalid={Boolean(errors.motif)} {...register("motif")} />
-          {errors.motif?.message && <span className="products-field-error" role="alert">{errors.motif.message}</span>}
-        </div>
-        {errors.root?.server?.message && (
-          <p className="products-form-error" role="alert">{errors.root.server.message}</p>
-        )}
-        <div className="products-dialog-actions">
-          <button className="product-button product-button-secondary" type="button" onClick={onClose} disabled={isSubmitting || busy}>
-            {t("stock.form.cancel")}
-          </button>
-          <button className="product-button product-button-primary" type="submit" disabled={isSubmitting || busy}>
-            {isSubmitting || busy ? t("stock.form.saving") : t("stock.form.submit")}
-          </button>
-        </div>
+        <Field as="textarea" id="movement-reason" label={t("stock.form.reason")} rows={3} maxLength={255} error={errors.motif?.message} {...register("motif")} />
       </form>
+      )}
     </Dialog>
   );
 }

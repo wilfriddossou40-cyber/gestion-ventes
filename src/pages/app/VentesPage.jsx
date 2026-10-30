@@ -5,17 +5,13 @@ import { Link, useLocation, useNavigate, useSearchParams } from "react-router-do
 import { deleteVente } from "../../api/ventes";
 import VenteDetailDialog from "../../components/ventes/VenteDetailDialog";
 import VentesTable from "../../components/ventes/VentesTable";
-import ProductsSkeleton from "../../components/produits/ProductsSkeleton";
 import { useLanguage } from "../../context/useLanguage";
 import useClients from "../../hooks/useClients";
 import useVentes from "../../hooks/useVentes";
+import { normalizeApiError } from "../../lib/apiErrors";
 import { formatCurrency } from "../../lib/format";
 import "./ProduitsPage.css";
 import "./VentesPage.css";
-
-function getErrorMessage(error, fallback) {
-  return error?.response?.data?.message ?? fallback;
-}
 
 function VentesPage() {
   const { language, t } = useLanguage();
@@ -81,7 +77,6 @@ function VentesPage() {
     try {
       await deleteVente(sale.id);
       toast.success(t("sales.history.toast.cancelled", { id: sale.id }));
-      setSelectedSaleId(null);
       await ventes.reload();
     } finally {
       setCanceling(false);
@@ -182,14 +177,16 @@ function VentesPage() {
           <div className="products-state">
             <CircleAlert className="products-state-error" size={26} aria-hidden="true" />
             <h2>{t("sales.history.states.loadErrorTitle")}</h2>
-            <p>{getErrorMessage(loadError, t("sales.history.states.loadError"))}</p>
+            <p>{normalizeApiError(loadError, t).message}</p>
             <button className="product-button product-button-primary" type="button" onClick={retryLoading}>
               {t("sales.history.actions.retry")}
             </button>
           </div>
         </section>
       ) : loading ? (
-        <section className="products-data-panel"><ProductsSkeleton /></section>
+        <section className="products-data-panel">
+          <VentesTable ventes={[]} language={language} onSelect={() => {}} loading />
+        </section>
       ) : sortedVentes.length === 0 ? (
         <section className="products-data-panel">
           <div className="products-state">

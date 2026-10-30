@@ -162,9 +162,6 @@
   gap: 8px;
 }
 
-.sale-client-controls input,
-.sale-client-controls select,
-.sale-fields input[type="date"],
 .sale-quantity-control input {
   width: 100%;
   min-width: 0;

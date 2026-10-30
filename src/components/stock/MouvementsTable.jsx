@@ -1,9 +1,8 @@
-import { ArrowDownToLine, ArrowUpFromLine, ChevronLeft, ChevronRight } from "lucide-react";
-import { useMemo, useState } from "react";
+import { ArrowDownToLine, ArrowUpFromLine } from "lucide-react";
+import { useMemo } from "react";
 import { useLanguage } from "../../context/useLanguage";
 import { formatDateTime } from "../../lib/format";
-
-const pageSize = 15;
+import DataTable from "../ui/DataTable";
 
 function MovementType({ type }) {
   const { t } = useLanguage();
@@ -17,93 +16,100 @@ function MovementType({ type }) {
   );
 }
 
-function MouvementsTable({ movements, language }) {
+function MouvementsTable({ movements, language, loading = false }) {
   const { t } = useLanguage();
-  const [pageIndex, setPageIndex] = useState(0);
   const sortedMovements = useMemo(() => [...movements].sort((a, b) => (
     new Date(b.created_at).getTime() - new Date(a.created_at).getTime() || Number(b.id) - Number(a.id)
   )), [movements]);
-  const pageCount = Math.max(1, Math.ceil(sortedMovements.length / pageSize));
-  const activePageIndex = Math.min(pageIndex, pageCount - 1);
-  const pageMovements = sortedMovements.slice(activePageIndex * pageSize, (activePageIndex + 1) * pageSize);
+  const columns = useMemo(() => [
+    {
+      id: "created_at",
+      accessorFn: (movement) => movement.created_at,
+      header: t("stock.journal.fields.date"),
+      cell: ({ row }) => formatDateTime(row.original.created_at, language),
+      enableSorting: false,
+    },
+    {
+      id: "produit",
+      accessorFn: (movement) => movement.produit?.nom ?? "",
+      header: t("stock.journal.fields.product"),
+      cell: ({ row }) => row.original.produit?.nom ?? "—",
+      enableSorting: false,
+      meta: { truncate: true },
+    },
+    {
+      id: "type",
+      accessorFn: (movement) => movement.type,
+      header: t("stock.journal.fields.type"),
+      cell: ({ row }) => <MovementType type={row.original.type} />,
+      enableSorting: false,
+    },
+    {
+      id: "quantite",
+      accessorFn: (movement) => Number(movement.quantite),
+      header: t("stock.journal.fields.quantity"),
+      cell: ({ row }) => {
+        const sign = row.original.type === "entree" ? "+" : "−";
+        const color = row.original.type === "entree" ? "is-entry" : "is-exit";
+        return (
+          <span className={`stock-movement-quantity ${color}`}>
+            {sign}{row.original.quantite}
+          </span>
+        );
+      },
+      enableSorting: false,
+      meta: { numeric: true },
+    },
+    {
+      id: "motif",
+      accessorFn: (movement) => movement.motif ?? "",
+      header: t("stock.journal.fields.reason"),
+      cell: ({ row }) => row.original.motif
+        ? <span title={row.original.motif}>{row.original.motif}</span>
+        : <span className="stock-muted-dash">—</span>,
+      enableSorting: false,
+      meta: { truncate: true },
+    },
+  ], [language, t]);
 
-  function signedQuantity(movement) {
+  function renderCard(movement) {
     const sign = movement.type === "entree" ? "+" : "−";
-    return `${sign}${movement.quantite}`;
+    const quantityClass = movement.type === "entree" ? "is-entry" : "is-exit";
+    return (
+      <>
+        <div className="ui-data-table-card-heading">
+          <strong className="ui-data-table-card-title" title={movement.produit?.nom}>
+            {movement.produit?.nom ?? "—"}
+          </strong>
+          <span className="ui-data-table-card-status"><MovementType type={movement.type} /></span>
+        </div>
+        <dl className="ui-data-table-card-fields">
+          <div>
+            <dt>{t("stock.journal.fields.date")}</dt>
+            <dd><time dateTime={movement.created_at}>{formatDateTime(movement.created_at, language)}</time></dd>
+          </div>
+          <div>
+            <dt>{t("stock.journal.fields.quantity")}</dt>
+            <dd className={`stock-movement-quantity ${quantityClass}`}>{sign}{movement.quantite}</dd>
+          </div>
+          <div>
+            <dt>{t("stock.journal.fields.reason")}</dt>
+            <dd title={movement.motif}>{movement.motif || <span className="stock-muted-dash">—</span>}</dd>
+          </div>
+        </dl>
+      </>
+    );
   }
 
   return (
-    <>
-      <div className="products-table-wrap stock-movements-table-wrap">
-        <table className="products-table stock-movements-table">
-          <thead>
-            <tr>
-              <th scope="col">{t("stock.journal.fields.date")}</th>
-              <th scope="col">{t("stock.journal.fields.product")}</th>
-              <th scope="col">{t("stock.journal.fields.type")}</th>
-              <th scope="col">{t("stock.journal.fields.quantity")}</th>
-              <th scope="col">{t("stock.journal.fields.reason")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pageMovements.map((movement) => (
-              <tr key={movement.id}>
-                <td>{formatDateTime(movement.created_at, language)}</td>
-                <td>{movement.produit?.nom ?? "—"}</td>
-                <td><MovementType type={movement.type} /></td>
-                <td className={`stock-movement-quantity ${movement.type === "entree" ? "is-entry" : "is-exit"}`}>
-                  {signedQuantity(movement)}
-                </td>
-                <td>{movement.motif || <span className="stock-muted-dash">—</span>}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="stock-movements-mobile">
-        {pageMovements.map((movement) => (
-          <article className="stock-movement-card" key={movement.id}>
-            <div className="stock-movement-card-top">
-              <strong>{movement.produit?.nom ?? "—"}</strong>
-              <MovementType type={movement.type} />
-            </div>
-            <div className="stock-movement-card-meta">
-              <time dateTime={movement.created_at}>{formatDateTime(movement.created_at, language)}</time>
-              <strong className={`stock-movement-quantity ${movement.type === "entree" ? "is-entry" : "is-exit"}`}>
-                {signedQuantity(movement)}
-              </strong>
-            </div>
-            <p>{movement.motif || <span className="stock-muted-dash">—</span>}</p>
-          </article>
-        ))}
-      </div>
-      <div className="products-pagination">
-        <span>{t("stock.journal.pagination", {
-          current: String(activePageIndex + 1),
-          total: String(pageCount),
-        })}</span>
-        <div>
-          <button
-            className="product-icon-action"
-            type="button"
-            aria-label={t("stock.journal.previousPage")}
-            disabled={activePageIndex === 0}
-            onClick={() => setPageIndex((current) => Math.max(0, current - 1))}
-          >
-            <ChevronLeft size={18} aria-hidden="true" />
-          </button>
-          <button
-            className="product-icon-action"
-            type="button"
-            aria-label={t("stock.journal.nextPage")}
-            disabled={activePageIndex >= pageCount - 1}
-            onClick={() => setPageIndex((current) => Math.min(pageCount - 1, current + 1))}
-          >
-            <ChevronRight size={18} aria-hidden="true" />
-          </button>
-        </div>
-      </div>
-    </>
+    <DataTable
+      data={sortedMovements}
+      columns={columns}
+      pageSize={15}
+      renderCard={renderCard}
+      className="stock-movements-table"
+      loading={loading}
+    />
   );
 }
 

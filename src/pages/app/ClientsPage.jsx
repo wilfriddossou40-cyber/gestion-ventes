@@ -6,15 +6,11 @@ import { createClient, deleteClient, updateClient } from "../../api/clients";
 import ClientFormDialog from "../../components/clients/ClientFormDialog";
 import ClientsTable from "../../components/clients/ClientsTable";
 import ConfirmDialog from "../../components/produits/ConfirmDialog";
-import ProductsSkeleton from "../../components/produits/ProductsSkeleton";
 import { useLanguage } from "../../context/useLanguage";
 import useClients from "../../hooks/useClients";
+import { normalizeApiError } from "../../lib/apiErrors";
 import "./ClientsPage.css";
 import "./ProduitsPage.css";
-
-function getErrorMessage(error, fallback) {
-  return error?.response?.data?.message ?? fallback;
-}
 
 function ClientsPage() {
   const { language, t } = useLanguage();
@@ -47,7 +43,6 @@ function ClientsPage() {
       if (dialog.client) await updateClient(dialog.client.id, payload);
       else await createClient(payload);
       toast.success(t(dialog.client ? "clients.toast.updated" : "clients.toast.created"));
-      setDialog(null);
       await clients.reload();
     } finally {
       setMutating(false);
@@ -60,7 +55,6 @@ function ClientsPage() {
     try {
       await deleteClient(dialog.client.id);
       toast.success(t("clients.toast.deleted"));
-      setDialog(null);
       await clients.reload();
     } finally {
       setMutating(false);
@@ -107,13 +101,13 @@ function ClientsPage() {
           <div className="products-state">
             <CircleAlert className="products-state-error" size={26} aria-hidden="true" />
             <h2>{t("clients.states.loadErrorTitle")}</h2>
-            <p>{getErrorMessage(clients.error, t("clients.states.loadError"))}</p>
+            <p>{normalizeApiError(clients.error, t).message}</p>
             <button className="product-button product-button-primary" type="button" onClick={clients.reload}>
               {t("clients.actions.retry")}
             </button>
           </div>
         ) : clients.loading ? (
-          <ProductsSkeleton />
+          <ClientsTable clients={[]} language={language} onEdit={() => {}} onDelete={() => {}} loading />
         ) : clients.data.length === 0 ? (
           <div className="products-state">
             <h2>{t(search ? "clients.states.noResultsTitle" : "clients.states.emptyTitle")}</h2>
@@ -151,7 +145,6 @@ function ClientsPage() {
           title={t("clients.confirmDelete.title")}
           message={t("clients.confirmDelete.message", { name: dialog.client.nom })}
           confirmLabel={t("clients.actions.delete")}
-          errorFallbackKey="clients.errors.delete"
           errorSuggestion={t("clients.deleteConflictSuggestion")}
           busy={mutating}
           onClose={() => setDialog(null)}

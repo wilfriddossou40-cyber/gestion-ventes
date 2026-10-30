@@ -1,4 +1,17 @@
 {
+  "dataTable": {
+    "range": "{from}–{to} of {total}",
+    "page": "Page {current} of {total}",
+    "sortBy": "Sort by {field}",
+    "previousPage": "Previous page",
+    "nextPage": "Next page"
+  },
+  "errors": {
+    "validation": "Please check the highlighted fields.",
+    "network": "Unable to reach the server.",
+    "server": "The server encountered an error. Please try again later.",
+    "generic": "An error occurred. Please try again."
+  },
   "meta": {
     "title": "Stock & Sales — Manage your business without a ledger"
   },
@@ -136,10 +149,63 @@
       "sales": "Sales",
       "stock": "Stock"
     },
+    "dashboard": {
+      "actionTitle": "Needs attention",
+      "actionDescription": "Products that need your attention.",
+      "viewStock": "View all and restock",
+      "noAlerts": "No products are below their alert threshold.",
+      "stockValue": "Stock: {stock}",
+      "thresholdValue": "Threshold: {threshold}",
+      "overviewTitle": "Your activity",
+      "overviewDescription": "Key figures to keep track of your business.",
+      "errorTitle": "Data unavailable",
+      "retry": "Try again",
+      "alertsError": "Could not load stock alerts.",
+      "dashboardError": "Could not load dashboard metrics.",
+      "salesError": "Could not load recent sales.",
+      "kpi": {
+        "revenue": "Total revenue",
+        "todaySales": "Sales today",
+        "lowStock": "Low-stock products",
+        "products": "Products",
+        "clients": "Clients"
+      },
+      "variation": "{variation} compared with the previous month",
+      "emptyTitle": "Welcome to your management workspace",
+      "emptyDescription": "Add your first products and clients to start tracking your business.",
+      "addProducts": "Add products",
+      "addClients": "Add clients",
+      "startSale": "Record a sale",
+      "chart": {
+        "title": "Sales by month",
+        "description": "Revenue for the six latest available months.",
+        "empty": "Monthly sales will appear here once a sale is recorded.",
+        "accessibleLabel": "Monthly revenue chart",
+        "month": "Month",
+        "revenue": "Revenue",
+        "salesCount": "Number of sales"
+      },
+      "currencyShort": "FCFA",
+      "activityTitle": "Top products and recent sales",
+      "topProducts": {
+        "title": "Top products",
+        "description": "Ranked by quantities sold.",
+        "empty": "No product sales yet.",
+        "barLabel": "{product}: {quantity} sold",
+        "sold": "{count} sold"
+      },
+      "recent": {
+        "title": "Recent sales",
+        "description": "The five latest sales.",
+        "viewAll": "View sales history",
+        "empty": "No sales recorded yet."
+      },
+      "unknownClient": "Client"
+    },
     "pages": {
       "dashboard": {
         "title": "Dashboard",
-        "description": "This page will show an overview of your sales and stock."
+        "description": "See what needs attention and track your business results."
       },
       "products": {
         "title": "Products",
