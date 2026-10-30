@@ -110,7 +110,8 @@ class VenteController extends Controller
     // DELETE /api/ventes/{id} : ANNULE une vente et remet le stock
     public function destroy(Vente $vente)
     {
-       foreach ($vente->details as $detail) {
+        DB::transaction(function () use ($vente) {
+            foreach ($vente->details as $detail) {
                 $produit = Produit::lockForUpdate()->find($detail->produit_id);
                 // On remet en stock les quantites vendues
                 $produit->increment('quantite_stock', $detail->quantite);
@@ -118,10 +119,13 @@ class VenteController extends Controller
                     'type' => 'entree',
                     'quantite' => $detail->quantite,
                     'motif' => "Annulation vente #{$vente->id}"
-                     ]);
+                ]);
+            }
+
             // Les lignes sont supprimees avec la vente (cascadeOnDelete)
             $vente->delete();
-        };
+        });
+
         return response()->json(null, 204);
     }
 }
