@@ -1,0 +1,117 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  color: #24251f;
+  background: #f6f3ed;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+
+  --page: #f6f3ed;
+  --surface: #fffefa;
+  --surface-raised: #ffffff;
+  --text: #24251f;
+  --muted: #716f67;
+  --subtle: #929087;
+  --border: #e4e0d7;
+  --border-strong: #d3cec2;
+  --accent: #b64d32;
+  --accent-hover: #963d28;
+  --accent-soft: #f4e5dc;
+  --accent-ink: #762f1e;
+  --accent-button-text: #fffaf5;
+  --success: var(--accent-ink);
+  --warning: var(--accent-ink);
+  --warning-soft: var(--accent-soft);
+  --shadow-card: 0 18px 55px rgb(46 39 27 / 9%), 0 2px 8px rgb(46 39 27 / 5%);
+
+  color-scheme: light;
+}
+
+html.dark {
+  color: #eeece4;
+  background: #171815;
+
+  --page: #171815;
+  --surface: #1e201c;
+  --surface-raised: #242620;
+  --text: #eeece4;
+  --muted: #b0aea4;
+  --subtle: #8d8c83;
+  --border: #383a32;
+  --border-strong: #4a4c43;
+  --accent: #e18465;
+  --accent-hover: #f09a7d;
+  --accent-soft: #3a2821;
+  --accent-ink: #f3b49c;
+  --accent-button-text: #291a15;
+  --success: var(--accent-ink);
+  --warning: var(--accent-ink);
+  --warning-soft: var(--accent-soft);
+  --shadow-card: 0 20px 55px rgb(0 0 0 / 28%), 0 2px 8px rgb(0 0 0 / 14%);
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+  scroll-padding-top: 92px;
+  background-color: var(--page);
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--page);
+  color: var(--text);
+}
+
+body,
+button,
+a {
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+::selection {
+  color: var(--text);
+  background: var(--accent-soft);
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

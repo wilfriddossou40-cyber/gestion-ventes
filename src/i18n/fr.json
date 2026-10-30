@@ -1,0 +1,123 @@
+{
+  "meta": {
+    "title": "Stock & ventes — Gérez votre activité sans cahier"
+  },
+  "brand": {
+    "name": "Stock & ventes"
+  },
+  "header": {
+    "home": "Stock & ventes, accueil",
+    "languageLabel": "Passer en anglais",
+    "englishShort": "EN",
+    "frenchShort": "FR",
+    "themeLabel": "Changer le thème, actuellement {theme}",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "navigation": "Navigation principale",
+    "features": "Fonctionnalités",
+    "howItWorks": "Comment ça marche",
+    "openApp": "Accéder à l'application"
+  },
+  "theme": {
+    "light": "clair",
+    "dark": "sombre",
+    "system": "système"
+  },
+  "hero": {
+    "eyebrow": "Stocks et ventes, au même endroit",
+    "title": "Sachez ce qu’il vous reste. Et ce que vous avez vendu.",
+    "description": "Enregistrez vos produits et vos ventes, sans cahier ni calcul à la main. Votre stock suit chaque mouvement.",
+    "primary": "Accéder à l'application",
+    "secondary": "Voir les fonctionnalités",
+    "note": "Une vue claire de l’activité, du stock à la vente."
+  },
+  "preview": {
+    "accessibleLabel": "Aperçu de démonstration de l’application",
+    "demo": "Exemple — données de démonstration",
+    "dashboard": "APERÇU",
+    "overview": "Votre activité",
+    "products": "Produits en catalogue",
+    "todaySales": "Ventes du jour",
+    "demoValue": "Exemple",
+    "stockStatus": "ÉTAT DU STOCK",
+    "stockTitle": "À surveiller",
+    "lowStock": "Stock faible",
+    "productOne": "Huile végétale",
+    "units": "unités",
+    "stockLevel": "Niveau de stock de démonstration, sous le seuil d’alerte",
+    "lowThreshold": "Seuil d’alerte",
+    "demoInventory": "Quantité d’exemple",
+    "lastMovement": "Dernier mouvement",
+    "sale": "Vente",
+    "movementDescription": "Vente enregistrée · 2 unités",
+    "caption": "Aperçu fictif : les valeurs affichées sont des exemples."
+  },
+  "features": {
+    "eyebrow": "Ce que vous pouvez suivre",
+    "title": "Du stock à la vente, sans compter deux fois.",
+    "description": "Les outils essentiels pour garder une trace fiable de votre activité.",
+    "stockMarker": "Seuil d’alerte atteint",
+    "items": {
+      "catalog": {
+        "title": "Produits et catégories",
+        "description": "Organisez votre catalogue et retrouvez rapidement chaque produit."
+      },
+      "clients": {
+        "title": "Fichier clients",
+        "description": "Associez vos ventes à vos clients et gardez leurs informations utiles à portée de main."
+      },
+      "sales": {
+        "title": "Ventes calculées",
+        "description": "Enregistrez les articles vendus ; le montant total est calculé automatiquement."
+      },
+      "stock": {
+        "title": "Stock vérifié",
+        "description": "Le stock disponible est contrôlé avant chaque vente. Un seuil bas attire l’attention."
+      },
+      "journal": {
+        "title": "Journal des mouvements",
+        "description": "Consultez les entrées et sorties pour comprendre les variations de stock."
+      },
+      "dashboard": {
+        "title": "Tableau de bord",
+        "description": "Retrouvez les repères utiles sur les ventes et l’état du stock."
+      }
+    }
+  },
+  "how": {
+    "eyebrow": "Une routine simple",
+    "title": "Trois gestes, une vue plus nette.",
+    "description": "Commencez par votre catalogue, puis laissez les mouvements raconter l’activité.",
+    "step": "ÉTAPE",
+    "steps": {
+      "add": {
+        "title": "Ajoutez vos produits",
+        "description": "Créez votre catalogue et classez les produits par catégorie."
+      },
+      "sell": {
+        "title": "Enregistrez une vente",
+        "description": "Sélectionnez les articles et le montant se calcule automatiquement."
+      },
+      "track": {
+        "title": "Suivez votre activité",
+        "description": "Vérifiez les niveaux de stock et retrouvez vos mouvements et ventes."
+      }
+    }
+  },
+  "closing": {
+    "eyebrow": "À vous de jouer",
+    "title": "Moins de calculs. Plus de visibilité.",
+    "description": "Accédez à l’application pour commencer à suivre votre activité.",
+    "button": "Ouvrir l'application"
+  },
+  "footer": {
+    "project": "Projet de fin de licence",
+    "repository": "Dépôt GitHub",
+    "completeLink": "Lien à compléter",
+    "note": "Gestion des ventes et des stocks"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "back": "Retour à l’accueil"
+  }
+}

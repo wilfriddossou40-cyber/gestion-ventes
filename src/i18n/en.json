@@ -1,0 +1,123 @@
+{
+  "meta": {
+    "title": "Stock & Sales — Manage your business without a ledger"
+  },
+  "brand": {
+    "name": "Stock & Sales"
+  },
+  "header": {
+    "home": "Stock & Sales, home",
+    "languageLabel": "Switch to French",
+    "englishShort": "EN",
+    "frenchShort": "FR",
+    "themeLabel": "Change theme, currently {theme}",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "navigation": "Main navigation",
+    "features": "Features",
+    "howItWorks": "How it works",
+    "openApp": "Open the app"
+  },
+  "theme": {
+    "light": "light",
+    "dark": "dark",
+    "system": "system"
+  },
+  "hero": {
+    "eyebrow": "Stock and sales, in one place",
+    "title": "Know what is left in stock. And what you have sold.",
+    "description": "Record products and sales without a ledger or manual calculations. Your stock follows every movement.",
+    "primary": "Open the app",
+    "secondary": "Explore features",
+    "note": "A clear view of your business, from stock to sale."
+  },
+  "preview": {
+    "accessibleLabel": "Application preview with demonstration data",
+    "demo": "Demo — sample data",
+    "dashboard": "PREVIEW",
+    "overview": "Your activity",
+    "products": "Products in catalogue",
+    "todaySales": "Sales today",
+    "demoValue": "Example",
+    "stockStatus": "STOCK STATUS",
+    "stockTitle": "Needs attention",
+    "lowStock": "Low stock",
+    "productOne": "Vegetable oil",
+    "units": "units",
+    "stockLevel": "Sample stock level, below the alert threshold",
+    "lowThreshold": "Alert threshold",
+    "demoInventory": "Sample quantity",
+    "lastMovement": "Latest movement",
+    "sale": "Sale",
+    "movementDescription": "Sale recorded · 2 units",
+    "caption": "Illustrative preview: all displayed values are examples."
+  },
+  "features": {
+    "eyebrow": "What you can track",
+    "title": "From stock to sale, without counting twice.",
+    "description": "The essentials for keeping a reliable record of your business.",
+    "stockMarker": "Alert threshold reached",
+    "items": {
+      "catalog": {
+        "title": "Products and categories",
+        "description": "Organise your catalogue and find each product quickly."
+      },
+      "clients": {
+        "title": "Customer records",
+        "description": "Link sales to customers and keep useful customer details close at hand."
+      },
+      "sales": {
+        "title": "Sales totals calculated",
+        "description": "Record items sold; the total amount is calculated automatically."
+      },
+      "stock": {
+        "title": "Stock checks",
+        "description": "Available stock is checked before each sale. Low levels are flagged."
+      },
+      "journal": {
+        "title": "Movement log",
+        "description": "Review stock coming in and going out to understand changes."
+      },
+      "dashboard": {
+        "title": "Dashboard",
+        "description": "See useful indicators for sales and current stock levels."
+      }
+    }
+  },
+  "how": {
+    "eyebrow": "A simple routine",
+    "title": "Three steps to a clearer picture.",
+    "description": "Start with your catalogue, then let each movement tell the story.",
+    "step": "STEP",
+    "steps": {
+      "add": {
+        "title": "Add your products",
+        "description": "Build your catalogue and organise products by category."
+      },
+      "sell": {
+        "title": "Record a sale",
+        "description": "Choose the items and let the total calculate automatically."
+      },
+      "track": {
+        "title": "Track your activity",
+        "description": "Check stock levels and review your movements and sales."
+      }
+    }
+  },
+  "closing": {
+    "eyebrow": "Get started",
+    "title": "Less calculating. More clarity.",
+    "description": "Open the app to start keeping track of your business.",
+    "button": "Open the app"
+  },
+  "footer": {
+    "project": "Final-year degree project",
+    "repository": "GitHub repository",
+    "completeLink": "Link to be added",
+    "note": "Sales and inventory management"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "back": "Back to home"
+  }
+}
