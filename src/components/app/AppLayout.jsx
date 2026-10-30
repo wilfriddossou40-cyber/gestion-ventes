@@ -6,6 +6,7 @@ import {
   Menu,
   Package,
   ShoppingCart,
+  Tags,
   UsersRound,
   Warehouse,
   X,
@@ -18,6 +19,7 @@ import "./AppLayout.css";
 const navigation = [
   { path: "/app", key: "dashboard", icon: ChartNoAxesCombined, end: true },
   { path: "/app/produits", key: "products", icon: Package },
+  { path: "/app/categories", key: "categories", icon: Tags },
   { path: "/app/clients", key: "clients", icon: UsersRound },
   { path: "/app/ventes", key: "sales", icon: ShoppingCart },
   { path: "/app/stock", key: "stock", icon: Warehouse },

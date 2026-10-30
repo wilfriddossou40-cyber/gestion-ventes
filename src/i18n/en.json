@@ -131,6 +131,7 @@
     "navigation": {
       "dashboard": "Dashboard",
       "products": "Products",
+      "categories": "Categories",
       "clients": "Clients",
       "sales": "Sales",
       "stock": "Stock"
@@ -143,6 +144,10 @@
       "products": {
         "title": "Products",
         "description": "This page will show your product catalogue and categories."
+      },
+      "categories": {
+        "title": "Categories",
+        "description": "Organize products and see which items belong to each category."
       },
       "clients": {
         "title": "Clients",
@@ -157,10 +162,246 @@
         "description": "This page will show stock levels and movements."
       }
     },
+    "products": {
+      "title": "Products",
+      "description": "View and manage your catalogue, prices, and stock levels.",
+      "fields": {
+        "name": "Name",
+        "reference": "Reference",
+        "category": "Category",
+        "price": "Price",
+        "stock": "Stock",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "categoryMissing": "Category removed",
+      "status": {
+        "out": "Out of stock",
+        "low": "Low stock",
+        "available": "Available"
+      },
+      "stockMeter": "Stock: {quantity} units; alert threshold: {threshold}",
+      "threshold": "Threshold {quantity}",
+      "filters": {
+        "label": "Product filters",
+        "search": "Search products",
+        "searchPlaceholder": "Name or reference",
+        "category": "Category",
+        "allCategories": "All categories",
+        "lowStockOnly": "Low stock only"
+      },
+      "sortBy": "Sort by {field}",
+      "pagination": "Page {current} of {total}",
+      "previousPage": "Previous page",
+      "nextPage": "Next page",
+      "states": {
+        "loadErrorTitle": "Could not load products",
+        "loadError": "Check your connection and try again.",
+        "emptyTitle": "No products found",
+        "empty": "Try changing the filters or create your first product.",
+        "noCategories": "Create a category before adding your first product."
+      },
+      "actions": {
+        "newProduct": "New product",
+        "createFirst": "Create the first product",
+        "goCategories": "Create a category",
+        "edit": "Edit",
+        "delete": "Delete",
+        "editNamed": "Edit {name}",
+        "deleteNamed": "Delete {name}",
+        "cancel": "Cancel",
+        "close": "Close",
+        "save": "Save",
+        "create": "Create product",
+        "saving": "Saving…",
+        "deleting": "Deleting…",
+        "retry": "Try again",
+        "confirm": "Confirm"
+      },
+      "form": {
+        "createTitle": "New product",
+        "editTitle": "Edit product",
+        "selectCategory": "Choose a category",
+        "initialStock": "Initial stock",
+        "alertThreshold": "Alert threshold",
+        "stockReadonly": "Stock changes through sales and stock movements."
+      },
+      "confirmDelete": {
+        "title": "Delete product?",
+        "message": "Are you sure you want to delete “{name}”?"
+      },
+      "validation": {
+        "required": "This field is required.",
+        "category": "Choose a valid category.",
+        "number": "Enter a valid number.",
+        "integer": "Enter a non-negative integer.",
+        "nonNegative": "The value must be zero or greater."
+      },
+      "errors": {
+        "save": "Could not save the product.",
+        "delete": "Could not delete the product."
+      },
+      "dialog": {
+        "close": "Close dialog"
+      },
+      "toast": {
+        "created": "Product created.",
+        "updated": "Product updated.",
+        "deleted": "Product deleted."
+      }
+    },
     "notFound": {
       "title": "Page not found",
       "description": "This address does not match an application page.",
       "return": "Return to home"
+    }
+  },
+  "products": {
+    "title": "Products",
+    "description": "View and manage your catalogue, prices, and stock levels.",
+    "fields": {
+      "name": "Name",
+      "reference": "Reference",
+      "category": "Category",
+      "price": "Price",
+      "stock": "Stock",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "categoryMissing": "Category removed",
+    "status": {
+      "out": "Out of stock",
+      "low": "Low stock",
+      "available": "Available"
+    },
+    "stockMeter": "Stock: {quantity} units; alert threshold: {threshold}",
+    "threshold": "Threshold {quantity}",
+    "filters": {
+      "label": "Product filters",
+      "search": "Search products",
+      "searchPlaceholder": "Name or reference",
+      "category": "Category",
+      "allCategories": "All categories",
+      "lowStockOnly": "Low stock only"
+    },
+    "sortBy": "Sort by {field}",
+    "pagination": "Page {current} of {total}",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "states": {
+      "loadErrorTitle": "Could not load products",
+      "loadError": "Check your connection and try again.",
+      "emptyTitle": "No products found",
+      "empty": "Try changing the filters or create your first product.",
+      "noCategories": "Create a category before adding your first product."
+    },
+    "actions": {
+      "newProduct": "New product",
+      "createFirst": "Create the first product",
+      "goCategories": "Create a category",
+      "edit": "Edit",
+      "delete": "Delete",
+      "editNamed": "Edit {name}",
+      "deleteNamed": "Delete {name}",
+      "cancel": "Cancel",
+      "close": "Close",
+      "save": "Save",
+      "create": "Create product",
+      "saving": "Saving…",
+      "deleting": "Deleting…",
+      "retry": "Try again",
+      "confirm": "Confirm"
+    },
+    "form": {
+      "createTitle": "New product",
+      "editTitle": "Edit product",
+      "selectCategory": "Choose a category",
+      "initialStock": "Initial stock",
+      "alertThreshold": "Alert threshold",
+      "stockReadonly": "Stock changes through sales and stock movements."
+    },
+    "confirmDelete": {
+      "title": "Delete product?",
+      "message": "Are you sure you want to delete “{name}”?"
+    },
+    "validation": {
+      "required": "This field is required.",
+      "category": "Choose a valid category.",
+      "number": "Enter a valid number.",
+      "integer": "Enter a non-negative integer.",
+      "nonNegative": "The value must be zero or greater."
+    },
+    "errors": {
+      "save": "Could not save the product.",
+      "delete": "Could not delete the product."
+    },
+    "dialog": {
+      "close": "Close dialog"
+    },
+    "toast": {
+      "created": "Product created.",
+      "updated": "Product updated.",
+      "deleted": "Product deleted."
+    }
+  },
+  "categories": {
+    "title": "Categories",
+    "description": "Create categories to organize your products and find their items.",
+    "fields": {
+      "name": "Name",
+      "description": "Description",
+      "productCount": "Number of products",
+      "actions": "Actions"
+    },
+    "actions": {
+      "new": "New category",
+      "first": "Create the first category",
+      "viewProducts": "View products",
+      "editNamed": "Edit {name}",
+      "deleteNamed": "Delete {name}",
+      "deleteDisabled": "Deletion disabled",
+      "hasProductsOne": "This category contains {count} product.",
+      "hasProductsMany": "This category contains {count} products.",
+      "create": "Create category",
+      "save": "Save",
+      "delete": "Delete",
+      "deleting": "Deleting…"
+    },
+    "search": {
+      "label": "Search categories",
+      "placeholder": "Name or description"
+    },
+    "states": {
+      "loadErrorTitle": "Could not load categories",
+      "loadError": "Check your connection and try again.",
+      "emptyTitle": "No categories",
+      "empty": "Create a category to organize your products.",
+      "noResultsTitle": "No results",
+      "noResults": "Try a different search."
+    },
+    "noDescription": "No description",
+    "productCountOne": "{count} product",
+    "productCountMany": "{count} products",
+    "form": {
+      "createTitle": "New category",
+      "editTitle": "Edit category"
+    },
+    "confirmDelete": {
+      "title": "Delete category?",
+      "message": "Are you sure you want to delete “{name}”?"
+    },
+    "validation": {
+      "required": "The name is required.",
+      "maxName": "The name must be 255 characters or fewer."
+    },
+    "errors": {
+      "save": "Could not save the category.",
+      "delete": "Could not delete the category."
+    },
+    "toast": {
+      "created": "Category created.",
+      "updated": "Category updated.",
+      "deleted": "Category deleted."
     }
   }
 }

@@ -131,6 +131,7 @@
     "navigation": {
       "dashboard": "Tableau de bord",
       "products": "Produits",
+      "categories": "Catégories",
       "clients": "Clients",
       "sales": "Ventes",
       "stock": "Stock"
@@ -143,6 +144,10 @@
       "products": {
         "title": "Produits",
         "description": "Vous retrouverez ici votre catalogue de produits et leurs catégories."
+      },
+      "categories": {
+        "title": "Catégories",
+        "description": "Organisez les produits et consultez ceux qui appartiennent à chaque catégorie."
       },
       "clients": {
         "title": "Clients",
@@ -157,10 +162,246 @@
         "description": "Vous retrouverez ici les niveaux de stock et leurs mouvements."
       }
     },
+    "products": {
+      "title": "Produits",
+      "description": "Consultez et gérez votre catalogue, vos prix et vos niveaux de stock.",
+      "fields": {
+        "name": "Nom",
+        "reference": "Référence",
+        "category": "Catégorie",
+        "price": "Prix",
+        "stock": "Stock",
+        "status": "Statut",
+        "actions": "Actions"
+      },
+      "categoryMissing": "Catégorie supprimée",
+      "status": {
+        "out": "En rupture",
+        "low": "Stock faible",
+        "available": "Disponible"
+      },
+      "stockMeter": "Stock : {quantity} unités ; seuil d’alerte : {threshold}",
+      "threshold": "Seuil {quantity}",
+      "filters": {
+        "label": "Filtres des produits",
+        "search": "Rechercher un produit",
+        "searchPlaceholder": "Nom ou référence",
+        "category": "Catégorie",
+        "allCategories": "Toutes les catégories",
+        "lowStockOnly": "Stock faible uniquement"
+      },
+      "sortBy": "Trier par {field}",
+      "pagination": "Page {current} sur {total}",
+      "previousPage": "Page précédente",
+      "nextPage": "Page suivante",
+      "states": {
+        "loadErrorTitle": "Impossible de charger les produits",
+        "loadError": "Vérifiez votre connexion puis réessayez.",
+        "emptyTitle": "Aucun produit trouvé",
+        "empty": "Essayez de modifier les filtres ou créez votre premier produit.",
+        "noCategories": "Créez une catégorie avant d’ajouter votre premier produit."
+      },
+      "actions": {
+        "newProduct": "Nouveau produit",
+        "createFirst": "Créer le premier produit",
+        "goCategories": "Créer une catégorie",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "editNamed": "Modifier {name}",
+        "deleteNamed": "Supprimer {name}",
+        "cancel": "Annuler",
+        "close": "Fermer",
+        "save": "Enregistrer",
+        "create": "Créer le produit",
+        "saving": "Enregistrement…",
+        "deleting": "Suppression…",
+        "retry": "Réessayer",
+        "confirm": "Confirmer"
+      },
+      "form": {
+        "createTitle": "Nouveau produit",
+        "editTitle": "Modifier le produit",
+        "selectCategory": "Choisir une catégorie",
+        "initialStock": "Stock initial",
+        "alertThreshold": "Seuil d’alerte",
+        "stockReadonly": "Le stock évolue avec les ventes et les mouvements de stock."
+      },
+      "confirmDelete": {
+        "title": "Supprimer le produit ?",
+        "message": "Voulez-vous vraiment supprimer « {name} » ?"
+      },
+      "validation": {
+        "required": "Ce champ est obligatoire.",
+        "category": "Choisissez une catégorie valide.",
+        "number": "Saisissez un nombre valide.",
+        "integer": "Saisissez un entier positif ou nul.",
+        "nonNegative": "La valeur doit être positive ou nulle."
+      },
+      "errors": {
+        "save": "Impossible d’enregistrer le produit.",
+        "delete": "Impossible de supprimer le produit."
+      },
+      "dialog": {
+        "close": "Fermer la fenêtre"
+      },
+      "toast": {
+        "created": "Produit créé.",
+        "updated": "Produit modifié.",
+        "deleted": "Produit supprimé."
+      }
+    },
     "notFound": {
       "title": "Page introuvable",
       "description": "Cette adresse ne correspond à aucune page de l’application.",
       "return": "Retour à l’accueil"
+    }
+  },
+  "products": {
+    "title": "Produits",
+    "description": "Consultez et gérez votre catalogue, vos prix et vos niveaux de stock.",
+    "fields": {
+      "name": "Nom",
+      "reference": "Référence",
+      "category": "Catégorie",
+      "price": "Prix",
+      "stock": "Stock",
+      "status": "Statut",
+      "actions": "Actions"
+    },
+    "categoryMissing": "Catégorie supprimée",
+    "status": {
+      "out": "En rupture",
+      "low": "Stock faible",
+      "available": "Disponible"
+    },
+    "stockMeter": "Stock : {quantity} unités ; seuil d’alerte : {threshold}",
+    "threshold": "Seuil {quantity}",
+    "filters": {
+      "label": "Filtres des produits",
+      "search": "Rechercher un produit",
+      "searchPlaceholder": "Nom ou référence",
+      "category": "Catégorie",
+      "allCategories": "Toutes les catégories",
+      "lowStockOnly": "Stock faible uniquement"
+    },
+    "sortBy": "Trier par {field}",
+    "pagination": "Page {current} sur {total}",
+    "previousPage": "Page précédente",
+    "nextPage": "Page suivante",
+    "states": {
+      "loadErrorTitle": "Impossible de charger les produits",
+      "loadError": "Vérifiez votre connexion puis réessayez.",
+      "emptyTitle": "Aucun produit trouvé",
+      "empty": "Essayez de modifier les filtres ou créez votre premier produit.",
+      "noCategories": "Créez une catégorie avant d’ajouter votre premier produit."
+    },
+    "actions": {
+      "newProduct": "Nouveau produit",
+      "createFirst": "Créer le premier produit",
+      "goCategories": "Créer une catégorie",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "editNamed": "Modifier {name}",
+      "deleteNamed": "Supprimer {name}",
+      "cancel": "Annuler",
+      "close": "Fermer",
+      "save": "Enregistrer",
+      "create": "Créer le produit",
+      "saving": "Enregistrement…",
+      "deleting": "Suppression…",
+      "retry": "Réessayer",
+      "confirm": "Confirmer"
+    },
+    "form": {
+      "createTitle": "Nouveau produit",
+      "editTitle": "Modifier le produit",
+      "selectCategory": "Choisir une catégorie",
+      "initialStock": "Stock initial",
+      "alertThreshold": "Seuil d’alerte",
+      "stockReadonly": "Le stock évolue avec les ventes et les mouvements de stock."
+    },
+    "confirmDelete": {
+      "title": "Supprimer le produit ?",
+      "message": "Voulez-vous vraiment supprimer « {name} » ?"
+    },
+    "validation": {
+      "required": "Ce champ est obligatoire.",
+      "category": "Choisissez une catégorie valide.",
+      "number": "Saisissez un nombre valide.",
+      "integer": "Saisissez un entier positif ou nul.",
+      "nonNegative": "La valeur doit être positive ou nulle."
+    },
+    "errors": {
+      "save": "Impossible d’enregistrer le produit.",
+      "delete": "Impossible de supprimer le produit."
+    },
+    "dialog": {
+      "close": "Fermer la fenêtre"
+    },
+    "toast": {
+      "created": "Produit créé.",
+      "updated": "Produit modifié.",
+      "deleted": "Produit supprimé."
+    }
+  },
+  "categories": {
+    "title": "Catégories",
+    "description": "Créez des catégories pour organiser vos produits et retrouver leurs articles.",
+    "fields": {
+      "name": "Nom",
+      "description": "Description",
+      "productCount": "Nombre de produits",
+      "actions": "Actions"
+    },
+    "actions": {
+      "new": "Nouvelle catégorie",
+      "first": "Créer la première catégorie",
+      "viewProducts": "Voir les produits",
+      "editNamed": "Modifier {name}",
+      "deleteNamed": "Supprimer {name}",
+      "deleteDisabled": "Suppression désactivée",
+      "hasProductsOne": "Cette catégorie contient {count} produit.",
+      "hasProductsMany": "Cette catégorie contient {count} produits.",
+      "create": "Créer la catégorie",
+      "save": "Enregistrer",
+      "delete": "Supprimer",
+      "deleting": "Suppression…"
+    },
+    "search": {
+      "label": "Rechercher une catégorie",
+      "placeholder": "Nom ou description"
+    },
+    "states": {
+      "loadErrorTitle": "Impossible de charger les catégories",
+      "loadError": "Vérifiez votre connexion puis réessayez.",
+      "emptyTitle": "Aucune catégorie",
+      "empty": "Créez une catégorie pour organiser vos produits.",
+      "noResultsTitle": "Aucun résultat",
+      "noResults": "Essayez une autre recherche."
+    },
+    "noDescription": "Aucune description",
+    "productCountOne": "{count} produit",
+    "productCountMany": "{count} produits",
+    "form": {
+      "createTitle": "Nouvelle catégorie",
+      "editTitle": "Modifier la catégorie"
+    },
+    "confirmDelete": {
+      "title": "Supprimer la catégorie ?",
+      "message": "Voulez-vous vraiment supprimer « {name} » ?"
+    },
+    "validation": {
+      "required": "Le nom est obligatoire.",
+      "maxName": "Le nom ne peut pas dépasser 255 caractères."
+    },
+    "errors": {
+      "save": "Impossible d’enregistrer la catégorie.",
+      "delete": "Impossible de supprimer la catégorie."
+    },
+    "toast": {
+      "created": "Catégorie créée.",
+      "updated": "Catégorie modifiée.",
+      "deleted": "Catégorie supprimée."
     }
   }
 }

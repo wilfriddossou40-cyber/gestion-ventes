@@ -4,6 +4,7 @@ import { ThemeProvider } from "./context/ThemeProvider";
 import AppLayout from "./components/app/AppLayout";
 import DashboardPage from "./pages/app/DashboardPage";
 import ProduitsPage from "./pages/app/ProduitsPage";
+import CategoriesPage from "./pages/app/CategoriesPage";
 import ClientsPage from "./pages/app/ClientsPage";
 import VentesPage from "./pages/app/VentesPage";
 import StockPage from "./pages/app/StockPage";
@@ -20,6 +21,7 @@ function App() {
             <Route path="/app" element={<AppLayout />}>
               <Route index element={<DashboardPage />} />
               <Route path="produits" element={<ProduitsPage />} />
+              <Route path="categories" element={<CategoriesPage />} />
               <Route path="clients" element={<ClientsPage />} />
               <Route path="ventes" element={<VentesPage />} />
               <Route path="stock" element={<StockPage />} />

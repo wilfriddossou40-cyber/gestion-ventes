@@ -20,7 +20,14 @@ export function LanguageProvider({ children }) {
 
   const value = useMemo(() => {
     const t = (key, values = {}) => {
-      const message = key.split(".").reduce((entry, part) => entry?.[part], dictionaries[language]) ?? key;
+      const message = key.split(".").reduce((entry, part) => entry?.[part], dictionaries[language]);
+      if (message === undefined || message === null) {
+        if (import.meta.env.DEV) {
+          console.warn(`Clé de traduction manquante : ${key}`);
+        }
+        return key;
+      }
+
       return Object.entries(values).reduce(
         (text, [name, replacement]) => text.replaceAll(`{${name}}`, replacement),
         message,
