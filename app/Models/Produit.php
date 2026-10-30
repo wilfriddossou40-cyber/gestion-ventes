@@ -36,7 +36,7 @@ class Produit extends Model
         return $this->hasMany(VenteDetail::class);
     }
 
-    public function mouvementsStock(): HasMany
+    public function mouvementStocks(): HasMany
     {
         return $this->hasMany(MouvementStock::class);
     }
