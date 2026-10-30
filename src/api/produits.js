@@ -5,6 +5,11 @@ export async function getProduits(params = {}) {
   return data;
 }
 
+export async function getProduitsAlertes() {
+  const { data } = await api.get("/produits/alertes");
+  return data;
+}
+
 export async function createProduit(produit) {
   const { data } = await api.post("/produits", produit);
   return data;

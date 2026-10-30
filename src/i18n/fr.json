@@ -145,6 +145,10 @@
         "title": "Produits",
         "description": "Vous retrouverez ici votre catalogue de produits et leurs catégories."
       },
+      "stock": {
+        "title": "Stock",
+        "description": "Vous retrouverez ici les niveaux de stock et leurs mouvements."
+      },
       "categories": {
         "title": "Catégories",
         "description": "Organisez les produits et consultez ceux qui appartiennent à chaque catégorie."
@@ -596,6 +600,81 @@
       "created": "Catégorie créée.",
       "updated": "Catégorie modifiée.",
       "deleted": "Catégorie supprimée."
+    }
+  },
+  "stock": {
+    "actions": {
+      "newMovement": "Nouveau mouvement",
+      "retry": "Réessayer"
+    },
+    "types": {
+      "entry": "Entrée",
+      "exit": "Sortie"
+    },
+    "alerts": {
+      "title": "À réapprovisionner",
+      "description": "Produits au niveau ou sous leur seuil d’alerte.",
+      "errorTitle": "Impossible de charger les alertes",
+      "error": "Vérifiez votre connexion puis réessayez.",
+      "none": "Aucun produit sous son seuil d’alerte.",
+      "currentStock": "Stock actuel :",
+      "threshold": "Seuil d’alerte :",
+      "restock": "Réapprovisionner"
+    },
+    "journal": {
+      "title": "Journal des mouvements",
+      "description": "Historique des entrées et sorties de stock.",
+      "errorTitle": "Impossible de charger les mouvements",
+      "error": "Vérifiez votre connexion puis réessayez.",
+      "emptyTitle": "Aucun mouvement enregistré",
+      "empty": "Les mouvements de stock apparaîtront ici.",
+      "noResultsTitle": "Aucun mouvement trouvé",
+      "noResults": "Essayez de modifier les filtres.",
+      "fields": {
+        "date": "Date et heure",
+        "product": "Produit",
+        "type": "Type",
+        "quantity": "Quantité",
+        "reason": "Motif"
+      },
+      "pagination": "Page {current} sur {total}",
+      "previousPage": "Page précédente",
+      "nextPage": "Page suivante"
+    },
+    "filters": {
+      "product": "Produit",
+      "productSearch": "Rechercher un produit",
+      "selectProduct": "Filtrer par produit",
+      "allProducts": "Tous les produits",
+      "type": "Type de mouvement",
+      "allTypes": "Tous",
+      "reset": "Réinitialiser",
+      "productsError": "Impossible de charger la liste des produits."
+    },
+    "form": {
+      "title": "Nouveau mouvement",
+      "product": "Produit",
+      "productSearch": "Rechercher par nom ou référence",
+      "selectProduct": "Choisir un produit",
+      "currentStock": "Stock actuel : {stock}",
+      "type": "Type de mouvement",
+      "quantity": "Quantité",
+      "exceedsStock": "La quantité dépasse le stock actuel ({stock}).",
+      "reason": "Motif (facultatif)",
+      "cancel": "Annuler",
+      "submit": "Enregistrer le mouvement",
+      "saving": "Enregistrement…",
+      "validation": {
+        "productRequired": "Choisissez un produit.",
+        "quantity": "Saisissez un entier supérieur ou égal à 1.",
+        "maxReason": "Le motif ne peut pas dépasser 255 caractères."
+      },
+      "errors": {
+        "save": "Impossible d’enregistrer le mouvement."
+      },
+      "toast": {
+        "created": "Mouvement de stock enregistré."
+      }
     }
   }
 }

@@ -145,6 +145,10 @@
         "title": "Products",
         "description": "This page will show your product catalogue and categories."
       },
+      "stock": {
+        "title": "Stock",
+        "description": "This page will show stock levels and movements."
+      },
       "categories": {
         "title": "Categories",
         "description": "Organize products and see which items belong to each category."
@@ -596,6 +600,81 @@
       "created": "Category created.",
       "updated": "Category updated.",
       "deleted": "Category deleted."
+    }
+  },
+  "stock": {
+    "actions": {
+      "newMovement": "New movement",
+      "retry": "Try again"
+    },
+    "types": {
+      "entry": "Entry",
+      "exit": "Exit"
+    },
+    "alerts": {
+      "title": "To restock",
+      "description": "Products at or below their alert threshold.",
+      "errorTitle": "Could not load stock alerts",
+      "error": "Check your connection and try again.",
+      "none": "No products are below their alert threshold.",
+      "currentStock": "Current stock:",
+      "threshold": "Alert threshold:",
+      "restock": "Restock"
+    },
+    "journal": {
+      "title": "Stock movement log",
+      "description": "History of stock entries and exits.",
+      "errorTitle": "Could not load stock movements",
+      "error": "Check your connection and try again.",
+      "emptyTitle": "No movements recorded",
+      "empty": "Stock movements will appear here.",
+      "noResultsTitle": "No movements found",
+      "noResults": "Try changing the filters.",
+      "fields": {
+        "date": "Date and time",
+        "product": "Product",
+        "type": "Type",
+        "quantity": "Quantity",
+        "reason": "Reason"
+      },
+      "pagination": "Page {current} of {total}",
+      "previousPage": "Previous page",
+      "nextPage": "Next page"
+    },
+    "filters": {
+      "product": "Product",
+      "productSearch": "Search products",
+      "selectProduct": "Filter by product",
+      "allProducts": "All products",
+      "type": "Movement type",
+      "allTypes": "All",
+      "reset": "Reset",
+      "productsError": "Could not load the product list."
+    },
+    "form": {
+      "title": "New movement",
+      "product": "Product",
+      "productSearch": "Search by name or reference",
+      "selectProduct": "Choose a product",
+      "currentStock": "Current stock: {stock}",
+      "type": "Movement type",
+      "quantity": "Quantity",
+      "exceedsStock": "Quantity exceeds current stock ({stock}).",
+      "reason": "Reason (optional)",
+      "cancel": "Cancel",
+      "submit": "Save movement",
+      "saving": "Saving…",
+      "validation": {
+        "productRequired": "Choose a product.",
+        "quantity": "Enter a whole number greater than or equal to 1.",
+        "maxReason": "The reason must be 255 characters or fewer."
+      },
+      "errors": {
+        "save": "Could not save the stock movement."
+      },
+      "toast": {
+        "created": "Stock movement recorded."
+      }
     }
   }
 }

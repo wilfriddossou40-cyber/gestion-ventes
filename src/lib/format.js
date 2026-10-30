@@ -23,3 +23,10 @@ export function formatDateOnly(value, language = "fr") {
     dateStyle: "medium",
   }).format(new Date(year, month - 1, day));
 }
+
+export function formatDateTime(value, language = "fr") {
+  return new Intl.DateTimeFormat(locales[language] ?? locales.fr, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(new Date(value));
+}
