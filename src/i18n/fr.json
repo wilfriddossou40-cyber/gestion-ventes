@@ -118,5 +118,49 @@
   "dashboard": {
     "title": "Tableau de bord",
     "back": "Retour à l’accueil"
+  },
+  "app": {
+    "layout": {
+      "navigation": "Navigation de l’application",
+      "backToSite": "Retour au site",
+      "openMenu": "Ouvrir le menu de navigation",
+      "closeMenu": "Fermer le menu de navigation",
+      "themeMenu": "Choisir un thème",
+      "themeChoice": "Choisir le thème {theme}"
+    },
+    "navigation": {
+      "dashboard": "Tableau de bord",
+      "products": "Produits",
+      "clients": "Clients",
+      "sales": "Ventes",
+      "stock": "Stock"
+    },
+    "pages": {
+      "dashboard": {
+        "title": "Tableau de bord",
+        "description": "Vous retrouverez ici une vue d’ensemble de vos ventes et de votre stock."
+      },
+      "products": {
+        "title": "Produits",
+        "description": "Vous retrouverez ici votre catalogue de produits et leurs catégories."
+      },
+      "clients": {
+        "title": "Clients",
+        "description": "Vous retrouverez ici les informations et l’historique de vos clients."
+      },
+      "sales": {
+        "title": "Ventes",
+        "description": "Vous retrouverez ici les ventes enregistrées et leurs détails."
+      },
+      "stock": {
+        "title": "Stock",
+        "description": "Vous retrouverez ici les niveaux de stock et leurs mouvements."
+      }
+    },
+    "notFound": {
+      "title": "Page introuvable",
+      "description": "Cette adresse ne correspond à aucune page de l’application.",
+      "return": "Retour à l’accueil"
+    }
   }
 }

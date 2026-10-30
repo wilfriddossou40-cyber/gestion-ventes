@@ -118,5 +118,49 @@
   "dashboard": {
     "title": "Dashboard",
     "back": "Back to home"
+  },
+  "app": {
+    "layout": {
+      "navigation": "Application navigation",
+      "backToSite": "Back to website",
+      "openMenu": "Open navigation menu",
+      "closeMenu": "Close navigation menu",
+      "themeMenu": "Choose a theme",
+      "themeChoice": "Choose the {theme} theme"
+    },
+    "navigation": {
+      "dashboard": "Dashboard",
+      "products": "Products",
+      "clients": "Clients",
+      "sales": "Sales",
+      "stock": "Stock"
+    },
+    "pages": {
+      "dashboard": {
+        "title": "Dashboard",
+        "description": "This page will show an overview of your sales and stock."
+      },
+      "products": {
+        "title": "Products",
+        "description": "This page will show your product catalogue and categories."
+      },
+      "clients": {
+        "title": "Clients",
+        "description": "This page will show client information and history."
+      },
+      "sales": {
+        "title": "Sales",
+        "description": "This page will show recorded sales and their details."
+      },
+      "stock": {
+        "title": "Stock",
+        "description": "This page will show stock levels and movements."
+      }
+    },
+    "notFound": {
+      "title": "Page not found",
+      "description": "This address does not match an application page.",
+      "return": "Return to home"
+    }
   }
 }

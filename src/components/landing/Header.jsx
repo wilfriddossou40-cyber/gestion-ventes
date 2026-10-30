@@ -1,14 +1,12 @@
 import { useState } from "react";
-import { Boxes, Menu, Moon, Sun, Monitor, X } from "lucide-react";
+import { Boxes, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import ThemeMenu from "../ThemeMenu";
 import { useLanguage } from "../../context/useLanguage";
-import { useTheme } from "../../context/useTheme";
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
-  const { theme, cycleTheme } = useTheme();
-  const ThemeIcon = theme === "light" ? Sun : theme === "dark" ? Moon : Monitor;
 
   return (
     <header className="site-header">
@@ -28,15 +26,7 @@ function Header() {
           >
             {language === "fr" ? t("header.englishShort") : t("header.frenchShort")}
           </button>
-          <button
-            className="icon-button"
-            type="button"
-            onClick={cycleTheme}
-            aria-label={t("header.themeLabel", { theme: t(`theme.${theme}`) })}
-            title={t("header.themeLabel", { theme: t(`theme.${theme}`) })}
-          >
-            <ThemeIcon size={19} aria-hidden="true" />
-          </button>
+          <ThemeMenu buttonClassName="icon-button" />
           <button
             className="icon-button menu-button"
             type="button"

@@ -1,7 +1,13 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { LanguageProvider } from "./context/LanguageProvider";
 import { ThemeProvider } from "./context/ThemeProvider";
-import DashboardPage from "./pages/DashboardPage";
+import AppLayout from "./components/app/AppLayout";
+import DashboardPage from "./pages/app/DashboardPage";
+import ProduitsPage from "./pages/app/ProduitsPage";
+import ClientsPage from "./pages/app/ClientsPage";
+import VentesPage from "./pages/app/VentesPage";
+import StockPage from "./pages/app/StockPage";
+import NotFoundPage from "./pages/app/NotFoundPage";
 import LandingPage from "./pages/LandingPage";
 
 function App() {
@@ -11,7 +17,15 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/app" element={<DashboardPage />} />
+            <Route path="/app" element={<AppLayout />}>
+              <Route index element={<DashboardPage />} />
+              <Route path="produits" element={<ProduitsPage />} />
+              <Route path="clients" element={<ClientsPage />} />
+              <Route path="ventes" element={<VentesPage />} />
+              <Route path="stock" element={<StockPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Route>
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
