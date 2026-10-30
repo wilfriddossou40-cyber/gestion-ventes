@@ -344,6 +344,72 @@
       "deleted": "Product deleted."
     }
   },
+  "clients": {
+    "title": "Clients",
+    "description": "Keep customer contact details organized and up to date.",
+    "fields": {
+      "name": "Name",
+      "phone": "Phone",
+      "email": "Email",
+      "address": "Address",
+      "actions": "Actions"
+    },
+    "search": {
+      "label": "Search clients",
+      "placeholder": "Name, phone, or email"
+    },
+    "sortBy": "Sort by {field}",
+    "pagination": "Page {current} of {total}",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "states": {
+      "loadErrorTitle": "Could not load clients",
+      "loadError": "Check your connection and try again.",
+      "emptyTitle": "No clients",
+      "empty": "Add a client to find their contact details when recording sales.",
+      "noResultsTitle": "No clients found",
+      "noResults": "Try a different name, phone number, or email."
+    },
+    "actions": {
+      "new": "New client",
+      "edit": "Edit",
+      "delete": "Delete",
+      "editNamed": "Edit {name}",
+      "deleteNamed": "Delete {name}",
+      "cancel": "Cancel",
+      "save": "Save",
+      "create": "Create client",
+      "saving": "Saving…",
+      "deleting": "Deleting…",
+      "retry": "Try again"
+    },
+    "form": {
+      "createTitle": "New client",
+      "editTitle": "Edit client"
+    },
+    "confirmDelete": {
+      "title": "Delete client?",
+      "message": "Are you sure you want to delete “{name}”?"
+    },
+    "deleteConflictSuggestion": "Keep this client to preserve their sales history.",
+    "validation": {
+      "required": "The name is required.",
+      "maxName": "The name must be 255 characters or fewer.",
+      "maxPhone": "The phone number must be 30 characters or fewer.",
+      "email": "Enter a valid email address.",
+      "maxEmail": "The email must be 255 characters or fewer.",
+      "maxAddress": "The address must be 255 characters or fewer."
+    },
+    "errors": {
+      "save": "Could not save the client.",
+      "delete": "Could not delete the client."
+    },
+    "toast": {
+      "created": "Client created.",
+      "updated": "Client updated.",
+      "deleted": "Client deleted."
+    }
+  },
   "categories": {
     "title": "Categories",
     "description": "Create categories to organize your products and find their items.",

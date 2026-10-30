@@ -9,19 +9,23 @@ function ConfirmDialog({
   cancelLabel,
   deletingLabel,
   errorFallbackKey = "products.errors.delete",
+  errorSuggestion,
   busy,
   onClose,
   onConfirm,
 }) {
   const { t } = useLanguage();
   const [error, setError] = useState("");
+  const [isConflict, setIsConflict] = useState(false);
 
   async function confirm() {
     setError("");
+    setIsConflict(false);
     try {
       await onConfirm();
     } catch (requestError) {
       setError(requestError.response?.data?.message ?? t(errorFallbackKey));
+      setIsConflict(requestError.response?.status === 409);
     }
   }
 
@@ -30,6 +34,7 @@ function ConfirmDialog({
       <div className="products-confirm-body">
         <p>{message}</p>
         {error && <p className="products-form-error" role="alert">{error}</p>}
+        {isConflict && errorSuggestion && <p>{errorSuggestion}</p>}
         <div className="products-dialog-actions">
           <button className="product-button product-button-secondary" type="button" onClick={onClose} disabled={busy}>
             {cancelLabel ?? t("products.actions.cancel")}

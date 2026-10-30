@@ -344,6 +344,72 @@
       "deleted": "Produit supprimé."
     }
   },
+  "clients": {
+    "title": "Clients",
+    "description": "Retrouvez les coordonnées de vos clients et gérez leurs informations.",
+    "fields": {
+      "name": "Nom",
+      "phone": "Téléphone",
+      "email": "E-mail",
+      "address": "Adresse",
+      "actions": "Actions"
+    },
+    "search": {
+      "label": "Rechercher un client",
+      "placeholder": "Nom, téléphone ou e-mail"
+    },
+    "sortBy": "Trier par {field}",
+    "pagination": "Page {current} sur {total}",
+    "previousPage": "Page précédente",
+    "nextPage": "Page suivante",
+    "states": {
+      "loadErrorTitle": "Impossible de charger les clients",
+      "loadError": "Vérifiez votre connexion puis réessayez.",
+      "emptyTitle": "Aucun client",
+      "empty": "Ajoutez un client pour retrouver ses coordonnées lors de vos ventes.",
+      "noResultsTitle": "Aucun client trouvé",
+      "noResults": "Essayez un autre nom, numéro de téléphone ou e-mail."
+    },
+    "actions": {
+      "new": "Nouveau client",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "editNamed": "Modifier {name}",
+      "deleteNamed": "Supprimer {name}",
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "create": "Créer le client",
+      "saving": "Enregistrement…",
+      "deleting": "Suppression…",
+      "retry": "Réessayer"
+    },
+    "form": {
+      "createTitle": "Nouveau client",
+      "editTitle": "Modifier le client"
+    },
+    "confirmDelete": {
+      "title": "Supprimer le client ?",
+      "message": "Voulez-vous vraiment supprimer « {name} » ?"
+    },
+    "deleteConflictSuggestion": "Conservez ce client pour garder l’historique de ses ventes.",
+    "validation": {
+      "required": "Le nom est obligatoire.",
+      "maxName": "Le nom ne peut pas dépasser 255 caractères.",
+      "maxPhone": "Le téléphone ne peut pas dépasser 30 caractères.",
+      "email": "Saisissez une adresse e-mail valide.",
+      "maxEmail": "L’e-mail ne peut pas dépasser 255 caractères.",
+      "maxAddress": "L’adresse ne peut pas dépasser 255 caractères."
+    },
+    "errors": {
+      "save": "Impossible d’enregistrer le client.",
+      "delete": "Impossible de supprimer le client."
+    },
+    "toast": {
+      "created": "Client créé.",
+      "updated": "Client modifié.",
+      "deleted": "Client supprimé."
+    }
+  },
   "categories": {
     "title": "Catégories",
     "description": "Créez des catégories pour organiser vos produits et retrouver leurs articles.",
