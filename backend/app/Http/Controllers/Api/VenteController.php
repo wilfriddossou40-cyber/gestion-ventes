@@ -1,11 +1,15 @@
 <?php
+
 namespace App\Http\Controllers\Api;
+
 use App\Http\Controllers\Controller;
 use App\Models\Produit;
 use App\Models\Vente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use RuntimeException;
+
 class VenteController extends Controller
 {
     // GET /api/ventes : historique des ventes
@@ -34,8 +38,10 @@ class VenteController extends Controller
         if ($request->filled('date_fin')) {
             $query->whereDate('date_vente', '<=', $request->date_fin);
         }
+
         return $query->orderByDesc('date_vente')->orderByDesc('id')->get();
     }
+
     // POST /api/ventes : enregistre une vente complete
     // React envoie le client, la date et la liste des produits achetes :
     // {
@@ -52,59 +58,68 @@ class VenteController extends Controller
             'lignes.*.produit_id' => 'required|exists:produits,id',
             'lignes.*.quantite' => 'required|integer|min:1',
         ]);
-        // TRANSACTION : vente + lignes + baisse du stock + historique.
-        // Si UNE seule etape echoue (ex : stock insuffisant),
-        // TOUT est annule et la base reste comme avant.
-        $vente = DB::transaction(function () use ($data) {
-            // 1. On cree la vente avec un total provisoire de 0
+
+        return response()->json(
+            $this->createFromValidatedData($data)->load('client', 'details.produit'),
+            201,
+        );
+    }
+
+    /**
+     * @param  array{client_id: int, date_vente: string, lignes: list<array{produit_id: int, quantite: int}>}  $data
+     */
+    public function createFromValidatedData(array $data): Vente
+    {
+        return DB::transaction(function () use ($data): Vente {
             $vente = Vente::create([
                 'client_id' => $data['client_id'],
                 'date_vente' => $data['date_vente'],
                 'montant_total' => 0,
             ]);
-            $total = 0;
+
+            $total = 0.0;
             foreach ($data['lignes'] as $ligne) {
-                // 2. On relit le produit en le bloquant (stock a jour)
-                $produit = Produit::lockForUpdate()->find($ligne['produit_id']);
-                // 3. VERIFICATION DU STOCK avant de vendre
-                if ($produit->quantite_stock < $ligne['quantite']) {
-                    // Erreur 422 : l'exception annule toute la transaction
+                $product = Produit::query()->lockForUpdate()->find($ligne['produit_id']);
+                if ($product === null) {
+                    throw new RuntimeException("Produit introuvable : {$ligne['produit_id']}");
+                }
+
+                if ($product->quantite_stock < $ligne['quantite']) {
                     throw ValidationException::withMessages([
-                        'lignes' => "Stock insuffisant pour {$produit->nom} "
-                            . "(disponible : {$produit->quantite_stock})",
+                        'lignes' => "Stock insuffisant pour {$product->nom} "
+                            ."(disponible : {$product->quantite_stock})",
                     ]);
                 }
-                // 4. CALCUL AUTOMATIQUE : sous-total = quantite x prix
-                // Le prix est copie dans la ligne : si le prix du produit
-                // change plus tard, les anciennes ventes restent justes.
-                $sousTotal = $ligne['quantite'] * $produit->prix;
+
+                $subtotal = $ligne['quantite'] * $product->prix;
                 $vente->details()->create([
-                    'produit_id' => $produit->id,
+                    'produit_id' => $product->id,
                     'quantite' => $ligne['quantite'],
-                    'prix_unitaire' => $produit->prix,
-                    'sous_total' => $sousTotal,
+                    'prix_unitaire' => $product->prix,
+                    'sous_total' => $subtotal,
                 ]);
-                // 5. On diminue le stock
-                $produit->decrement('quantite_stock', $ligne['quantite']);
-                // 6. On note la sortie dans l'historique du stock
-                $produit->mouvementStocks()->create([
+                $product->decrement('quantite_stock', $ligne['quantite']);
+                $product->mouvementStocks()->create([
                     'type' => 'sortie',
                     'quantite' => $ligne['quantite'],
                     'motif' => "Vente #{$vente->id}",
                 ]);
-                $total += $sousTotal;
+
+                $total += $subtotal;
             }
-            // 7. On enregistre le montant total calcule
+
             $vente->update(['montant_total' => $total]);
+
             return $vente;
         });
-        return response()->json($vente->load('client', 'details.produit'), 201);
     }
+
     // GET /api/ventes/{id} : une vente avec son client et ses lignes
     public function show(Vente $vente)
     {
         return $vente->load('client', 'details.produit');
     }
+
     // PAS de update : on ne modifie pas une vente enregistree.
     // En cas d'erreur, on annule la vente et on en refait une.
     // DELETE /api/ventes/{id} : ANNULE une vente et remet le stock
@@ -118,7 +133,7 @@ class VenteController extends Controller
                 $produit->mouvementStocks()->create([
                     'type' => 'entree',
                     'quantite' => $detail->quantite,
-                    'motif' => "Annulation vente #{$vente->id}"
+                    'motif' => "Annulation vente #{$vente->id}",
                 ]);
             }
 
