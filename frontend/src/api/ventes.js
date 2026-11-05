@@ -1,4 +1,5 @@
 import api from "./axios";
+import { invalidateDashboard } from "./dashboard";
 
 export async function getVentes(params = {}) {
   const { data } = await api.get("/ventes", { params });
@@ -12,9 +13,12 @@ export async function getVente(id) {
 
 export async function createVente(vente) {
   const { data } = await api.post("/ventes", vente);
+  invalidateDashboard();
   return data;
 }
 
 export async function deleteVente(id) {
-  return api.delete(`/ventes/${id}`);
+  const response = await api.delete(`/ventes/${id}`);
+  invalidateDashboard();
+  return response;
 }

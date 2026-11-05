@@ -2,6 +2,7 @@ import { ArrowDownToLine, ArrowUpFromLine } from "lucide-react";
 import { useMemo } from "react";
 import { useLanguage } from "../../context/useLanguage";
 import { formatDateTime } from "../../lib/format";
+import Badge from "../ui/Badge";
 import DataTable from "../ui/DataTable";
 
 function MovementType({ type }) {
@@ -9,10 +10,10 @@ function MovementType({ type }) {
   const isEntry = type === "entree";
   const Icon = isEntry ? ArrowDownToLine : ArrowUpFromLine;
   return (
-    <span className={`stock-movement-type${isEntry ? " is-entry" : " is-exit"}`}>
+    <Badge className={`stock-movement-type${isEntry ? " is-entry" : " is-exit"}`} variant={isEntry ? "success" : "alert"}>
       <Icon size={15} aria-hidden="true" />
       {t(isEntry ? "stock.types.entry" : "stock.types.exit")}
-    </span>
+    </Badge>
   );
 }
 

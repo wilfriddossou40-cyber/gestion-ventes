@@ -85,7 +85,7 @@ function ProduitsTable({ produits, language, onEdit, onDelete, loading = false }
       id: "statut",
       accessorFn: (product) => Number(product.quantite_stock),
       header: t("products.fields.status"),
-      cell: ({ row }) => <StockBadge produit={row.original} showLevel={false} />,
+      cell: ({ row }) => <StockBadge produit={row.original} />,
     },
     {
       id: "actions",

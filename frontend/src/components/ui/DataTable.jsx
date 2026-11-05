@@ -78,9 +78,12 @@ function DataTable({
                         key={header.id}
                         scope="col"
                         aria-sort={sorted ? (sorted === "asc" ? "ascending" : "descending") : "none"}
+                        data-column-id={column.id}
                         className={[
                           column.columnDef.meta?.numeric ? "is-numeric" : "",
                           column.columnDef.meta?.actions ? "is-actions" : "",
+                          column.id === "statut" ? "is-status" : "",
+                          column.id === "reference" ? "is-reference" : "",
                         ].filter(Boolean).join(" ")}
                       >
                         {canSort ? (
@@ -125,10 +128,13 @@ function DataTable({
                     return (
                       <td
                         key={cell.id}
+                        data-column-id={cell.column.id}
                         className={[
                           cell.column.columnDef.meta?.numeric ? "is-numeric" : "",
                           cell.column.columnDef.meta?.actions ? "is-actions" : "",
                           cell.column.columnDef.meta?.truncate ? "is-truncated" : "",
+                          cell.column.id === "statut" ? "is-status" : "",
+                          cell.column.id === "reference" ? "is-reference" : "",
                         ].filter(Boolean).join(" ")}
                         title={typeof value === "string" ? value : undefined}
                       >

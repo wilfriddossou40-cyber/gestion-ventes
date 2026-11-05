@@ -63,7 +63,8 @@
     "lastMovement": "Dernier mouvement",
     "sale": "Vente",
     "movementDescription": "Vente enregistrée · 2 unités",
-    "caption": "Aperçu fictif : les valeurs affichées sont des exemples."
+    "caption": "Aperçu fictif : les valeurs affichées sont des exemples.",
+    "demoDisclosure": "Données de démonstration"
   },
   "features": {
     "eyebrow": "Ce que vous pouvez suivre",
@@ -150,6 +151,22 @@
       "stock": "Stock"
     },
     "dashboard": {
+      "headerEyebrow": "Vue d’ensemble",
+      "periodLabel": "Période du graphique",
+      "period7": "7 jours",
+      "period30": "30 jours",
+      "chartsTitle": "Indicateurs graphiques",
+      "alertTitle": "Alertes de stock",
+      "alertDescription": "Produits qui nécessitent un réapprovisionnement.",
+      "alertCountLabel": "produit(s) à surveiller",
+      "alertProgress": "{percent} % du catalogue sous le seuil",
+      "alertLink": "Voir les produits",
+      "category": {
+        "title": "Ventes par catégorie",
+        "description": "Répartition globale du chiffre d’affaires.",
+        "empty": "Aucune vente par catégorie sur la période.",
+        "total": "Chiffre d’affaires"
+      },
       "actionTitle": "À traiter",
       "actionDescription": "Les produits qui nécessitent votre attention.",
       "viewStock": "Voir tout et réapprovisionner",
@@ -164,7 +181,9 @@
       "dashboardError": "Impossible de charger les indicateurs.",
       "salesError": "Impossible de charger les dernières ventes.",
       "kpi": {
-        "revenue": "Chiffre d’affaires total",
+        "revenue": "Chiffre d’affaires",
+        "sales": "Nombre de ventes",
+        "stockValue": "Valeur du stock",
         "todaySales": "Ventes aujourd’hui",
         "lowStock": "Produits en stock faible",
         "products": "Produits",
@@ -177,19 +196,22 @@
       "addClients": "Ajouter des clients",
       "startSale": "Enregistrer une vente",
       "chart": {
-        "title": "Ventes par mois",
-        "description": "Chiffre d’affaires des six derniers mois disponibles.",
-        "empty": "Les ventes mensuelles apparaîtront ici dès qu’une vente sera enregistrée.",
-        "accessibleLabel": "Graphique du chiffre d’affaires mensuel",
-        "month": "Mois",
+        "title": "Évolution du chiffre d’affaires",
+        "description": "Chiffre d’affaires sur les {days} derniers jours.",
+        "empty": "Les ventes journalières apparaîtront ici dès qu’une vente sera enregistrée.",
+        "accessibleLabel": "Graphique du chiffre d’affaires journalier",
+        "day": "Jour",
         "revenue": "Chiffre d’affaires",
         "salesCount": "Nombre de ventes"
       },
       "currencyShort": "FCFA",
       "activityTitle": "Classement des produits et ventes récentes",
       "topProducts": {
-        "title": "Meilleurs produits",
-        "description": "Classés selon les quantités vendues.",
+        "title": "Top 5 produits",
+        "description": "Comparez les quantités vendues et le chiffre d’affaires.",
+        "rankingLabel": "Classement des produits",
+        "byQuantity": "Quantités",
+        "byRevenue": "Chiffre d’affaires",
         "empty": "Aucune vente de produit pour le moment.",
         "barLabel": "{product} : {quantity} vendus",
         "sold": "{count} vendus"

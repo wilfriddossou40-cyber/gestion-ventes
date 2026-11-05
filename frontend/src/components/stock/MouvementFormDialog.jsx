@@ -3,8 +3,8 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { createMouvementStock } from "../../api/mouvementsStock";
 import { useLanguage } from "../../context/useLanguage";
-import Dialog from "../ui/Dialog";
-import Field from "../ui/Field";
+import Dialog from "../ui/ModalShell";
+import Field from "../ui/FormField";
 import { normalizeApiError } from "../../lib/apiErrors";
 
 function MouvementFormDialog({ products, initialProduct, initialType = "entree", busy, onClose, onSaved }) {

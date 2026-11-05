@@ -5,7 +5,7 @@ import { useLanguage } from "../../context/useLanguage";
 import { formatCurrency, formatDateOnly } from "../../lib/format";
 import { normalizeApiError } from "../../lib/apiErrors";
 import ConfirmDialog from "../produits/ConfirmDialog";
-import Dialog from "../ui/Dialog";
+import Dialog from "../ui/ModalShell";
 
 function VenteDetailDialog({ saleId, language, busy, onClose, onCancelSale }) {
   const { t } = useLanguage();

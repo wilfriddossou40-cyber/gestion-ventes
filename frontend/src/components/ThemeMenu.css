@@ -5,11 +5,12 @@
 .theme-menu-control .theme-menu-trigger {
   display: inline-flex;
   width: auto;
-  min-width: 44px;
+  min-width: 52px;
+  padding-right: 10px;
+  padding-left: 10px;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  padding: 0 8px;
+  gap: 4px;
 }
 
 .theme-menu-chevron {

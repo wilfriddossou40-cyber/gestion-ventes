@@ -1,10 +1,18 @@
 import { ArrowDownRight, ArrowUpRight, Boxes, CircleAlert } from "lucide-react";
+import { format } from "date-fns";
+import { enUS, fr } from "date-fns/locale";
 import { useLanguage } from "../../context/useLanguage";
-import { formatCurrency, formatDate } from "../../lib/format";
+import { formatCurrency } from "../../lib/format";
+
+function formatCurrentDate(language) {
+  return format(new Date(), language === "fr" ? "d MMM yyyy" : "MMM d, yyyy", {
+    locale: language === "fr" ? fr : enUS,
+  });
+}
 
 function AppPreview() {
   const { language, t } = useLanguage();
-  const exampleDate = new Date(2026, 8, 24);
+  const formattedDate = formatCurrentDate(language);
 
   return (
     <div className="preview-wrap" role="region" aria-label={t("preview.accessibleLabel")}>
@@ -14,26 +22,24 @@ function AppPreview() {
             <span className="preview-brand-icon"><Boxes size={16} aria-hidden="true" /></span>
             <span>{t("brand.name")}</span>
           </div>
-          <span className="demo-badge">{t("preview.demo")}</span>
         </div>
         <div className="preview-heading">
           <div>
             <p className="preview-kicker">{t("preview.dashboard")}</p>
             <h2>{t("preview.overview")}</h2>
           </div>
-          <span className="preview-date">{formatDate(exampleDate, language)}</span>
+          <span className="preview-date">{formattedDate}</span>
         </div>
 
         <div className="preview-metrics">
           <article className="metric-card">
             <span>{t("preview.products")}</span>
             <strong>24</strong>
-            <small><Boxes size={13} aria-hidden="true" />{t("preview.demoValue")}</small>
           </article>
           <article className="metric-card metric-sales">
             <span>{t("preview.todaySales")}</span>
             <strong>{formatCurrency(87500, language)}</strong>
-            <small><ArrowUpRight size={13} aria-hidden="true" />{t("preview.demoValue")}</small>
+            <small><ArrowUpRight size={14} aria-hidden="true" />+12 %</small>
           </article>
         </div>
 
@@ -69,7 +75,7 @@ function AppPreview() {
           </div>
         </div>
       </div>
-      <p className="preview-caption">{t("preview.caption")}</p>
+      <p className="preview-caption">{t("preview.demoDisclosure")}</p>
     </div>
   );
 }

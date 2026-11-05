@@ -24,7 +24,7 @@ function Header() {
             aria-label={t("header.languageLabel")}
             title={t("header.languageLabel")}
           >
-            {language === "fr" ? t("header.englishShort") : t("header.frenchShort")}
+            {language === "fr" ? t("header.frenchShort") : t("header.englishShort")}
           </button>
           <ThemeMenu buttonClassName="icon-button" />
           <button
@@ -45,7 +45,6 @@ function Header() {
           aria-label={t("header.navigation")}
         >
           <a href="#features" onClick={() => setMenuOpen(false)}>{t("header.features")}</a>
-          <a href="#how-it-works" onClick={() => setMenuOpen(false)}>{t("header.howItWorks")}</a>
           <Link className="button button-small button-primary" to="/app" onClick={() => setMenuOpen(false)}>
             {t("header.openApp")}
           </Link>

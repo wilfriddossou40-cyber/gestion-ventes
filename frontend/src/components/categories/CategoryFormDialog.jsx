@@ -2,8 +2,8 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { createCategorie, updateCategorie } from "../../api/categories";
 import { useLanguage } from "../../context/useLanguage";
-import Dialog from "../ui/Dialog";
-import Field from "../ui/Field";
+import Dialog from "../ui/ModalShell";
+import Field from "../ui/FormField";
 import { normalizeApiError } from "../../lib/apiErrors";
 
 function CategoryFormDialog({ category = null, onClose, onSaved, notify }) {

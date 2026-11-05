@@ -1,0 +1,51 @@
+.ui-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+}
+
+.ui-list-card > .ui-toolbar {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: var(--surface);
+}
+
+.ui-list-card > .ui-toolbar .products-search,
+.ui-list-card > .ui-toolbar .categories-search {
+  min-height: 40px;
+}
+
+.ui-list-card > .ui-toolbar .products-search input,
+.ui-list-card > .ui-toolbar .categories-search input,
+.ui-list-card > .ui-toolbar .products-filter-select select,
+.ui-list-card > .ui-toolbar .sales-filter-field select,
+.ui-list-card > .ui-toolbar .sales-filter-field input {
+  height: 40px;
+  min-height: 40px;
+}
+
+.ui-list-card > .ui-toolbar .products-low-filter {
+  min-height: 40px;
+}
+
+.ui-list-card > .ui-toolbar .product-button {
+  height: 40px;
+  min-height: 40px;
+}
+
+@media (max-width: 767px) {
+  .ui-list-card > .ui-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ui-list-card > .ui-toolbar > * {
+    width: 100%;
+    min-width: 0;
+  }
+}

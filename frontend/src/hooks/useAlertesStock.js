@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { DASHBOARD_INVALIDATED_EVENT } from "../api/dashboard";
 import { getProduitsAlertes } from "../api/produits";
 
 function useAlertesStock() {
@@ -20,6 +21,14 @@ function useAlertesStock() {
 
   useEffect(() => {
     reload();
+    const handleInvalidation = () => {
+      reload();
+    };
+    window.addEventListener(DASHBOARD_INVALIDATED_EVENT, handleInvalidation);
+
+    return () => {
+      window.removeEventListener(DASHBOARD_INVALIDATED_EVENT, handleInvalidation);
+    };
   }, [reload]);
 
   return { data, loading, error, reload };

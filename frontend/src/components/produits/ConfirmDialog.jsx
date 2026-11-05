@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLanguage } from "../../context/useLanguage";
-import Dialog from "../ui/Dialog";
+import Dialog from "../ui/ModalShell";
 import { normalizeApiError } from "../../lib/apiErrors";
 
 function ConfirmDialog({

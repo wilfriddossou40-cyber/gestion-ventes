@@ -1,5 +1,6 @@
 import { AlertTriangle, CircleCheck, CircleX } from "lucide-react";
 import { useLanguage } from "../../context/useLanguage";
+import Badge from "../ui/Badge";
 
 function StockBadge({ produit, showLevel = true }) {
   const { t } = useLanguage();
@@ -13,10 +14,10 @@ function StockBadge({ produit, showLevel = true }) {
 
   return (
     <div className={`product-stock product-stock-${status}`}>
-      <span className="product-stock-label">
+      <Badge className="product-stock-label" variant={status === "available" ? "success" : "alert"}>
         <StatusIcon size={15} aria-hidden="true" />
         {t(`products.status.${status}`)}
-      </span>
+      </Badge>
       {showLevel && (
         <div className="product-stock-meter">
           <div

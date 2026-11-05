@@ -185,7 +185,7 @@ function AppLayout() {
               title={t("header.languageLabel")}
               onClick={() => setLanguage(language === "fr" ? "en" : "fr")}
             >
-              {language === "fr" ? t("header.englishShort") : t("header.frenchShort")}
+              {language === "fr" ? "FR" : "EN"}
             </button>
             <ThemeMenu buttonClassName="app-icon-button" />
           </div>

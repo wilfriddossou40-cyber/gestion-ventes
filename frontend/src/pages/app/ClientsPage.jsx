@@ -5,12 +5,12 @@ import { useSearchParams } from "react-router-dom";
 import { createClient, deleteClient, updateClient } from "../../api/clients";
 import ClientFormDialog from "../../components/clients/ClientFormDialog";
 import ClientsTable from "../../components/clients/ClientsTable";
-import ConfirmDialog from "../../components/produits/ConfirmDialog";
+import ConfirmDialog from "../../components/ui/ConfirmDialog";
+import EmptyState from "../../components/ui/EmptyState";
+import ListPage from "../../components/ui/ListPage";
 import { useLanguage } from "../../context/useLanguage";
 import useClients from "../../hooks/useClients";
 import { normalizeApiError } from "../../lib/apiErrors";
-import "./ClientsPage.css";
-import "./ProduitsPage.css";
 
 function ClientsPage() {
   const { language, t } = useLanguage();
@@ -63,13 +63,22 @@ function ClientsPage() {
 
   return (
     <div className="clients-page">
-      <Toaster position="top-right" toastOptions={{ duration: 2800 }} />
-      <header className="products-page-header">
-        <div>
-          <h1>{t("clients.title")}</h1>
-          <p>{t("clients.description")}</p>
-        </div>
-        <div className="products-header-actions">
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 2800,
+          style: {
+            background: "var(--surface)",
+            border: "1px solid var(--border)",
+            boxShadow: "var(--shadow-card)",
+            color: "var(--text)",
+          },
+        }}
+      />
+      <ListPage
+        title={t("clients.title")}
+        description={t("clients.description")}
+        actions={
           <button
             className="product-button product-button-primary"
             type="button"
@@ -77,11 +86,8 @@ function ClientsPage() {
           >
             <Plus size={17} aria-hidden="true" />{t("clients.actions.new")}
           </button>
-        </div>
-      </header>
-
-      <section className="products-filters" aria-label={t("clients.search.label")}>
-        <label className="products-search">
+        }
+        toolbar={<label className="list-page-search">
           <Search size={17} aria-hidden="true" />
           <span className="sr-only">{t("clients.search.label")}</span>
           <input
@@ -94,25 +100,27 @@ function ClientsPage() {
             })}
           />
         </label>
-      </section>
+        }
+      >
 
-      <section className="products-data-panel" aria-live="polite">
         {clients.error ? (
-          <div className="products-state">
-            <CircleAlert className="products-state-error" size={26} aria-hidden="true" />
-            <h2>{t("clients.states.loadErrorTitle")}</h2>
-            <p>{normalizeApiError(clients.error, t).message}</p>
-            <button className="product-button product-button-primary" type="button" onClick={clients.reload}>
+          <EmptyState
+            className="products-state"
+            icon={CircleAlert}
+            title={t("clients.states.loadErrorTitle")}
+            description={normalizeApiError(clients.error, t).message}
+            actions={<button className="product-button product-button-primary" type="button" onClick={clients.reload}>
               {t("clients.actions.retry")}
-            </button>
-          </div>
+            </button>}
+          />
         ) : clients.loading ? (
           <ClientsTable clients={[]} language={language} onEdit={() => {}} onDelete={() => {}} loading />
         ) : clients.data.length === 0 ? (
-          <div className="products-state">
-            <h2>{t(search ? "clients.states.noResultsTitle" : "clients.states.emptyTitle")}</h2>
-            <p>{t(search ? "clients.states.noResults" : "clients.states.empty")}</p>
-            {!search && (
+          <EmptyState
+            className="products-state"
+            title={t(search ? "clients.states.noResultsTitle" : "clients.states.emptyTitle")}
+            description={t(search ? "clients.states.noResults" : "clients.states.empty")}
+            actions={!search && (
               <button
                 className="product-button product-button-primary"
                 type="button"
@@ -121,7 +129,7 @@ function ClientsPage() {
                 {t("clients.actions.new")}
               </button>
             )}
-          </div>
+          />
         ) : (
           <ClientsTable
             clients={clients.data}
@@ -130,7 +138,7 @@ function ClientsPage() {
             onDelete={(client) => setDialog({ type: "confirm", client })}
           />
         )}
-      </section>
+      </ListPage>
 
       {dialog?.type === "form" && (
         <ClientFormDialog

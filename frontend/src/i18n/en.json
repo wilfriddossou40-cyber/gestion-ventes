@@ -63,7 +63,8 @@
     "lastMovement": "Latest movement",
     "sale": "Sale",
     "movementDescription": "Sale recorded · 2 units",
-    "caption": "Illustrative preview: all displayed values are examples."
+    "caption": "Illustrative preview: all displayed values are examples.",
+    "demoDisclosure": "Demonstration data"
   },
   "features": {
     "eyebrow": "What you can track",
@@ -150,6 +151,22 @@
       "stock": "Stock"
     },
     "dashboard": {
+      "headerEyebrow": "Overview",
+      "periodLabel": "Chart period",
+      "period7": "7 days",
+      "period30": "30 days",
+      "chartsTitle": "Visual metrics",
+      "alertTitle": "Stock alerts",
+      "alertDescription": "Products that need replenishment.",
+      "alertCountLabel": "product(s) to watch",
+      "alertProgress": "{percent}% of the catalogue below threshold",
+      "alertLink": "View products",
+      "category": {
+        "title": "Sales by category",
+        "description": "All-time revenue distribution.",
+        "empty": "No category sales for this period.",
+        "total": "Revenue"
+      },
       "actionTitle": "Needs attention",
       "actionDescription": "Products that need your attention.",
       "viewStock": "View all and restock",
@@ -164,7 +181,9 @@
       "dashboardError": "Could not load dashboard metrics.",
       "salesError": "Could not load recent sales.",
       "kpi": {
-        "revenue": "Total revenue",
+        "revenue": "Revenue",
+        "sales": "Number of sales",
+        "stockValue": "Stock value",
         "todaySales": "Sales today",
         "lowStock": "Low-stock products",
         "products": "Products",
@@ -177,19 +196,22 @@
       "addClients": "Add clients",
       "startSale": "Record a sale",
       "chart": {
-        "title": "Sales by month",
-        "description": "Revenue for the six latest available months.",
-        "empty": "Monthly sales will appear here once a sale is recorded.",
-        "accessibleLabel": "Monthly revenue chart",
-        "month": "Month",
+        "title": "Revenue over time",
+        "description": "Revenue for the last {days} days.",
+        "empty": "Daily sales will appear here once a sale is recorded.",
+        "accessibleLabel": "Daily revenue chart",
+        "day": "Day",
         "revenue": "Revenue",
         "salesCount": "Number of sales"
       },
       "currencyShort": "FCFA",
       "activityTitle": "Top products and recent sales",
       "topProducts": {
-        "title": "Top products",
-        "description": "Ranked by quantities sold.",
+        "title": "Top 5 products",
+        "description": "Compare quantities sold and revenue.",
+        "rankingLabel": "Product ranking",
+        "byQuantity": "Quantity",
+        "byRevenue": "Revenue",
         "empty": "No product sales yet.",
         "barLabel": "{product}: {quantity} sold",
         "sold": "{count} sold"

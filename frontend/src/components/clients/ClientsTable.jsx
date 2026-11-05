@@ -1,6 +1,7 @@
 import { Pencil, Trash2 } from "lucide-react";
 import { useMemo } from "react";
 import { useLanguage } from "../../context/useLanguage";
+import Avatar from "../ui/Avatar";
 import DataTable from "../ui/DataTable";
 
 function ClientActions({ client, onEdit, onDelete, t }) {
@@ -33,7 +34,15 @@ function ClientsTable({ clients, language, onEdit, onDelete, loading = false }) 
       id: "nom",
       accessorFn: (client) => client.nom ?? "",
       header: t("clients.fields.name"),
-      cell: ({ row }) => <span className="product-table-name">{row.original.nom}</span>,
+      cell: ({ row }) => (
+        <span className="client-table-identity">
+          <Avatar name={row.original.nom} />
+          <span>
+            <strong className="product-table-name">{row.original.nom}</strong>
+            {row.original.email && <small>{row.original.email}</small>}
+          </span>
+        </span>
+      ),
       sortFn: (left, right, id) => String(left.getValue(id) ?? "").localeCompare(
         String(right.getValue(id) ?? ""),
         language,
@@ -80,7 +89,10 @@ function ClientsTable({ clients, language, onEdit, onDelete, loading = false }) 
     return (
       <>
         <div className="ui-data-table-card-heading">
-          <strong className="ui-data-table-card-title" title={client.nom}>{client.nom}</strong>
+          <span className="client-card-identity">
+            <Avatar name={client.nom} />
+            <strong className="ui-data-table-card-title" title={client.nom}>{client.nom}</strong>
+          </span>
         </div>
         <dl className="ui-data-table-card-fields">
           <div>

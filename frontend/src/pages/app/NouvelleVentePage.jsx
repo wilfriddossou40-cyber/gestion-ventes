@@ -7,7 +7,9 @@ import { createClient } from "../../api/clients";
 import ClientFormDialog from "../../components/clients/ClientFormDialog";
 import ProductsSkeleton from "../../components/produits/ProductsSkeleton";
 import ApiErrorBanner from "../../components/ui/ApiErrorBanner";
-import Field from "../../components/ui/Field";
+import Card from "../../components/ui/Card";
+import Field from "../../components/ui/FormField";
+import PageHeader from "../../components/ui/PageHeader";
 import { useLanguage } from "../../context/useLanguage";
 import useClients from "../../hooks/useClients";
 import useProduits from "../../hooks/useProduits";
@@ -152,16 +154,22 @@ function NouvelleVentePage() {
 
   return (
     <div className="new-sale-page">
-      <Toaster position="top-right" toastOptions={{ duration: 2800 }} />
-      <header className="products-page-header">
-        <div>
-          <h1>{t("sales.new.title")}</h1>
-          <p>{t("sales.new.description")}</p>
-        </div>
-      </header>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 2800,
+          style: {
+            background: "var(--surface)",
+            border: "1px solid var(--border)",
+            boxShadow: "var(--shadow-card)",
+            color: "var(--text)",
+          },
+        }}
+      />
+      <PageHeader title={t("sales.new.title")} description={t("sales.new.description")} />
 
       {loadError ? (
-        <section className="products-data-panel">
+        <Card className="products-data-panel">
           <div className="products-state">
             <AlertCircle className="products-state-error" size={26} aria-hidden="true" />
             <h2>{t("sales.new.states.loadErrorTitle")}</h2>
@@ -170,11 +178,11 @@ function NouvelleVentePage() {
               {t("sales.new.actions.retry")}
             </button>
           </div>
-        </section>
+        </Card>
       ) : loading ? (
-        <section className="products-data-panel"><ProductsSkeleton /></section>
+        <Card className="products-data-panel"><ProductsSkeleton /></Card>
       ) : products.data.length === 0 ? (
-        <section className="products-data-panel">
+        <Card className="products-data-panel">
           <div className="products-state">
             <h2>{t("sales.new.states.noProductsTitle")}</h2>
             <p>{t("sales.new.states.noProducts")}</p>
@@ -182,10 +190,10 @@ function NouvelleVentePage() {
               {t("sales.new.actions.viewProducts")}
             </Link>
           </div>
-        </section>
+        </Card>
       ) : (
         <form className="new-sale-layout" onSubmit={submitSale}>
-          <section className="sale-catalog" aria-labelledby="sale-catalog-title">
+          <Card as="section" className="sale-catalog" aria-labelledby="sale-catalog-title">
             <div className="sale-section-heading">
               <div>
                 <h2 id="sale-catalog-title">{t("sales.new.catalog.title")}</h2>
@@ -233,9 +241,9 @@ function NouvelleVentePage() {
                 <p className="sale-list-empty">{t("sales.new.catalog.noResults")}</p>
               )}
             </div>
-          </section>
+          </Card>
 
-          <aside className="sale-cart" aria-labelledby="sale-cart-title">
+          <Card as="aside" className="sale-cart" aria-labelledby="sale-cart-title">
             <div className="sale-cart-heading">
               <h2 id="sale-cart-title">{t("sales.new.cart.title")}</h2>
               <span>{t("sales.new.cart.itemCount", { count: cart.length })}</span>
@@ -385,7 +393,7 @@ function NouvelleVentePage() {
                 {submitting ? t("sales.new.actions.sending") : t("sales.new.actions.submit")}
               </button>
             </div>
-          </aside>
+          </Card>
 
           <div className="sale-mobile-submit">
             <div>

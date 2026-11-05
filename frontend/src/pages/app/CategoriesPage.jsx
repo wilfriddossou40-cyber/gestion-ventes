@@ -4,13 +4,14 @@ import { Link } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
 import { deleteCategorie } from "../../api/categories";
 import CategoryFormDialog from "../../components/categories/CategoryFormDialog";
-import ConfirmDialog from "../../components/produits/ConfirmDialog";
+import ConfirmDialog from "../../components/ui/ConfirmDialog";
+import Badge from "../../components/ui/Badge";
 import DataTable from "../../components/ui/DataTable";
+import ListPage from "../../components/ui/ListPage";
 import { useLanguage } from "../../context/useLanguage";
 import useCategories from "../../hooks/useCategories";
 import useProduits from "../../hooks/useProduits";
 import { normalizeApiError } from "../../lib/apiErrors";
-import "./CategoriesPage.css";
 
 function CategoriesPage() {
   const { t } = useLanguage();
@@ -90,9 +91,9 @@ function CategoriesPage() {
       <>
         <div className="ui-data-table-card-heading">
           <strong className="ui-data-table-card-title" title={category.nom}>{category.nom}</strong>
-          <span className="ui-data-table-card-status category-card-count">
+          <Badge className="ui-data-table-card-status category-card-count" variant="neutral">
             {t(count === 1 ? "categories.productCountOne" : "categories.productCountMany", { count })}
-          </span>
+          </Badge>
         </div>
         <dl className="ui-data-table-card-fields">
           <div>
@@ -136,23 +137,30 @@ function CategoriesPage() {
 
   return (
     <div className="categories-page">
-      <Toaster position="top-right" toastOptions={{ duration: 2800 }} />
-      <header className="categories-page-header">
-        <div>
-          <h1>{t("categories.title")}</h1>
-          <p>{t("categories.description")}</p>
-        </div>
-        <button
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 2800,
+          style: {
+            background: "var(--surface)",
+            border: "1px solid var(--border)",
+            boxShadow: "var(--shadow-card)",
+            color: "var(--text)",
+          },
+        }}
+      />
+      <ListPage
+        title={t("categories.title")}
+        description={t("categories.description")}
+        actions={<button
           className="product-button product-button-primary"
           type="button"
           onClick={() => setDialog({ type: "form", category: null })}
         >
           <Plus size={17} aria-hidden="true" />{t("categories.actions.new")}
-        </button>
-      </header>
-
-      <section className="categories-toolbar" aria-label={t("categories.search.label")}>
-        <label className="categories-search">
+        </button>}
+        toolbar={
+        <label className="list-page-search">
           <Search size={17} aria-hidden="true" />
           <span className="sr-only">{t("categories.search.label")}</span>
           <input
@@ -162,9 +170,9 @@ function CategoriesPage() {
             onChange={(event) => setSearch(event.target.value)}
           />
         </label>
-      </section>
+        }
+      >
 
-      <section className="categories-data-panel" aria-live="polite">
         {requestError ? (
           <div className="products-state categories-state">
             <CircleAlert className="products-state-error" size={26} aria-hidden="true" />
@@ -201,7 +209,7 @@ function CategoriesPage() {
             renderCard={renderCategoryCard}
           />
         )}
-      </section>
+      </ListPage>
 
       {dialog?.type === "form" && (
         <CategoryFormDialog
@@ -228,9 +236,13 @@ function CategoriesPage() {
 }
 
 function CategoryActions({ category, count, t, onEdit, onDelete }) {
+  const deleteLabel = count > 0
+    ? t(count === 1 ? "categories.actions.hasProductsOne" : "categories.actions.hasProductsMany", { count })
+    : t("categories.actions.deleteNamed", { name: category.nom });
+
   return (
-    <>
-      <Link className="category-product-link" to={`/app/produits?categorie=${category.id}`}>
+    <div className="category-row-actions">
+      <Link className="category-product-link product-button product-button-secondary" to={`/app/produits?categorie=${category.id}`}>
         {t("categories.actions.viewProducts")}
       </Link>
       <button
@@ -241,22 +253,17 @@ function CategoryActions({ category, count, t, onEdit, onDelete }) {
       >
         <Pencil size={15} aria-hidden="true" />
       </button>
-      {count > 0 ? (
-        <span className="category-delete-disabled">
-          <strong>{t("categories.actions.deleteDisabled")}</strong>
-          {t(count === 1 ? "categories.actions.hasProductsOne" : "categories.actions.hasProductsMany", { count })}
-        </span>
-      ) : (
-        <button
-          className="product-icon-action product-icon-danger"
-          type="button"
-          aria-label={t("categories.actions.deleteNamed", { name: category.nom })}
-          onClick={onDelete}
-        >
-          <Trash2 size={15} aria-hidden="true" />
-        </button>
-      )}
-    </>
+      <button
+        className="product-icon-action product-icon-danger"
+        type="button"
+        aria-label={deleteLabel}
+        title={count > 0 ? deleteLabel : undefined}
+        disabled={count > 0}
+        onClick={onDelete}
+      >
+        <Trash2 size={15} aria-hidden="true" />
+      </button>
+    </div>
   );
 }
 

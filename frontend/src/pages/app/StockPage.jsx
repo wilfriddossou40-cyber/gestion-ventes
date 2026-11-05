@@ -7,13 +7,14 @@ import MouvementFormDialog from "../../components/stock/MouvementFormDialog";
 import MouvementsTable from "../../components/stock/MouvementsTable";
 import ProductsSkeleton from "../../components/produits/ProductsSkeleton";
 import StockBadge from "../../components/produits/StockBadge";
+import Card from "../../components/ui/Card";
+import Toolbar from "../../components/ui/Toolbar";
+import ListPage from "../../components/ui/ListPage";
 import { useLanguage } from "../../context/useLanguage";
 import useAlertesStock from "../../hooks/useAlertesStock";
 import useMouvementsStock from "../../hooks/useMouvementsStock";
 import useProduits from "../../hooks/useProduits";
 import { normalizeApiError } from "../../lib/apiErrors";
-import "./ProduitsPage.css";
-import "./StockPage.css";
 
 function StockPage() {
   const { language, t } = useLanguage();
@@ -66,13 +67,24 @@ function StockPage() {
 
   return (
     <div className="stock-page">
-      <Toaster position="top-right" toastOptions={{ duration: 2800 }} />
-      <header className="products-page-header">
-        <div>
-          <h1>{t("app.pages.stock.title")}</h1>
-          <p>{t("app.pages.stock.description")}</p>
-        </div>
-        <div className="stock-page-header-actions">
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 2800,
+          style: {
+            background: "var(--surface)",
+            border: "1px solid var(--border)",
+            boxShadow: "var(--shadow-card)",
+            color: "var(--text)",
+          },
+        }}
+      />
+      <ListPage
+        card={false}
+        className="stock-page-content"
+        title={t("app.pages.stock.title")}
+        description={t("app.pages.stock.description")}
+        actions={
           <button
             className="product-button product-button-primary"
             type="button"
@@ -81,10 +93,10 @@ function StockPage() {
           >
             <Plus size={17} aria-hidden="true" />{t("stock.actions.newMovement")}
           </button>
-        </div>
-      </header>
+        }
+      >
 
-      <section className="stock-section" aria-labelledby="stock-alerts-title">
+      <Card className="stock-section" aria-labelledby="stock-alerts-title">
         <div className="stock-section-heading">
           <div>
             <h2 id="stock-alerts-title">{t("stock.alerts.title")}</h2>
@@ -116,8 +128,8 @@ function StockPage() {
                   <span>{product.reference}{product.categorie?.nom ? ` · ${product.categorie.nom}` : ""}</span>
                 </div>
                 <div className="stock-alert-quantities">
-                  <span>{t("stock.alerts.currentStock")} <strong>{product.quantite_stock}</strong></span>
-                  <span>{t("stock.alerts.threshold")} <strong>{product.seuil_alerte}</strong></span>
+                  <span><span>{t("stock.alerts.currentStock")}</span><strong>{product.quantite_stock}</strong></span>
+                  <span><span>{t("stock.alerts.threshold")}</span><strong>{product.seuil_alerte}</strong></span>
                 </div>
                 <StockBadge produit={product} />
                 <button
@@ -132,16 +144,16 @@ function StockPage() {
             ))}
           </div>
         )}
-      </section>
+      </Card>
 
-      <section className="stock-section" aria-labelledby="stock-journal-title">
+      <Card className="stock-section" aria-labelledby="stock-journal-title">
         <div className="stock-section-heading">
           <div>
             <h2 id="stock-journal-title">{t("stock.journal.title")}</h2>
             <p>{t("stock.journal.description")}</p>
           </div>
         </div>
-        <div className="stock-journal-filters">
+        <Toolbar className="stock-journal-filters">
           <label className="stock-filter-product">
             <span>{t("stock.filters.product")}</span>
             <input
@@ -184,7 +196,7 @@ function StockPage() {
           >
             {t("stock.filters.reset")}
           </button>
-        </div>
+        </Toolbar>
         {products.error && (
           <div className="stock-products-error" role="alert">
             <span>{normalizeApiError(products.error, t).message}</span>
@@ -218,7 +230,7 @@ function StockPage() {
             <MouvementsTable movements={movements.data} language={language} />
           </div>
         )}
-      </section>
+      </Card>
 
       {dialog && (
         <MouvementFormDialog
@@ -230,6 +242,7 @@ function StockPage() {
           onSaved={saveMovement}
         />
       )}
+      </ListPage>
     </div>
   );
 }

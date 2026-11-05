@@ -5,13 +5,12 @@ import { Link, useLocation, useNavigate, useSearchParams } from "react-router-do
 import { deleteVente } from "../../api/ventes";
 import VenteDetailDialog from "../../components/ventes/VenteDetailDialog";
 import VentesTable from "../../components/ventes/VentesTable";
+import ListPage from "../../components/ui/ListPage";
 import { useLanguage } from "../../context/useLanguage";
 import useClients from "../../hooks/useClients";
 import useVentes from "../../hooks/useVentes";
 import { normalizeApiError } from "../../lib/apiErrors";
 import { formatCurrency } from "../../lib/format";
-import "./ProduitsPage.css";
-import "./VentesPage.css";
 
 function VentesPage() {
   const { language, t } = useLanguage();
@@ -94,86 +93,93 @@ function VentesPage() {
 
   return (
     <div className="sales-page">
-      <Toaster position="top-right" toastOptions={{ duration: 2800 }} />
-      <header className="products-page-header">
-        <div>
-          <h1>{t("app.pages.sales.title")}</h1>
-          <p>{t("app.pages.sales.description")}</p>
-        </div>
-        <div className="products-header-actions">
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 2800,
+          style: {
+            background: "var(--surface)",
+            border: "1px solid var(--border)",
+            boxShadow: "var(--shadow-card)",
+            color: "var(--text)",
+          },
+        }}
+      />
+      <ListPage
+        title={t("app.pages.sales.title")}
+        description={t("app.pages.sales.description")}
+        actions={
           <Link className="product-button product-button-primary" to="/app/ventes/nouvelle">
             <Plus size={17} aria-hidden="true" />{t("sales.new.actions.newSale")}
           </Link>
-        </div>
-      </header>
-
-      <section className="products-filters sales-filters" aria-label={t("sales.history.filters.label")}>
-        <label className="products-search">
-          <Search size={17} aria-hidden="true" />
-          <span className="sr-only">{t("sales.history.filters.search")}</span>
-          <input
-            type="search"
-            value={searchDraft}
-            placeholder={t("sales.history.filters.searchPlaceholder")}
-            onChange={(event) => setSearchState({
-              urlValue: committedSearch,
-              draft: event.target.value,
-            })}
-          />
-        </label>
-        <label className="sales-filter-field">
-          <span>{t("sales.history.filters.client")}</span>
-          <select
-            value={clientId}
-            onChange={(event) => updateFilter("client_id", event.target.value)}
-            disabled={clients.loading || Boolean(clients.error)}
+        }
+        toolbarLabel={t("sales.history.filters.label")}
+        toolbar={<>
+          <label className="list-page-search sales-filter-search">
+            <Search size={17} aria-hidden="true" />
+            <span className="sr-only">{t("sales.history.filters.search")}</span>
+            <input
+              type="search"
+              value={searchDraft}
+              placeholder={t("sales.history.filters.searchPlaceholder")}
+              onChange={(event) => setSearchState({
+                urlValue: committedSearch,
+                draft: event.target.value,
+              })}
+            />
+          </label>
+          <label className="list-page-filter sales-client-filter">
+            <span className="sr-only">{t("sales.history.filters.client")}</span>
+            <select
+              className="list-page-control"
+              aria-label={t("sales.history.filters.client")}
+              value={clientId}
+              onChange={(event) => updateFilter("client_id", event.target.value)}
+              disabled={clients.loading || Boolean(clients.error)}
+            >
+              <option value="">{t("sales.history.filters.allClients")}</option>
+              {clients.data.map((client) => (
+                <option value={client.id} key={client.id}>{client.nom}</option>
+              ))}
+            </select>
+          </label>
+          <label className="sales-date-filter">
+            <span>{t("sales.history.filters.from")}</span>
+            <input
+              type="date"
+              value={dateStart}
+              onChange={(event) => updateFilter("date_debut", event.target.value)}
+            />
+          </label>
+          <label className="sales-date-filter">
+            <span>{t("sales.history.filters.to")}</span>
+            <input
+              type="date"
+              value={dateEnd}
+              onChange={(event) => updateFilter("date_fin", event.target.value)}
+            />
+          </label>
+          <button
+            className="product-button product-button-secondary sales-reset-button"
+            type="button"
+            onClick={resetFilters}
+            disabled={!filtersActive}
           >
-            <option value="">{t("sales.history.filters.allClients")}</option>
-            {clients.data.map((client) => (
-              <option value={client.id} key={client.id}>{client.nom}</option>
-            ))}
-          </select>
-        </label>
-        <label className="sales-filter-field">
-          <span>{t("sales.history.filters.from")}</span>
-          <input
-            type="date"
-            value={dateStart}
-            onChange={(event) => updateFilter("date_debut", event.target.value)}
-          />
-        </label>
-        <label className="sales-filter-field">
-          <span>{t("sales.history.filters.to")}</span>
-          <input
-            type="date"
-            value={dateEnd}
-            onChange={(event) => updateFilter("date_fin", event.target.value)}
-          />
-        </label>
-        <button
-          className="product-button product-button-secondary sales-reset-button"
-          type="button"
-          onClick={resetFilters}
-          disabled={!filtersActive}
-        >
-          <RotateCcw size={15} aria-hidden="true" />{t("sales.history.filters.reset")}
-        </button>
-      </section>
-
-      <section className="sales-selection-summary" aria-live="polite">
-        <div>
-          <span>{t("sales.history.summary.label")}</span>
-          <strong>{t("sales.history.summary.count", { count: sortedVentes.length })}</strong>
-        </div>
-        <div>
-          <span>{t("sales.history.summary.amount")}</span>
-          <strong>{formatCurrency(selectedTotal, language)}</strong>
-        </div>
-        <small>{t("sales.history.summary.selection")}</small>
-      </section>
-
-      {loadError ? (
-        <section className="products-data-panel">
+            <RotateCcw size={15} aria-hidden="true" />{t("sales.history.filters.reset")}
+          </button>
+        </>}
+        summary={<section className="list-page-summary sales-selection-summary" aria-live="polite">
+          <div>
+            <span>{t("sales.history.summary.label")}</span>
+            <strong>{t("sales.history.summary.count", { count: sortedVentes.length })}</strong>
+          </div>
+          <div>
+            <span>{t("sales.history.summary.amount")}</span>
+            <strong>{formatCurrency(selectedTotal, language)}</strong>
+          </div>
+        </section>}
+      >
+        {loadError ? (
           <div className="products-state">
             <CircleAlert className="products-state-error" size={26} aria-hidden="true" />
             <h2>{t("sales.history.states.loadErrorTitle")}</h2>
@@ -182,13 +188,9 @@ function VentesPage() {
               {t("sales.history.actions.retry")}
             </button>
           </div>
-        </section>
-      ) : loading ? (
-        <section className="products-data-panel">
+        ) : loading ? (
           <VentesTable ventes={[]} language={language} onSelect={() => {}} loading />
-        </section>
-      ) : sortedVentes.length === 0 ? (
-        <section className="products-data-panel">
+        ) : sortedVentes.length === 0 ? (
           <div className="products-state">
             <h2>{t(filtersActive ? "sales.history.states.noResultsTitle" : "sales.history.states.emptyTitle")}</h2>
             <p>{t(filtersActive ? "sales.history.states.noResults" : "sales.history.states.empty")}</p>
@@ -196,22 +198,20 @@ function VentesPage() {
               <button className="product-button product-button-secondary" type="button" onClick={resetFilters}>
                 {t("sales.history.filters.reset")}
               </button>
-            ) : (
-              <Link className="product-button product-button-primary" to="/app/ventes/nouvelle">
-                <Plus size={16} aria-hidden="true" />{t("sales.new.actions.newSale")}
-              </Link>
-            )}
+              ) : (
+                <Link className="product-button product-button-primary" to="/app/ventes/nouvelle">
+                  <Plus size={16} aria-hidden="true" />{t("sales.new.actions.newSale")}
+                </Link>
+              )}
           </div>
-        </section>
-      ) : (
-        <section className="products-data-panel">
+        ) : (
           <VentesTable
             ventes={sortedVentes}
             language={language}
             onSelect={(sale) => setSelectedSaleId(sale.id)}
           />
-        </section>
-      )}
+        )}
+      </ListPage>
 
       {selectedSaleId !== null && (
         <VenteDetailDialog

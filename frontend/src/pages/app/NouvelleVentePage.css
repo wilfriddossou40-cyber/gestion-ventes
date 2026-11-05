@@ -409,7 +409,7 @@
     padding: 10px 20px calc(10px + env(safe-area-inset-bottom));
     border-top: 1px solid var(--border);
     background: var(--surface);
-    box-shadow: 0 -8px 24px rgb(0 0 0 / 8%);
+    box-shadow: var(--color-shadow-popover);
   }
 
   .sale-mobile-submit > div {

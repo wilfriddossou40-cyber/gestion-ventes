@@ -1,51 +1,50 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
-  ArrowDownRight,
+  AlertTriangle,
   ArrowRight,
-  ArrowUpRight,
+  Boxes,
+  CalendarDays,
   CircleAlert,
-  CircleCheck,
-  CircleDollarSign,
-  Package,
   RotateCw,
-  ShoppingBag,
-  TriangleAlert,
+  ShoppingCart,
   Users,
+  Wallet,
 } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import { enUS, fr } from "date-fns/locale";
 import {
-  Bar,
-  BarChart,
+  Area,
+  AreaChart,
   CartesianGrid,
+  Cell,
+  Pie,
+  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
 import { Link } from "react-router-dom";
-import ProductsSkeleton from "../../components/produits/ProductsSkeleton";
-import StockBadge from "../../components/produits/StockBadge";
+import ChartCard from "../../components/dashboard/ChartCard";
+import Avatar from "../../components/ui/Avatar";
+import ListPage from "../../components/ui/ListPage";
+import StatCard from "../../components/ui/StatCard";
 import { useLanguage } from "../../context/useLanguage";
-import useAlertesStock from "../../hooks/useAlertesStock";
 import useDashboard from "../../hooks/useDashboard";
-import useVentes from "../../hooks/useVentes";
 import { formatCurrency, formatDateOnly } from "../../lib/format";
 import { normalizeApiError } from "../../lib/apiErrors";
 import "./DashboardPage.css";
 
 const locales = { en: "en-US", fr: "fr-FR" };
-
-function toAmount(value) {
-  const amount = Number(value);
-  return Number.isFinite(amount) ? amount : 0;
-}
-
-function getMonthLabel(value, language) {
-  const [year, month] = value.split("-").map(Number);
-  return new Intl.DateTimeFormat(locales[language] ?? locales.fr, {
-    month: "short",
-    year: "2-digit",
-  }).format(new Date(year, month - 1, 1));
-}
+const dateFnsLocales = { en: enUS, fr };
+const categoryColors = [
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)",
+  "var(--chart-6)",
+];
 
 function formatCompactAmount(value, language) {
   return new Intl.NumberFormat(locales[language] ?? locales.fr, {
@@ -58,11 +57,19 @@ function formatVariation(value, language) {
   return new Intl.NumberFormat(locales[language] ?? locales.fr, {
     style: "percent",
     signDisplay: "always",
-    maximumFractionDigits: 0,
+    maximumFractionDigits: 1,
   }).format(value / 100);
 }
 
-function BlockError({ error, onRetry, t }) {
+function formatDay(value, language) {
+  const [year, month, day] = value.split("-").map(Number);
+  return new Intl.DateTimeFormat(locales[language] ?? locales.fr, {
+    day: "numeric",
+    month: "short",
+  }).format(new Date(year, month - 1, day));
+}
+
+function DashboardError({ error, onRetry, t }) {
   return (
     <div className="dashboard-error" role="alert">
       <CircleAlert size={20} aria-hidden="true" />
@@ -70,7 +77,7 @@ function BlockError({ error, onRetry, t }) {
         <strong>{t("app.dashboard.errorTitle")}</strong>
         <p>{normalizeApiError(error, t).message}</p>
       </div>
-      <button className="product-button product-button-secondary" type="button" onClick={onRetry}>
+      <button className="dashboard-retry" type="button" onClick={onRetry}>
         <RotateCw size={15} aria-hidden="true" />
         {t("app.dashboard.retry")}
       </button>
@@ -78,338 +85,399 @@ function BlockError({ error, onRetry, t }) {
   );
 }
 
-function DashboardPage() {
-  const { language, t } = useLanguage();
-  const alerts = useAlertesStock();
-  const dashboard = useDashboard();
-  const sales = useVentes({});
-
-  const monthlySales = useMemo(() => (
-    (dashboard.data?.ventes_par_mois ?? [])
-      .map((item) => ({
-        ...item,
-        total: toAmount(item.total),
-        monthLabel: getMonthLabel(item.mois, language),
-      }))
-      .sort((left, right) => left.mois.localeCompare(right.mois))
-  ), [dashboard.data?.ventes_par_mois, language]);
-  const chartSales = monthlySales.slice(-6);
-  const recentSales = useMemo(() => (
-    sales.data
-      .slice()
-      .sort((left, right) => {
-        const dateDifference = Date.parse(right.date_vente) - Date.parse(left.date_vente);
-        if (dateDifference !== 0) return dateDifference;
-        return Number(right.id) - Number(left.id);
-      })
-      .slice(0, 5)
-      .map((sale) => ({ ...sale, amount: toAmount(sale.montant_total) }))
-  ), [sales.data]);
-  const topProducts = useMemo(() => (
-    (dashboard.data?.top_produits ?? [])
-      .map((product) => ({ ...product, sold: Number(product.total_vendu) || 0 }))
-      .sort((left, right) => right.sold - left.sold)
-  ), [dashboard.data?.top_produits]);
-  const maxTopProductSold = Math.max(...topProducts.map((product) => product.sold), 1);
-
-  const currentMonth = monthlySales.at(-1);
-  const previousMonth = monthlySales.at(-2);
-  const variation = previousMonth && previousMonth.total !== 0
-    ? ((currentMonth.total - previousMonth.total) / previousMonth.total) * 100
-    : null;
-  const lowStockCount = Number(dashboard.data?.produits_stock_faible) || 0;
-  const hasEmptyDatabase = dashboard.data
-    && Number(dashboard.data.nombre_produits) === 0
-    && Number(dashboard.data.nombre_ventes) === 0;
+function ChartTooltip({ active, payload, label, language, t }) {
+  if (!active || !payload?.length) {
+    return null;
+  }
 
   return (
-    <div className="app-page dashboard-page">
-      <header className="products-page-header dashboard-header">
-        <div>
-          <h1>{t("app.pages.dashboard.title")}</h1>
-          <p>{t("app.pages.dashboard.description")}</p>
-        </div>
-      </header>
+    <div className="dashboard-tooltip">
+      <span>{formatDay(label, language)}</span>
+      <strong>{formatCurrency(Number(payload[0].value), language)}</strong>
+      <small>{t("app.dashboard.chart.revenue")}</small>
+    </div>
+  );
+}
 
-      <section className="dashboard-section dashboard-action-section" aria-labelledby="dashboard-actions-title">
-        <div className="dashboard-section-heading">
-          <div>
-            <h2 id="dashboard-actions-title">{t("app.dashboard.actionTitle")}</h2>
-            <p>{t("app.dashboard.actionDescription")}</p>
-          </div>
-          <Link className="dashboard-text-link" to="/app/stock">
-            {t("app.dashboard.viewStock")}
-          </Link>
+function DashboardPage() {
+  const { language, t } = useLanguage();
+  const { data, loading, error, reload } = useDashboard();
+  const [period, setPeriod] = useState(30);
+  const [productRanking, setProductRanking] = useState("quantity");
+
+  const dailySales = useMemo(() => (
+    data ? data.ventes_par_jour.map((item) => ({
+      ...item,
+      jour: String(item.jour).slice(0, 10),
+      total: Number(item.total),
+    })) : []
+  ), [data]);
+  const periodSales = dailySales.slice(-period);
+  const hasPeriodSales = periodSales.some((item) => item.total > 0);
+  const sparklineSales = dailySales.slice(-7);
+  const topProducts = useMemo(() => (
+    data ? data.top_produits.slice(0, 5).map((product) => ({
+      ...product,
+      quantity: Number(product.total_vendu),
+    })) : []
+  ), [data]);
+  const topProductsByRevenue = useMemo(() => (
+    data ? data.top_produits_par_chiffre_affaires.slice(0, 5).map((product) => ({
+      ...product,
+      revenue: Number(product.chiffre_affaires),
+    })) : []
+  ), [data]);
+  const categories = useMemo(() => (
+    data ? data.ventes_par_categorie.map((category, index) => ({
+      ...category,
+      chiffre_affaires: Number(category.chiffre_affaires),
+      color: categoryColors[index % categoryColors.length],
+    })) : []
+  ), [data]);
+  const totalCategoryRevenue = categories.reduce(
+    (total, category) => total + category.chiffre_affaires,
+    0,
+  );
+  const rankedProducts = productRanking === "quantity" ? topProducts : topProductsByRevenue;
+  const maxProductValue = Math.max(
+    ...rankedProducts.map((product) => (
+      productRanking === "quantity" ? product.quantity : product.revenue
+    )),
+    1,
+  );
+  const variationRevenue = data?.variation_chiffre_affaires ?? null;
+  const variationSales = data?.variation_nombre_ventes ?? null;
+  const lowStockCount = Number(data?.produits_stock_faible);
+  const productCount = Number(data?.nombre_produits);
+  const lowStockLevel = productCount > 0
+    ? Math.min((lowStockCount / productCount) * 100, 100)
+    : 0;
+  const recentSales = data ? data.dernieres_ventes.slice(0, 5) : [];
+  const dayLocale = dateFnsLocales[language] ?? dateFnsLocales.fr;
+
+  if (error) {
+    return (
+      <div className="app-page dashboard-page">
+        <DashboardError error={error} onRetry={reload} t={t} />
+      </div>
+    );
+  }
+
+  return (
+    <ListPage
+      card={false}
+      className="app-page dashboard-page"
+      headerClassName="dashboard-header"
+      eyebrow={t("app.dashboard.headerEyebrow")}
+      title={t("app.pages.dashboard.title")}
+      description={(
+        <>
+          <CalendarDays size={15} aria-hidden="true" />
+          {data ? formatDateOnly(dailySales.at(-1)?.jour, language) : <span className="dashboard-date-skeleton" />}
+        </>
+      )}
+      actions={
+        <div className="dashboard-period" role="group" aria-label={t("app.dashboard.periodLabel")}>
+          {[7, 30].map((days) => (
+            <button
+              aria-pressed={period === days}
+              className={period === days ? "is-active" : ""}
+              key={days}
+              onClick={() => setPeriod(days)}
+              type="button"
+            >
+              {t(`app.dashboard.period${days}`)}
+            </button>
+          ))}
         </div>
-        {alerts.error ? (
-          <BlockError
-            error={alerts.error}
-            onRetry={alerts.reload}
-            t={t}
-          />
-        ) : alerts.loading ? (
-          <div className="dashboard-panel dashboard-skeleton"><ProductsSkeleton /></div>
-        ) : alerts.data.length === 0 ? (
-          <div className="dashboard-positive-state">
-            <CircleCheck size={20} aria-hidden="true" />
-            <p>{t("app.dashboard.noAlerts")}</p>
-          </div>
-        ) : (
-          <div className="dashboard-alert-list">
-            {alerts.data.slice(0, 5).map((product) => (
-              <article className="dashboard-alert-item" key={product.id}>
-                <div className="dashboard-alert-product">
-                  <strong>{product.nom}</strong>
-                  {product.categorie?.nom && <span>{product.categorie.nom}</span>}
-                </div>
-                <span className="dashboard-alert-stock">
-                  {t("app.dashboard.stockValue", { stock: String(product.quantite_stock) })}
-                  <span>{t("app.dashboard.thresholdValue", { threshold: String(product.seuil_alerte) })}</span>
-                </span>
-                <StockBadge produit={product} showLevel={false} />
-              </article>
-            ))}
-          </div>
-        )}
+      }
+    >
+
+      <section className="dashboard-stat-grid" aria-label={t("app.dashboard.overviewTitle")}>
+        <StatCard
+          icon={Wallet}
+          label={t("app.dashboard.kpi.revenue")}
+          loading={loading}
+          sparkline={sparklineSales}
+          trend={variationRevenue}
+          trendLabel={t("app.dashboard.variation", {
+            variation: variationRevenue === null ? "" : formatVariation(variationRevenue, language),
+          })}
+          value={data ? formatCurrency(Number(data.chiffre_affaires), language) : ""}
+          valueLabel={t("app.dashboard.kpi.revenue")}
+          variant="revenue"
+        />
+        <StatCard
+          icon={ShoppingCart}
+          label={t("app.dashboard.kpi.sales")}
+          loading={loading}
+          trend={variationSales}
+          trendLabel={t("app.dashboard.variation", {
+            variation: variationSales === null ? "" : formatVariation(variationSales, language),
+          })}
+          value={data ? new Intl.NumberFormat(locales[language] ?? locales.fr).format(Number(data.nombre_ventes)) : ""}
+          valueLabel={t("app.dashboard.kpi.sales")}
+        />
+        <StatCard
+          icon={Users}
+          label={t("app.dashboard.kpi.clients")}
+          loading={loading}
+          value={data ? new Intl.NumberFormat(locales[language] ?? locales.fr).format(Number(data.nombre_clients)) : ""}
+          valueLabel={t("app.dashboard.kpi.clients")}
+        />
+        <StatCard
+          icon={Boxes}
+          label={t("app.dashboard.kpi.stockValue")}
+          loading={loading}
+          value={data ? formatCurrency(Number(data.valeur_stock), language) : ""}
+          valueLabel={t("app.dashboard.kpi.stockValue")}
+          variant="stock"
+        />
       </section>
 
-      <section className="dashboard-section" aria-labelledby="dashboard-kpi-title">
-        <div className="dashboard-section-heading">
-          <div>
-            <h2 id="dashboard-kpi-title">{t("app.dashboard.overviewTitle")}</h2>
-            <p>{t("app.dashboard.overviewDescription")}</p>
-          </div>
-        </div>
-        {dashboard.error ? (
-          <BlockError
-            error={dashboard.error}
-            onRetry={dashboard.reload}
-            t={t}
-          />
-        ) : dashboard.loading ? (
-          <div className="dashboard-panel dashboard-skeleton"><ProductsSkeleton /></div>
-        ) : (
-          <>
-            <div className="dashboard-kpi-grid">
-              <article className="dashboard-kpi dashboard-kpi-revenue">
-                <span className="dashboard-kpi-heading">
-                  <span>{t("app.dashboard.kpi.revenue")}</span>
-                  <span className="dashboard-kpi-icon"><CircleDollarSign size={19} aria-hidden="true" /></span>
-                </span>
-                <strong>{formatCurrency(toAmount(dashboard.data.chiffre_affaires), language)}</strong>
-                {variation !== null && Number.isFinite(variation) && (
-                  <span className={`dashboard-variation${variation < 0 ? " is-down" : ""}`}>
-                    {variation < 0
-                      ? <ArrowDownRight size={16} aria-hidden="true" />
-                      : variation > 0
-                        ? <ArrowUpRight size={16} aria-hidden="true" />
-                        : <ArrowRight size={16} aria-hidden="true" />}
-                    {t("app.dashboard.variation", { variation: formatVariation(variation, language) })}
-                  </span>
-                )}
-              </article>
-              <article className="dashboard-kpi">
-                <span className="dashboard-kpi-heading">
-                  <span>{t("app.dashboard.kpi.todaySales")}</span>
-                  <span className="dashboard-kpi-icon"><ShoppingBag size={18} aria-hidden="true" /></span>
-                </span>
-                <strong>{Number(dashboard.data.ventes_aujourdhui) || 0}</strong>
-                <small>{formatCurrency(toAmount(dashboard.data.ca_aujourdhui), language)}</small>
-              </article>
-              <Link className="dashboard-kpi dashboard-kpi-link" to="/app/stock">
-                <span className="dashboard-kpi-heading">
-                  <span>{t("app.dashboard.kpi.lowStock")}</span>
-                  <span className="dashboard-kpi-icon"><TriangleAlert size={18} aria-hidden="true" /></span>
-                </span>
-                <strong>{lowStockCount}</strong>
-                <small>{t("app.dashboard.viewStock")}</small>
-              </Link>
-              <article className="dashboard-kpi">
-                <span className="dashboard-kpi-heading">
-                  <span>{t("app.dashboard.kpi.products")}</span>
-                  <span className="dashboard-kpi-icon"><Package size={18} aria-hidden="true" /></span>
-                </span>
-                <strong>{Number(dashboard.data.nombre_produits) || 0}</strong>
-              </article>
-              <article className="dashboard-kpi">
-                <span className="dashboard-kpi-heading">
-                  <span>{t("app.dashboard.kpi.clients")}</span>
-                  <span className="dashboard-kpi-icon"><Users size={18} aria-hidden="true" /></span>
-                </span>
-                <strong>{Number(dashboard.data.nombre_clients) || 0}</strong>
-              </article>
-            </div>
-            {hasEmptyDatabase && (
-              <div className="dashboard-welcome">
-                <div>
-                  <h3>{t("app.dashboard.emptyTitle")}</h3>
-                  <p>{t("app.dashboard.emptyDescription")}</p>
-                </div>
-                <div className="dashboard-welcome-links">
-                  <Link to="/app/produits">{t("app.dashboard.addProducts")}</Link>
-                  <Link to="/app/clients">{t("app.dashboard.addClients")}</Link>
-                  <Link to="/app/ventes/nouvelle">{t("app.dashboard.startSale")}</Link>
-                </div>
-              </div>
-            )}
-          </>
-        )}
-      </section>
-
-      {!dashboard.error && (
-      <section className="dashboard-section" aria-labelledby="dashboard-chart-title">
-        <div className="dashboard-section-heading">
-          <div>
-            <h2 id="dashboard-chart-title">{t("app.dashboard.chart.title")}</h2>
-            <p>{t("app.dashboard.chart.description")}</p>
-          </div>
-        </div>
-        {dashboard.loading ? (
-          <div className="dashboard-panel dashboard-chart-skeleton"><ProductsSkeleton /></div>
-        ) : chartSales.length === 0 ? (
-          <div className="dashboard-panel dashboard-empty-chart">
-            <p>{t("app.dashboard.chart.empty")}</p>
-          </div>
-        ) : (
-          <div className="dashboard-panel dashboard-chart-panel">
-            <div className="dashboard-chart" role="img" aria-label={t("app.dashboard.chart.accessibleLabel")}>
+      <section className="dashboard-chart-grid" aria-label={t("app.dashboard.chartsTitle")}>
+        <ChartCard
+          className="dashboard-revenue-card"
+          description={t("app.dashboard.chart.description", { days: String(period) })}
+          loading={loading}
+          title={t("app.dashboard.chart.title")}
+        >
+          {!hasPeriodSales ? (
+            <div className="dashboard-empty-chart">{t("app.dashboard.chart.empty")}</div>
+          ) : (
+            <div
+              aria-label={t("app.dashboard.chart.accessibleLabel")}
+              className="dashboard-area-chart"
+              role="img"
+            >
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartSales} margin={{ top: 8, right: 4, left: 0, bottom: 0 }}>
-                  <CartesianGrid stroke="var(--border)" vertical={false} />
+                <AreaChart data={periodSales} margin={{ top: 12, right: 12, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="dashboardRevenueFill" x1="0" x2="0" y1="0" y2="1">
+                      <stop offset="0%" stopColor="var(--chart-1)" stopOpacity={0.25} />
+                      <stop offset="95%" stopColor="var(--chart-1)" stopOpacity={0.015} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid stroke="var(--border)" strokeDasharray="3 5" vertical={false} />
                   <XAxis
-                    dataKey="monthLabel"
-                    tick={{ fill: "var(--muted)", fontSize: 12 }}
+                    axisLine={false}
+                    dataKey="jour"
+                    minTickGap={24}
+                    tick={{ fill: "var(--color-text-secondary)", fontSize: 11 }}
+                    tickFormatter={(value) => formatDay(value, language)}
                     tickLine={false}
-                    axisLine={{ stroke: "var(--border)" }}
-                    minTickGap={12}
                   />
                   <YAxis
-                    width={76}
-                    tickFormatter={(value) => `${formatCompactAmount(value, language)} ${t("app.dashboard.currencyShort")}`}
-                    tick={{ fill: "var(--muted)", fontSize: 11 }}
-                    tickLine={false}
                     axisLine={false}
+                    tick={{ fill: "var(--color-text-secondary)", fontSize: 11 }}
+                    tickFormatter={(value) => formatCompactAmount(value, language)}
+                    tickLine={false}
+                    width={58}
                   />
                   <Tooltip
-                    formatter={(value) => [formatCurrency(toAmount(value), language), t("app.dashboard.chart.revenue")]}
-                    contentStyle={{
-                      border: "1px solid var(--border)",
-                      borderRadius: 9,
-                      backgroundColor: "var(--surface-raised)",
-                      color: "var(--text)",
-                    }}
-                    labelStyle={{ color: "var(--text)", fontWeight: 700 }}
-                    itemStyle={{ color: "var(--accent-ink)" }}
-                    cursor={{ fill: "var(--accent-soft)" }}
+                    content={<ChartTooltip language={language} t={t} />}
+                    cursor={{ stroke: "var(--chart-1)", strokeDasharray: "4 4" }}
                   />
-                  <Bar dataKey="total" fill="var(--accent)" radius={[5, 5, 0, 0]} maxBarSize={54} />
-                </BarChart>
+                  <Area
+                    activeDot={{ r: 5, stroke: "var(--surface)", strokeWidth: 3 }}
+                    dataKey="total"
+                    fill="url(#dashboardRevenueFill)"
+                    isAnimationActive={false}
+                    stroke="var(--chart-1)"
+                    strokeWidth={2.5}
+                    type="monotone"
+                  />
+                </AreaChart>
               </ResponsiveContainer>
             </div>
-            <table className="dashboard-sr-only">
-              <caption>{t("app.dashboard.chart.accessibleLabel")}</caption>
-              <thead>
-                <tr>
-                  <th scope="col">{t("app.dashboard.chart.month")}</th>
-                  <th scope="col">{t("app.dashboard.chart.revenue")}</th>
-                  <th scope="col">{t("app.dashboard.chart.salesCount")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {chartSales.map((item) => (
-                  <tr key={item.mois}>
-                    <th scope="row">{item.monthLabel}</th>
-                    <td>{formatCurrency(item.total, language)}</td>
-                    <td>{Number(item.nombre) || 0}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
-      )}
+          )}
+        </ChartCard>
 
-      <section
-        className={`dashboard-section dashboard-lower-grid${dashboard.error ? " dashboard-lower-grid-single" : ""}`}
-        aria-label={t("app.dashboard.activityTitle")}
-      >
-        {!dashboard.error && (
-        <div>
-          <div className="dashboard-section-heading">
-            <div>
-              <h2>{t("app.dashboard.topProducts.title")}</h2>
-              <p>{t("app.dashboard.topProducts.description")}</p>
-            </div>
-          </div>
-          {dashboard.loading ? (
-            <div className="dashboard-panel dashboard-skeleton"><ProductsSkeleton /></div>
-          ) : topProducts.length === 0 ? (
-            <div className="dashboard-panel dashboard-empty-list"><p>{t("app.dashboard.topProducts.empty")}</p></div>
+        <ChartCard
+          className="dashboard-category-card"
+          description={t("app.dashboard.category.description")}
+          loading={loading}
+          title={t("app.dashboard.category.title")}
+        >
+          {categories.length === 0 || totalCategoryRevenue === 0 ? (
+            <div className="dashboard-empty-chart">{t("app.dashboard.category.empty")}</div>
           ) : (
-            <ol className="dashboard-panel dashboard-top-products">
-              {topProducts.map((product, index) => (
-                <li key={product.id}>
-                  <span className="dashboard-rank">{index + 1}</span>
-                  <div className="dashboard-top-product-info">
-                    <strong>{product.nom}</strong>
-                    <div
-                      className="dashboard-progress-track"
-                      role="img"
-                      aria-label={t("app.dashboard.topProducts.barLabel", {
-                        product: product.nom,
-                        quantity: String(product.sold),
-                      })}
+            <>
+              <div
+                aria-label={t("app.dashboard.category.title")}
+                className="dashboard-donut-wrap"
+                role="img"
+              >
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={categories.filter((category) => category.chiffre_affaires > 0)}
+                      dataKey="chiffre_affaires"
+                      innerRadius="69%"
+                      isAnimationActive={false}
+                      outerRadius="92%"
+                      paddingAngle={3}
+                      stroke="none"
                     >
-                      <span style={{ width: `${(product.sold / maxTopProductSold) * 100}%` }} />
+                      {categories.filter((category) => category.chiffre_affaires > 0).map((category) => (
+                        <Cell key={category.id} fill={category.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      formatter={(value) => formatCurrency(Number(value), language)}
+                      contentStyle={{
+                        border: "1px solid var(--border)",
+                        borderRadius: 12,
+                        backgroundColor: "var(--surface)",
+                        color: "var(--text)",
+                        boxShadow: "var(--color-shadow-popover)",
+                      }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="dashboard-donut-total">
+                  <span>{t("app.dashboard.category.total")}</span>
+                  <strong>{formatCurrency(totalCategoryRevenue, language)}</strong>
+                </div>
+              </div>
+              <ul className="dashboard-category-legend">
+                {categories.filter((category) => category.chiffre_affaires > 0).map((category) => (
+                  <li key={category.id}>
+                    <span className="dashboard-legend-name">
+                      <i style={{ backgroundColor: category.color }} />
+                      {category.nom}
+                    </span>
+                    <strong>
+                      {new Intl.NumberFormat(locales[language] ?? locales.fr, {
+                        maximumFractionDigits: 1,
+                      }).format((category.chiffre_affaires / totalCategoryRevenue) * 100)}%
+                    </strong>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </ChartCard>
+      </section>
+
+      <section className="dashboard-bottom-grid" aria-label={t("app.dashboard.activityTitle")}>
+        <ChartCard
+          description={t("app.dashboard.topProducts.description")}
+          loading={loading}
+          title={t("app.dashboard.topProducts.title")}
+        >
+          <div className="dashboard-ranking-switch" role="group" aria-label={t("app.dashboard.topProducts.rankingLabel")}>
+            {["quantity", "revenue"].map((ranking) => (
+              <button
+                aria-pressed={productRanking === ranking}
+                className={productRanking === ranking ? "is-active" : ""}
+                key={ranking}
+                onClick={() => setProductRanking(ranking)}
+                type="button"
+              >
+                {t(`app.dashboard.topProducts.by${ranking === "quantity" ? "Quantity" : "Revenue"}`)}
+              </button>
+            ))}
+          </div>
+          {rankedProducts.length === 0 ? (
+            <div className="dashboard-empty-list">{t("app.dashboard.topProducts.empty")}</div>
+          ) : (
+            <ol className="dashboard-top-products">
+              {rankedProducts.map((product, index) => {
+                const value = productRanking === "quantity" ? product.quantity : product.revenue;
+
+                return (
+                <li key={product.id}>
+                  <span className="dashboard-product-rank">{String(index + 1).padStart(2, "0")}</span>
+                  <div className="dashboard-product-detail">
+                    <div className="dashboard-product-label">
+                      <strong>{product.nom}</strong>
+                      <span>
+                        {productRanking === "quantity"
+                          ? t("app.dashboard.topProducts.sold", { count: String(value) })
+                          : formatCurrency(value, language)}
+                      </span>
+                    </div>
+                    <div className="dashboard-progress-track">
+                      <span style={{ width: `${(value / maxProductValue) * 100}%` }} />
                     </div>
                   </div>
-                  <span className="dashboard-sold-count">
-                    {t("app.dashboard.topProducts.sold", { count: String(product.sold) })}
-                  </span>
                 </li>
-              ))}
+                );
+              })}
             </ol>
           )}
-        </div>
-        )}
+        </ChartCard>
 
-        <div>
-          <div className="dashboard-section-heading">
-            <div>
-              <h2>{t("app.dashboard.recent.title")}</h2>
-              <p>{t("app.dashboard.recent.description")}</p>
+        <ChartCard
+          description={t("app.dashboard.alertDescription")}
+          loading={loading}
+          title={t("app.dashboard.alertTitle")}
+        >
+          <div className="dashboard-alert-summary">
+            <div className="dashboard-alert-count">
+              <span className="dashboard-alert-icon"><AlertTriangle size={17} aria-hidden="true" /></span>
+              <strong>{data ? lowStockCount : ""}</strong>
+              <span>{t("app.dashboard.alertCountLabel")}</span>
             </div>
-            <Link className="dashboard-text-link" to="/app/ventes">{t("app.dashboard.recent.viewAll")}</Link>
+            {lowStockCount === 0 ? (
+              <p className="dashboard-alert-ok">{t("app.dashboard.noAlerts")}</p>
+            ) : (
+              <>
+                <div
+                  aria-label={t("app.dashboard.alertProgress", { percent: String(Math.round(lowStockLevel)) })}
+                  className="dashboard-alert-track"
+                  role="img"
+                >
+                  <span style={{ width: `${lowStockLevel}%` }} />
+                </div>
+                <p className="dashboard-alert-caption">
+                  {t("app.dashboard.alertProgress", { percent: String(Math.round(lowStockLevel)) })}
+                </p>
+              </>
+            )}
+            <Link className="dashboard-products-link" to="/app/produits">
+              {t("app.dashboard.alertLink")}
+              <ArrowRight size={15} aria-hidden="true" />
+            </Link>
           </div>
-          {sales.error ? (
-            <BlockError
-              error={sales.error}
-              onRetry={sales.reload}
-              t={t}
-            />
-          ) : sales.loading ? (
-            <div className="dashboard-panel dashboard-skeleton"><ProductsSkeleton /></div>
-          ) : recentSales.length === 0 ? (
-            <div className="dashboard-panel dashboard-empty-list"><p>{t("app.dashboard.recent.empty")}</p></div>
+        </ChartCard>
+
+        <ChartCard
+          description={t("app.dashboard.recent.description")}
+          loading={loading}
+          title={t("app.dashboard.recent.title")}
+        >
+          {recentSales.length === 0 ? (
+            <div className="dashboard-empty-list">{t("app.dashboard.recent.empty")}</div>
           ) : (
-            <ul className="dashboard-panel dashboard-recent-sales">
-              {recentSales.map((sale) => (
-                <li key={sale.id}>
-                  <Link to="/app/ventes">
+            <ul className="dashboard-recent-sales">
+              {recentSales.map((sale) => {
+                const customerName = sale.client?.nom ?? t("app.dashboard.unknownClient");
+
+                return (
+                  <li key={sale.id}>
+                    <Avatar className="dashboard-sale-avatar" name={customerName} aria-hidden="true" />
                     <span className="dashboard-sale-main">
-                      <strong>{sale.client?.nom ?? t("app.dashboard.unknownClient")}</strong>
-                      <small>{formatDateOnly(String(sale.date_vente).slice(0, 10), language)}</small>
+                      <strong>{customerName}</strong>
+                      <small>
+                        {formatDistanceToNow(new Date(sale.date_vente), {
+                          addSuffix: true,
+                          locale: dayLocale,
+                        })}
+                      </small>
                     </span>
-                    <strong className="dashboard-sale-amount">{formatCurrency(sale.amount, language)}</strong>
-                  </Link>
-                </li>
-              ))}
+                    <strong className="dashboard-sale-amount">
+                      {formatCurrency(Number(sale.montant_total), language)}
+                    </strong>
+                  </li>
+                );
+              })}
             </ul>
           )}
-        </div>
+        </ChartCard>
       </section>
-    </div>
+    </ListPage>
   );
 }
 

@@ -3,14 +3,15 @@ import { CircleAlert, Plus, Search } from "lucide-react";
 import { Toaster, toast } from "react-hot-toast";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { createProduit, deleteProduit, updateProduit } from "../../api/produits";
-import ConfirmDialog from "../../components/produits/ConfirmDialog";
+import ConfirmDialog from "../../components/ui/ConfirmDialog";
 import ProduitFormDialog from "../../components/produits/ProduitFormDialog";
 import ProduitsTable from "../../components/produits/ProduitsTable";
+import EmptyState from "../../components/ui/EmptyState";
+import ListPage from "../../components/ui/ListPage";
 import { useLanguage } from "../../context/useLanguage";
 import useCategories from "../../hooks/useCategories";
 import useProduits from "../../hooks/useProduits";
 import { normalizeApiError } from "../../lib/apiErrors";
-import "./ProduitsPage.css";
 
 function ProduitsPage() {
   const { language, t } = useLanguage();
@@ -94,21 +95,28 @@ function ProduitsPage() {
 
   return (
     <div className="products-page">
-      <Toaster position="top-right" toastOptions={{ duration: 2800 }} />
-      <header className="products-page-header">
-        <div>
-          <h1>{t("products.title")}</h1>
-          <p>{t("products.description")}</p>
-        </div>
-        <div className="products-header-actions">
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 2800,
+          style: {
+            background: "var(--surface)",
+            border: "1px solid var(--border)",
+            boxShadow: "var(--shadow-card)",
+            color: "var(--text)",
+          },
+        }}
+      />
+      <ListPage
+        title={t("products.title")}
+        description={t("products.description")}
+        actions={
           <button className="product-button product-button-primary" type="button" onClick={openNewProduct}>
             <Plus size={17} aria-hidden="true" />{t("products.actions.newProduct")}
           </button>
-        </div>
-      </header>
-
-      <section className="products-filters" aria-label={t("products.filters.label")}>
-        <label className="products-search">
+        }
+        toolbar={<>
+        <label className="list-page-search">
           <Search size={17} aria-hidden="true" />
           <span className="sr-only">{t("products.filters.search")}</span>
           <input
@@ -121,9 +129,10 @@ function ProduitsPage() {
             })}
           />
         </label>
-        <label className="products-filter-select">
-          <span>{t("products.filters.category")}</span>
+        <label className="list-page-filter">
           <select
+            className="list-page-control"
+            aria-label={t("products.filters.category")}
             value={categoryFilter}
             onChange={(event) => updateQuery("categorie", event.target.value)}
             disabled={categories.loading || Boolean(categories.error)}
@@ -134,7 +143,7 @@ function ProduitsPage() {
             ))}
           </select>
         </label>
-        <label className="products-low-filter">
+        <label className="list-page-check">
           <input
             type="checkbox"
             checked={lowOnly}
@@ -142,18 +151,19 @@ function ProduitsPage() {
           />
           <span>{t("products.filters.lowStockOnly")}</span>
         </label>
-      </section>
+        </>}
+      >
 
-      <section className="products-data-panel" aria-live="polite">
         {requestError ? (
-          <div className="products-state">
-            <CircleAlert className="products-state-error" size={26} aria-hidden="true" />
-            <h2>{t("products.states.loadErrorTitle")}</h2>
-            <p>{normalizeApiError(requestError, t).message}</p>
-            <button className="product-button product-button-primary" type="button" onClick={retry}>
+          <EmptyState
+            className="products-state"
+            icon={CircleAlert}
+            title={t("products.states.loadErrorTitle")}
+            description={normalizeApiError(requestError, t).message}
+            actions={<button className="product-button product-button-primary" type="button" onClick={retry}>
               {t("products.actions.retry")}
-            </button>
-          </div>
+            </button>}
+          />
         ) : produits.loading || categories.loading ? (
           <ProduitsTable
             produits={[]}
@@ -163,10 +173,11 @@ function ProduitsPage() {
             loading
           />
         ) : produits.data.length === 0 ? (
-          <div className="products-state">
-            <h2>{t("products.states.emptyTitle")}</h2>
-            <p>{categories.data.length === 0 ? t("products.states.noCategories") : t("products.states.empty")}</p>
-            <button
+          <EmptyState
+            className="products-state"
+            title={t("products.states.emptyTitle")}
+            description={categories.data.length === 0 ? t("products.states.noCategories") : t("products.states.empty")}
+            actions={<button
               className="product-button product-button-primary"
               type="button"
               onClick={categories.data.length === 0 ? () => navigate("/app/categories") : openNewProduct}
@@ -174,8 +185,8 @@ function ProduitsPage() {
               {categories.data.length === 0
                 ? t("products.actions.goCategories")
                 : t("products.actions.createFirst")}
-            </button>
-          </div>
+            </button>}
+          />
         ) : (
           <ProduitsTable
             produits={produits.data}
@@ -184,7 +195,7 @@ function ProduitsPage() {
             onDelete={(product) => setDialog({ type: "confirm", product })}
           />
         )}
-      </section>
+      </ListPage>
 
       {dialog?.type === "form" && (
         <ProduitFormDialog

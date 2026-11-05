@@ -45,11 +45,8 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 20px 34px;
-  margin-bottom: 16px;
   padding: 16px 18px;
-  border: 1px solid var(--border);
-  border-radius: 11px;
-  background: var(--surface);
+  border-bottom: 1px solid var(--border);
 }
 
 .sales-selection-summary > div {
