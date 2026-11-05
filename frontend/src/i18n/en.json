@@ -1,0 +1,746 @@
+{
+  "dataTable": {
+    "range": "{from}–{to} of {total}",
+    "page": "Page {current} of {total}",
+    "sortBy": "Sort by {field}",
+    "previousPage": "Previous page",
+    "nextPage": "Next page"
+  },
+  "errors": {
+    "validation": "Please check the highlighted fields.",
+    "network": "Unable to reach the server.",
+    "server": "The server encountered an error. Please try again later.",
+    "generic": "An error occurred. Please try again."
+  },
+  "meta": {
+    "title": "Stock & Sales — Manage your business without a ledger"
+  },
+  "brand": {
+    "name": "Stock & Sales"
+  },
+  "header": {
+    "home": "Stock & Sales, home",
+    "languageLabel": "Switch to French",
+    "englishShort": "EN",
+    "frenchShort": "FR",
+    "themeLabel": "Change theme, currently {theme}",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "navigation": "Main navigation",
+    "features": "Features",
+    "howItWorks": "How it works",
+    "openApp": "Open the app"
+  },
+  "theme": {
+    "light": "light",
+    "dark": "dark",
+    "system": "system"
+  },
+  "hero": {
+    "eyebrow": "Stock and sales, in one place",
+    "title": "Know what is left in stock. And what you have sold.",
+    "description": "Record products and sales without a ledger or manual calculations. Your stock follows every movement.",
+    "primary": "Open the app",
+    "secondary": "Explore features",
+    "note": "A clear view of your business, from stock to sale."
+  },
+  "preview": {
+    "accessibleLabel": "Application preview with demonstration data",
+    "demo": "Demo — sample data",
+    "dashboard": "PREVIEW",
+    "overview": "Your activity",
+    "products": "Products in catalogue",
+    "todaySales": "Sales today",
+    "demoValue": "Example",
+    "stockStatus": "STOCK STATUS",
+    "stockTitle": "Needs attention",
+    "lowStock": "Low stock",
+    "productOne": "Vegetable oil",
+    "units": "units",
+    "stockLevel": "Sample stock level, below the alert threshold",
+    "lowThreshold": "Alert threshold",
+    "demoInventory": "Sample quantity",
+    "lastMovement": "Latest movement",
+    "sale": "Sale",
+    "movementDescription": "Sale recorded · 2 units",
+    "caption": "Illustrative preview: all displayed values are examples."
+  },
+  "features": {
+    "eyebrow": "What you can track",
+    "title": "From stock to sale, without counting twice.",
+    "description": "The essentials for keeping a reliable record of your business.",
+    "stockMarker": "Alert threshold reached",
+    "items": {
+      "catalog": {
+        "title": "Products and categories",
+        "description": "Organise your catalogue and find each product quickly."
+      },
+      "clients": {
+        "title": "Customer records",
+        "description": "Link sales to customers and keep useful customer details close at hand."
+      },
+      "sales": {
+        "title": "Sales totals calculated",
+        "description": "Record items sold; the total amount is calculated automatically."
+      },
+      "stock": {
+        "title": "Stock checks",
+        "description": "Available stock is checked before each sale. Low levels are flagged."
+      },
+      "journal": {
+        "title": "Movement log",
+        "description": "Review stock coming in and going out to understand changes."
+      },
+      "dashboard": {
+        "title": "Dashboard",
+        "description": "See useful indicators for sales and current stock levels."
+      }
+    }
+  },
+  "how": {
+    "eyebrow": "A simple routine",
+    "title": "Three steps to a clearer picture.",
+    "description": "Start with your catalogue, then let each movement tell the story.",
+    "step": "STEP",
+    "steps": {
+      "add": {
+        "title": "Add your products",
+        "description": "Build your catalogue and organise products by category."
+      },
+      "sell": {
+        "title": "Record a sale",
+        "description": "Choose the items and let the total calculate automatically."
+      },
+      "track": {
+        "title": "Track your activity",
+        "description": "Check stock levels and review your movements and sales."
+      }
+    }
+  },
+  "closing": {
+    "eyebrow": "Get started",
+    "title": "Less calculating. More clarity.",
+    "description": "Open the app to start keeping track of your business.",
+    "button": "Open the app"
+  },
+  "footer": {
+    "description": "Manage products, track stock, and record sales.",
+    "navigation": "Navigation",
+    "copyright": "© {year} {appName}. All rights reserved."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "back": "Back to home"
+  },
+  "app": {
+    "layout": {
+      "navigation": "Application navigation",
+      "backToSite": "Back to website",
+      "openMenu": "Open navigation menu",
+      "closeMenu": "Close navigation menu",
+      "themeMenu": "Choose a theme",
+      "themeChoice": "Choose the {theme} theme"
+    },
+    "navigation": {
+      "dashboard": "Dashboard",
+      "products": "Products",
+      "categories": "Categories",
+      "clients": "Clients",
+      "sales": "Sales",
+      "stock": "Stock"
+    },
+    "dashboard": {
+      "actionTitle": "Needs attention",
+      "actionDescription": "Products that need your attention.",
+      "viewStock": "View all and restock",
+      "noAlerts": "No products are below their alert threshold.",
+      "stockValue": "Stock: {stock}",
+      "thresholdValue": "Threshold: {threshold}",
+      "overviewTitle": "Your activity",
+      "overviewDescription": "Key figures to keep track of your business.",
+      "errorTitle": "Data unavailable",
+      "retry": "Try again",
+      "alertsError": "Could not load stock alerts.",
+      "dashboardError": "Could not load dashboard metrics.",
+      "salesError": "Could not load recent sales.",
+      "kpi": {
+        "revenue": "Total revenue",
+        "todaySales": "Sales today",
+        "lowStock": "Low-stock products",
+        "products": "Products",
+        "clients": "Clients"
+      },
+      "variation": "{variation} compared with the previous month",
+      "emptyTitle": "Welcome to your management workspace",
+      "emptyDescription": "Add your first products and clients to start tracking your business.",
+      "addProducts": "Add products",
+      "addClients": "Add clients",
+      "startSale": "Record a sale",
+      "chart": {
+        "title": "Sales by month",
+        "description": "Revenue for the six latest available months.",
+        "empty": "Monthly sales will appear here once a sale is recorded.",
+        "accessibleLabel": "Monthly revenue chart",
+        "month": "Month",
+        "revenue": "Revenue",
+        "salesCount": "Number of sales"
+      },
+      "currencyShort": "FCFA",
+      "activityTitle": "Top products and recent sales",
+      "topProducts": {
+        "title": "Top products",
+        "description": "Ranked by quantities sold.",
+        "empty": "No product sales yet.",
+        "barLabel": "{product}: {quantity} sold",
+        "sold": "{count} sold"
+      },
+      "recent": {
+        "title": "Recent sales",
+        "description": "The five latest sales.",
+        "viewAll": "View sales history",
+        "empty": "No sales recorded yet."
+      },
+      "unknownClient": "Client"
+    },
+    "pages": {
+      "dashboard": {
+        "title": "Dashboard",
+        "description": "See what needs attention and track your business results."
+      },
+      "products": {
+        "title": "Products",
+        "description": "This page will show your product catalogue and categories."
+      },
+      "stock": {
+        "title": "Stock",
+        "description": "This page will show stock levels and movements."
+      },
+      "categories": {
+        "title": "Categories",
+        "description": "Organize products and see which items belong to each category."
+      },
+      "clients": {
+        "title": "Clients",
+        "description": "This page will show client information and history."
+      },
+      "sales": {
+        "title": "Sales",
+        "description": "This page will show recorded sales and their details.",
+        "newTitle": "New sale"
+      },
+      "stock": {
+        "title": "Stock",
+        "description": "This page will show stock levels and movements."
+      }
+    },
+    "products": {
+      "title": "Products",
+      "description": "View and manage your catalogue, prices, and stock levels.",
+      "fields": {
+        "name": "Name",
+        "reference": "Reference",
+        "category": "Category",
+        "price": "Price",
+        "stock": "Stock",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "categoryMissing": "Category removed",
+      "status": {
+        "out": "Out of stock",
+        "low": "Low stock",
+        "available": "Available"
+      },
+      "stockMeter": "Stock: {quantity} units; alert threshold: {threshold}",
+      "threshold": "Threshold {quantity}",
+      "filters": {
+        "label": "Product filters",
+        "search": "Search products",
+        "searchPlaceholder": "Name or reference",
+        "category": "Category",
+        "allCategories": "All categories",
+        "lowStockOnly": "Low stock only"
+      },
+      "sortBy": "Sort by {field}",
+      "pagination": "Page {current} of {total}",
+      "previousPage": "Previous page",
+      "nextPage": "Next page",
+      "states": {
+        "loadErrorTitle": "Could not load products",
+        "loadError": "Check your connection and try again.",
+        "emptyTitle": "No products found",
+        "empty": "Try changing the filters or create your first product.",
+        "noCategories": "Create a category before adding your first product."
+      },
+      "actions": {
+        "newProduct": "New product",
+        "createFirst": "Create the first product",
+        "goCategories": "Create a category",
+        "edit": "Edit",
+        "delete": "Delete",
+        "editNamed": "Edit {name}",
+        "deleteNamed": "Delete {name}",
+        "cancel": "Cancel",
+        "close": "Close",
+        "save": "Save",
+        "create": "Create product",
+        "saving": "Saving…",
+        "deleting": "Deleting…",
+        "retry": "Try again",
+        "confirm": "Confirm"
+      },
+      "form": {
+        "createTitle": "New product",
+        "editTitle": "Edit product",
+        "selectCategory": "Choose a category",
+        "initialStock": "Initial stock",
+        "alertThreshold": "Alert threshold",
+        "stockReadonly": "Stock changes through sales and stock movements."
+      },
+      "confirmDelete": {
+        "title": "Delete product?",
+        "message": "Are you sure you want to delete “{name}”?"
+      },
+      "validation": {
+        "required": "This field is required.",
+        "category": "Choose a valid category.",
+        "number": "Enter a valid number.",
+        "integer": "Enter a non-negative integer.",
+        "nonNegative": "The value must be zero or greater."
+      },
+      "errors": {
+        "save": "Could not save the product.",
+        "delete": "Could not delete the product."
+      },
+      "dialog": {
+        "close": "Close dialog"
+      },
+      "toast": {
+        "created": "Product created.",
+        "updated": "Product updated.",
+        "deleted": "Product deleted."
+      }
+    },
+    "notFound": {
+      "title": "Page not found",
+      "description": "This address does not match an application page.",
+      "return": "Return to home"
+    }
+  },
+  "products": {
+    "title": "Products",
+    "description": "View and manage your catalogue, prices, and stock levels.",
+    "fields": {
+      "name": "Name",
+      "reference": "Reference",
+      "category": "Category",
+      "price": "Price",
+      "stock": "Stock",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "categoryMissing": "Category removed",
+    "status": {
+      "out": "Out of stock",
+      "low": "Low stock",
+      "available": "Available"
+    },
+    "stockMeter": "Stock: {quantity} units; alert threshold: {threshold}",
+    "threshold": "Threshold {quantity}",
+    "filters": {
+      "label": "Product filters",
+      "search": "Search products",
+      "searchPlaceholder": "Name or reference",
+      "category": "Category",
+      "allCategories": "All categories",
+      "lowStockOnly": "Low stock only"
+    },
+    "sortBy": "Sort by {field}",
+    "pagination": "Page {current} of {total}",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "states": {
+      "loadErrorTitle": "Could not load products",
+      "loadError": "Check your connection and try again.",
+      "emptyTitle": "No products found",
+      "empty": "Try changing the filters or create your first product.",
+      "noCategories": "Create a category before adding your first product."
+    },
+    "actions": {
+      "newProduct": "New product",
+      "createFirst": "Create the first product",
+      "goCategories": "Create a category",
+      "edit": "Edit",
+      "delete": "Delete",
+      "editNamed": "Edit {name}",
+      "deleteNamed": "Delete {name}",
+      "cancel": "Cancel",
+      "close": "Close",
+      "save": "Save",
+      "create": "Create product",
+      "saving": "Saving…",
+      "deleting": "Deleting…",
+      "retry": "Try again",
+      "confirm": "Confirm"
+    },
+    "form": {
+      "createTitle": "New product",
+      "editTitle": "Edit product",
+      "selectCategory": "Choose a category",
+      "initialStock": "Initial stock",
+      "alertThreshold": "Alert threshold",
+      "stockReadonly": "Stock changes through sales and stock movements."
+    },
+    "confirmDelete": {
+      "title": "Delete product?",
+      "message": "Are you sure you want to delete “{name}”?"
+    },
+    "validation": {
+      "required": "This field is required.",
+      "category": "Choose a valid category.",
+      "number": "Enter a valid number.",
+      "integer": "Enter a non-negative integer.",
+      "nonNegative": "The value must be zero or greater."
+    },
+    "errors": {
+      "save": "Could not save the product.",
+      "delete": "Could not delete the product."
+    },
+    "dialog": {
+      "close": "Close dialog"
+    },
+    "toast": {
+      "created": "Product created.",
+      "updated": "Product updated.",
+      "deleted": "Product deleted."
+    }
+  },
+  "clients": {
+    "title": "Clients",
+    "description": "Keep customer contact details organized and up to date.",
+    "fields": {
+      "name": "Name",
+      "phone": "Phone",
+      "email": "Email",
+      "address": "Address",
+      "actions": "Actions"
+    },
+    "search": {
+      "label": "Search clients",
+      "placeholder": "Name, phone, or email"
+    },
+    "sortBy": "Sort by {field}",
+    "pagination": "Page {current} of {total}",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "states": {
+      "loadErrorTitle": "Could not load clients",
+      "loadError": "Check your connection and try again.",
+      "emptyTitle": "No clients",
+      "empty": "Add a client to find their contact details when recording sales.",
+      "noResultsTitle": "No clients found",
+      "noResults": "Try a different name, phone number, or email."
+    },
+    "actions": {
+      "new": "New client",
+      "edit": "Edit",
+      "delete": "Delete",
+      "editNamed": "Edit {name}",
+      "deleteNamed": "Delete {name}",
+      "cancel": "Cancel",
+      "save": "Save",
+      "create": "Create client",
+      "saving": "Saving…",
+      "deleting": "Deleting…",
+      "retry": "Try again"
+    },
+    "form": {
+      "createTitle": "New client",
+      "editTitle": "Edit client"
+    },
+    "confirmDelete": {
+      "title": "Delete client?",
+      "message": "Are you sure you want to delete “{name}”?"
+    },
+    "deleteConflictSuggestion": "Keep this client to preserve their sales history.",
+    "validation": {
+      "required": "The name is required.",
+      "maxName": "The name must be 255 characters or fewer.",
+      "maxPhone": "The phone number must be 30 characters or fewer.",
+      "email": "Enter a valid email address.",
+      "maxEmail": "The email must be 255 characters or fewer.",
+      "maxAddress": "The address must be 255 characters or fewer."
+    },
+    "errors": {
+      "save": "Could not save the client.",
+      "delete": "Could not delete the client."
+    },
+    "toast": {
+      "created": "Client created.",
+      "updated": "Client updated.",
+      "deleted": "Client deleted."
+    }
+  },
+  "sales": {
+    "history": {
+      "fields": {
+        "number": "No.",
+        "date": "Date",
+        "client": "Client",
+        "items": "Items",
+        "amount": "Amount"
+      },
+      "filters": {
+        "label": "Sales history filters",
+        "search": "Search by client name",
+        "searchPlaceholder": "Client name",
+        "client": "Client",
+        "allClients": "All clients",
+        "from": "From",
+        "to": "To",
+        "reset": "Reset"
+      },
+      "summary": {
+        "label": "Number of sales",
+        "count": "{count}",
+        "amount": "Total amount",
+        "selection": "For this selection"
+      },
+      "number": "Sale no. {id}",
+      "itemCount": "{count} item(s)",
+      "sortBy": "Sort by {field}",
+      "openSale": "Open details for sale {id}",
+      "pagination": "Page {current} of {total}",
+      "previousPage": "Previous page",
+      "nextPage": "Next page",
+      "states": {
+        "loadErrorTitle": "Could not load sales history",
+        "loadError": "Check your connection and try again.",
+        "emptyTitle": "No sales recorded",
+        "empty": "Record a sale to see it here.",
+        "noResultsTitle": "No sales match these filters",
+        "noResults": "Try a wider date range or different filters."
+      },
+      "actions": {
+        "retry": "Try again",
+        "cancelSale": "Cancel sale"
+      },
+      "detail": {
+        "title": "Sale no. {id} details",
+        "loading": "Loading sale details…",
+        "loadError": "Could not load this sale’s details.",
+        "retry": "Try again",
+        "fields": {
+          "product": "Product",
+          "quantity": "Quantity",
+          "unitPrice": "Unit price",
+          "subtotal": "Subtotal"
+        }
+      },
+      "cancel": {
+        "title": "Cancel this sale?",
+        "message": "This cancels the sale and returns its product quantities to stock.",
+        "keep": "Keep sale",
+        "pending": "Cancelling…",
+        "error": "Could not cancel the sale."
+      },
+      "toast": {
+        "cancelled": "Sale no. {id} cancelled. Stock has been restored."
+      }
+    },
+    "new": {
+      "title": "New sale",
+      "description": "Choose a client and add the sold products to the cart.",
+      "actions": {
+        "newSale": "New sale",
+        "submit": "Record sale",
+        "sending": "Saving…",
+        "retry": "Try again",
+        "viewProducts": "View products"
+      },
+      "states": {
+        "loadErrorTitle": "Could not load the data",
+        "loadError": "Check your connection and try again.",
+        "noProductsTitle": "No products available",
+        "noProducts": "Add products before recording a sale."
+      },
+      "catalog": {
+        "title": "Catalogue",
+        "description": "Select a product to add it to the cart.",
+        "searchLabel": "Search products",
+        "searchPlaceholder": "Name or reference",
+        "outOfStock": "Out of stock",
+        "stock": "Stock: {stock}",
+        "noResults": "No products match your search."
+      },
+      "cart": {
+        "title": "Cart",
+        "itemCount": "{count} item(s)",
+        "empty": "Select a product from the catalogue.",
+        "unitPrice": "each",
+        "availableStock": "Available stock: {stock}",
+        "remove": "Remove {name} from cart",
+        "decrease": "Decrease quantity of {name}",
+        "increase": "Increase quantity of {name}",
+        "quantity": "Quantity of {name}"
+      },
+      "client": {
+        "label": "Client",
+        "searchPlaceholder": "Search clients",
+        "selectLabel": "Select a client",
+        "selectPlaceholder": "Choose a client",
+        "noResults": "No clients match your search.",
+        "none": "No clients have been added.",
+        "goToClients": "Create a client",
+        "new": "+ New client"
+      },
+      "required": "(required)",
+      "date": {
+        "label": "Sale date"
+      },
+      "total": {
+        "label": "Estimated total",
+        "note": "The final amount is calculated by the server."
+      },
+      "success": "Sale recorded: {amount}.",
+      "errors": {
+        "submit": "Could not record the sale. Check the details and try again."
+      }
+    }
+  },
+  "categories": {
+    "title": "Categories",
+    "description": "Create categories to organize your products and find their items.",
+    "fields": {
+      "name": "Name",
+      "description": "Description",
+      "productCount": "Number of products",
+      "actions": "Actions"
+    },
+    "actions": {
+      "new": "New category",
+      "first": "Create the first category",
+      "viewProducts": "View products",
+      "editNamed": "Edit {name}",
+      "deleteNamed": "Delete {name}",
+      "deleteDisabled": "Deletion disabled",
+      "hasProductsOne": "This category contains {count} product.",
+      "hasProductsMany": "This category contains {count} products.",
+      "create": "Create category",
+      "save": "Save",
+      "delete": "Delete",
+      "deleting": "Deleting…"
+    },
+    "search": {
+      "label": "Search categories",
+      "placeholder": "Name or description"
+    },
+    "states": {
+      "loadErrorTitle": "Could not load categories",
+      "loadError": "Check your connection and try again.",
+      "emptyTitle": "No categories",
+      "empty": "Create a category to organize your products.",
+      "noResultsTitle": "No results",
+      "noResults": "Try a different search."
+    },
+    "noDescription": "No description",
+    "productCountOne": "{count} product",
+    "productCountMany": "{count} products",
+    "form": {
+      "createTitle": "New category",
+      "editTitle": "Edit category"
+    },
+    "confirmDelete": {
+      "title": "Delete category?",
+      "message": "Are you sure you want to delete “{name}”?"
+    },
+    "validation": {
+      "required": "The name is required.",
+      "maxName": "The name must be 255 characters or fewer."
+    },
+    "errors": {
+      "save": "Could not save the category.",
+      "delete": "Could not delete the category."
+    },
+    "toast": {
+      "created": "Category created.",
+      "updated": "Category updated.",
+      "deleted": "Category deleted."
+    }
+  },
+  "stock": {
+    "actions": {
+      "newMovement": "New movement",
+      "retry": "Try again"
+    },
+    "types": {
+      "entry": "Entry",
+      "exit": "Exit"
+    },
+    "alerts": {
+      "title": "To restock",
+      "description": "Products at or below their alert threshold.",
+      "errorTitle": "Could not load stock alerts",
+      "error": "Check your connection and try again.",
+      "none": "No products are below their alert threshold.",
+      "currentStock": "Current stock:",
+      "threshold": "Alert threshold:",
+      "restock": "Restock"
+    },
+    "journal": {
+      "title": "Stock movement log",
+      "description": "History of stock entries and exits.",
+      "errorTitle": "Could not load stock movements",
+      "error": "Check your connection and try again.",
+      "emptyTitle": "No movements recorded",
+      "empty": "Stock movements will appear here.",
+      "noResultsTitle": "No movements found",
+      "noResults": "Try changing the filters.",
+      "fields": {
+        "date": "Date and time",
+        "product": "Product",
+        "type": "Type",
+        "quantity": "Quantity",
+        "reason": "Reason"
+      },
+      "pagination": "Page {current} of {total}",
+      "previousPage": "Previous page",
+      "nextPage": "Next page"
+    },
+    "filters": {
+      "product": "Product",
+      "productSearch": "Search products",
+      "selectProduct": "Filter by product",
+      "allProducts": "All products",
+      "type": "Movement type",
+      "allTypes": "All",
+      "reset": "Reset",
+      "productsError": "Could not load the product list."
+    },
+    "form": {
+      "title": "New movement",
+      "product": "Product",
+      "productSearch": "Search by name or reference",
+      "selectProduct": "Choose a product",
+      "currentStock": "Current stock: {stock}",
+      "type": "Movement type",
+      "quantity": "Quantity",
+      "exceedsStock": "Quantity exceeds current stock ({stock}).",
+      "reason": "Reason (optional)",
+      "cancel": "Cancel",
+      "submit": "Save movement",
+      "saving": "Saving…",
+      "validation": {
+        "productRequired": "Choose a product.",
+        "quantity": "Enter a whole number greater than or equal to 1.",
+        "maxReason": "The reason must be 255 characters or fewer."
+      },
+      "errors": {
+        "save": "Could not save the stock movement."
+      },
+      "toast": {
+        "created": "Stock movement recorded."
+      }
+    }
+  }
+}

@@ -1,0 +1,66 @@
+.theme-menu-control {
+  position: relative;
+}
+
+.theme-menu-control .theme-menu-trigger {
+  display: inline-flex;
+  width: auto;
+  min-width: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 0 8px;
+}
+
+.theme-menu-chevron {
+  color: var(--muted);
+}
+
+.theme-menu-options {
+  position: absolute;
+  z-index: 50;
+  top: calc(100% + 8px);
+  right: 0;
+  display: flex;
+  width: 176px;
+  flex-direction: column;
+  gap: 3px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.theme-menu-option {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 13px;
+  text-align: left;
+  text-transform: capitalize;
+}
+
+.theme-menu-option:hover,
+.theme-menu-option[aria-checked="true"] {
+  background: var(--page);
+}
+
+.theme-menu-option[aria-checked="true"] {
+  color: var(--accent-ink);
+}
+
+.theme-menu-selected {
+  width: 7px;
+  height: 7px;
+  margin-left: auto;
+  border-radius: 50%;
+  background: var(--accent);
+}

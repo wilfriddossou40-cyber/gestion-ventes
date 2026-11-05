@@ -1,0 +1,19 @@
+.clients-page {
+  width: 100%;
+  min-width: 0;
+}
+
+.client-contact-link {
+  color: var(--accent-ink);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+
+.client-contact-link:hover {
+  color: var(--accent);
+}
+
+.client-empty-value {
+  color: var(--subtle);
+}
