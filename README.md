@@ -1,257 +1,143 @@
 # Gestion des ventes et des stocks
 
-Application web de gestion commerciale permettant de gérer les produits, les catégories, les clients, les ventes et les mouvements de stock. Une API REST Laravel connectée à MySQL fournit les données à une interface React.
+Application web de gestion commerciale permettant de gérer les produits, les clients, les ventes et les mouvements de stock. Elle repose sur une API REST Laravel et une interface React connectée à une base de données MySQL.
 
-Ce projet académique illustre la gestion des ventes et du stock dans une petite activité commerciale.
-
-## Démarrage rapide
-
-Prérequis : PHP 8.3+, Composer, MySQL 8+, Node.js 20.19+ ou 22.12+ et npm. Depuis un clone du dépôt, ces commandes PowerShell lancent les deux serveurs ; adaptez les identifiants MySQL de `backend/.env` avant les migrations si nécessaire.
-
-1. Créez la base :
-   ```powershell
-   mysql -u root -e "CREATE DATABASE gestion_ventes CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-   ```
-2. Dans un premier terminal, installez et préparez l’API :
-   ```powershell
-   Set-Location backend; composer install; Copy-Item .env.example .env; php artisan key:generate; php artisan migrate --seed
-   ```
-3. Lancez l’API dans ce terminal :
-   ```powershell
-   php artisan serve --host=127.0.0.1 --port=8000
-   ```
-4. Dans un second terminal, installez et lancez l’interface :
-   ```powershell
-   Set-Location frontend; npm install; Copy-Item .env.example .env; npm run dev
-   ```
-
-Ouvrez <http://localhost:5173>. L’API est disponible sur <http://127.0.0.1:8000/api>.
+Projet académique.
 
 ## Fonctionnalités
 
-### Produits et catégories
+### Gestion des produits et des catégories
 
-- Créer, consulter, modifier et supprimer des produits et des catégories, sous réserve des règles de dépendance.
-- Organiser les produits par catégorie et gérer leurs références, prix, quantités et seuils d'alerte.
+- Création, consultation, modification et suppression des produits.
+- Organisation des produits par catégories.
+- Gestion des références, des prix et des quantités en stock.
+- Définition des seuils d'alerte pour chaque produit.
 
-### Clients
+### Gestion des clients
 
-- Enregistrer, consulter, rechercher, modifier et supprimer les clients lorsque ceux-ci ne sont pas liés à des ventes.
+- Enregistrement et gestion des informations des clients.
+- Consultation et recherche des clients.
 
-### Ventes et historique
+### Gestion des ventes
 
-- Enregistrer une vente contenant plusieurs produits, avec calcul serveur des montants et contrôle du stock disponible.
-- Consulter l'historique des ventes, rechercher une vente et filtrer par client ou période.
-- Consulter le détail ou annuler une vente ; l'annulation rétablit le stock.
+- Enregistrement des ventes avec plusieurs produits.
+- Calcul automatique des montants.
+- Vérification de la disponibilité du stock avant validation.
+- Historique des ventes avec recherche et filtres par client et par période.
+- Consultation et annulation des ventes avec rétablissement du stock.
 
-### Stocks
+### Gestion des stocks
 
-- Enregistrer et consulter les entrées et sorties de stock.
-- Mettre à jour automatiquement les quantités après une vente ou son annulation.
-- Repérer les produits dont le stock est inférieur ou égal au seuil d'alerte.
+- Enregistrement des entrées et sorties de stock.
+- Historique des mouvements de stock.
+- Mise à jour automatique du stock après chaque vente.
+- Alertes en cas de stock faible.
 
-### Tableau de bord et interface
+### Tableau de bord
 
-- Suivre le chiffre d'affaires, les ventes, les clients et la valeur du stock au moyen d'indicateurs et de graphiques.
-- Consulter l'évolution des ventes, les ventes par catégorie, les produits les plus vendus et les ventes récentes.
-- Utiliser l'interface en français ou en anglais, avec les thèmes clair, sombre ou système, sur ordinateur comme sur mobile.
+- Suivi du chiffre d'affaires et du nombre de ventes.
+- Indicateurs sur les clients et les stocks.
+- Graphiques d'évolution des ventes.
+- Visualisation des catégories et des produits les plus vendus.
 
-## Technologies et versions
+### Interface utilisateur
 
-Les versions ci-dessous sont celles déclarées dans les manifestes ou observées dans l'environnement de développement vérifié. Les contraintes entre parenthèses viennent des fichiers de dépendances.
+- Interface disponible en français et en anglais.
+- Thèmes clair, sombre et système.
+- Interface responsive adaptée aux différents écrans.
 
-| Technologie | Version / contrainte |
+## Technologies utilisées
+
+| Partie | Technologies |
 |---|---|
-| PHP | `^8.3` requis ; PHP 8.4.12 vérifié |
-| Laravel | `^13.17` déclaré ; Laravel Framework 13.39.0 vérifié |
-| Laravel Sanctum | `^4.0` |
-| Composer | 2.10.2 vérifié |
-| MySQL | MySQL 8.x requis ; client 8.4.3 détecté et extension PHP `pdo_mysql` disponible |
-| Node.js | v24.15.0 vérifié |
-| npm | 11.12.1 vérifié |
-| React / React DOM | 19.3.1 |
-| Vite | 8.3.5 |
-| Recharts | 3.10.1 |
-| React Router | 7.18.5 |
-| Tailwind CSS | 4.3.3 |
-| Axios | 1.21.0 |
-| date-fns | 4.4.0 |
-| Lucide React | 1.63.0 |
-| React Hook Form | 7.91.0 |
+| Backend | PHP 8.3+, Laravel 13 |
+| Base de données | MySQL 8+ |
+| Frontend | React 19, Vite 8 |
+| Style | Tailwind CSS 4 |
+| Bibliothèques | Axios, Recharts, React Router |
 
-## Architecture
-
-```text
-backend/                         # API Laravel
-├── app/
-│   ├── Http/Controllers/Api/    # Contrôleurs REST
-│   └── Models/                  # Modèles Eloquent et relations
-├── database/
-│   ├── migrations/              # Schéma SQL et clés étrangères
-│   └── seeders/                 # Données initiales
-├── routes/
-│   └── api.php                 # Routes de l'API
-├── tests/
-│   └── Feature/                 # Tests fonctionnels
-└── composer.json                # Dépendances PHP
-
-frontend/                        # Application React / Vite
-├── src/
-│   ├── api/                     # Client HTTP et appels API
-│   ├── components/              # Composants métier et UI partagés
-│   ├── context/                 # Langue et thème
-│   ├── hooks/                   # Hooks de données
-│   ├── i18n/                    # Traductions française et anglaise
-│   ├── lib/                     # Fonctions utilitaires
-│   └── pages/                   # Accueil et pages de l'application
-├── package.json                 # Dépendances et scripts frontend
-└── vite.config.js               # Configuration Vite
-```
-
-### Schéma des tables métier
-
-Les colonnes `id` sont les clés primaires. Les tables métier comportent également `created_at` et `updated_at`.
-
-| Table | Colonnes clés | Relations / clés étrangères |
-|---|---|---|
-| `categories` | `id`, `nom` (unique), `description` | Une catégorie possède plusieurs produits. |
-| `clients` | `id`, `nom`, `telephone`, `email`, `adresse` | Un client peut avoir plusieurs ventes. |
-| `produits` | `id`, `categorie_id`, `nom`, `reference` (unique), `prix`, `quantite_stock`, `seuil_alerte` | `categorie_id` référence `categories.id`. Un produit apparaît dans des détails de vente et des mouvements de stock. |
-| `ventes` | `id`, `client_id`, `date_vente`, `montant_total` | `client_id` référence `clients.id`. Une vente possède plusieurs détails. |
-| `vente_details` | `id`, `vente_id`, `produit_id`, `quantite`, `prix_unitaire`, `sous_total` | `vente_id` référence `ventes.id` avec suppression en cascade ; `produit_id` référence `produits.id`. |
-| `mouvement_stocks` | `id`, `produit_id`, `type` (`entree` / `sortie`), `quantite`, `motif` | `produit_id` référence `produits.id`. |
-
-Laravel ajoute également ses tables de support (utilisateurs, sessions, cache, tâches en file et jetons personnels). Elles ne constituent pas un système de connexion dans l'interface actuelle.
-
-## Installation et lancement
+## Installation et exécution
 
 ### Prérequis
 
-- PHP 8.3 ou ultérieur avec `pdo_mysql`.
-- Composer 2.x.
-- MySQL 8.x, démarré localement.
-- Node.js compatible avec Vite 8 (Node.js 20.19+ ou 22.12+) et npm.
+- PHP 8.3 ou supérieur
+- Composer
+- MySQL 8 ou supérieur
+- Node.js compatible avec Vite 8
+- npm
+- Git
 
-### Backend
-
-Depuis la racine du dépôt, créez la base MySQL (adaptez l'utilisateur si nécessaire) :
+### 1. Cloner le dépôt
 
 ```powershell
-mysql -u root -e "CREATE DATABASE gestion_ventes CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+git clone https://github.com/wilfriddossou40-cyber/gestion-ventes.git
+cd gestion-ventes
 ```
 
-Puis installez et démarrez l'API :
+### 2. Installer les dépendances du backend
 
 ```powershell
-Set-Location backend
+cd backend
 composer install
 Copy-Item .env.example .env
 ```
 
-Modifiez au besoin `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME` et `DB_PASSWORD` dans `backend/.env`, puis exécutez :
+### 3. Configurer MySQL et le fichier `.env`
+
+Créer une base de données MySQL nommée `gestion_ventes`.
+
+Configurer ensuite les paramètres de connexion dans `backend/.env` :
+
+```dotenv
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=gestion_ventes
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Adapter les identifiants selon votre configuration MySQL.
+
+### 4. Préparer la base de données
+
+Depuis le dossier `backend/` :
 
 ```powershell
 php artisan key:generate
 php artisan migrate --seed
-php artisan serve --host=127.0.0.1 --port=8000
 ```
 
-Les seeders chargent les données de démonstration métier ; aucun utilisateur de connexion n’est requis pour utiliser l’interface.
+Les seeders installent des données de démonstration pour permettre de découvrir les fonctionnalités de l'application.
 
-### Frontend
+### 5. Installer les dépendances du frontend
 
-Dans un autre terminal :
+Depuis la racine du projet :
 
 ```powershell
-Set-Location frontend
+cd ../frontend
 npm install
 Copy-Item .env.example .env
+```
+
+### 6. Démarrer l'application
+
+Ouvrir deux terminaux.
+
+**Terminal 1 – Backend (depuis `backend/`) :**
+
+```powershell
+php artisan serve
+```
+
+**Terminal 2 – Frontend (depuis `frontend/`) :**
+
+```powershell
 npm run dev
 ```
 
-`VITE_API_URL` pointe par défaut vers `http://127.0.0.1:8000/api`. Changez cette valeur si l'API est servie ailleurs. Le fichier `frontend/.env` doit exister avant de lancer Vite ; copiez `frontend/.env.example`.
+## Accès à l'application
 
-### URLs locales
-
-- Interface : <http://localhost:5173>
-- API : <http://127.0.0.1:8000/api>
-- Tableau de bord API : <http://127.0.0.1:8000/api/dashboard>
-
-## Parcours de démonstration
-
-1. Depuis **Produits**, créez un produit en lui attribuant une catégorie, un prix, une quantité de départ et un seuil d’alerte.
-2. Ouvrez **Ventes > Nouvelle vente**, sélectionnez un client et ajoutez ce produit au panier.
-3. Validez la vente, puis retournez dans **Produits** ou **Stock** : la quantité disponible a diminué et un mouvement de sortie a été enregistré.
-4. Recommencez en demandant une quantité supérieure au stock disponible : l’API refuse la vente et ne crée ni vente partielle ni mouvement.
-5. Consultez **Ventes** pour rechercher et filtrer l’historique.
-6. Ouvrez le **Tableau de bord** pour voir les indicateurs, l’évolution des ventes, les catégories et les produits les plus vendus.
-
-## API principale
-
-Routes relevées avec `php artisan route:list --path=api`. Les routes sont actuellement accessibles sans authentification.
-
-| Méthode | URL | Rôle |
-|---|---|---|
-| `GET` | `/api/categories` | Lister les catégories |
-| `POST` | `/api/categories` | Créer une catégorie |
-| `GET` | `/api/categories/{categorie}` | Consulter une catégorie |
-| `PUT`, `PATCH` | `/api/categories/{categorie}` | Modifier une catégorie |
-| `DELETE` | `/api/categories/{categorie}` | Supprimer une catégorie sans produit associé |
-| `GET` | `/api/clients` | Lister/rechercher les clients (`?search=`) |
-| `POST` | `/api/clients` | Créer un client |
-| `GET` | `/api/clients/{client}` | Consulter un client |
-| `PUT`, `PATCH` | `/api/clients/{client}` | Modifier un client |
-| `DELETE` | `/api/clients/{client}` | Supprimer un client sans vente associée |
-| `GET` | `/api/produits` | Lister/rechercher les produits (`search`, `categorie_id`, `stock_faible`) |
-| `GET` | `/api/produits/alertes` | Lister les produits en stock faible |
-| `POST` | `/api/produits` | Créer un produit |
-| `GET` | `/api/produits/{produit}` | Consulter un produit |
-| `PUT`, `PATCH` | `/api/produits/{produit}` | Modifier un produit |
-| `DELETE` | `/api/produits/{produit}` | Supprimer un produit qui n'a pas été vendu |
-| `GET` | `/api/ventes` | Consulter l'historique (filtres `client_id`, `search`, `date_debut`, `date_fin`) |
-| `POST` | `/api/ventes` | Enregistrer une vente |
-| `GET` | `/api/ventes/{vente}` | Consulter le détail d'une vente |
-| `DELETE` | `/api/ventes/{vente}` | Annuler une vente et rétablir les stocks |
-| `GET` | `/api/mouvements-stock` | Lister les mouvements (`produit_id`, `type`) |
-| `POST` | `/api/mouvements-stock` | Enregistrer une entrée ou sortie de stock |
-| `GET` | `/api/dashboard` | Récupérer les indicateurs et agrégations du tableau de bord |
-
-Une vente enregistrée n'a pas de route de modification : elle peut être annulée puis recréée.
-
-## Règles métier
-
-- Avant une vente, l'API vérifie que le stock couvre chaque quantité demandée.
-- La vente, ses lignes, la décrémentation du stock et les mouvements correspondants sont traités dans une transaction. Les produits sont relus avec verrouillage (`lockForUpdate`) pour éviter les mises à jour concurrentes du stock.
-- Le montant total et les sous-totaux sont calculés côté serveur à partir des prix des produits en base ; les prix envoyés par le navigateur ne font pas autorité.
-- Une sortie manuelle de stock est refusée si la quantité disponible est insuffisante.
-- La suppression d'un produit lié à une vente ou d'une catégorie contenant encore des produits est protégée. La suppression d'un client ayant des ventes est également refusée.
-- L'annulation d'une vente rétablit les quantités et inscrit les mouvements d'entrée correspondants.
-
-## Tests et vérifications
-
-Depuis `backend/` :
-
-```powershell
-php artisan test
-```
-
-Depuis `frontend/` :
-
-```powershell
-npm run build
-npm run lint
-```
-
-## Limites et améliorations possibles
-
-- Aucune authentification ni autorisation n'est actuellement appliquée aux routes API ; ne pas exposer ce serveur tel quel à Internet.
-- La pagination côté serveur et des politiques d'accès par rôle pourraient être ajoutées si le volume de données ou les besoins d'exploitation augmentent.
-- `npm run lint` signale actuellement des avertissements Oxlint dans certains hooks et composants, même si la commande se termine avec succès.
-
-## Dépannage
-
-- **Base inexistante ou connexion refusée** : vérifiez que MySQL est démarré, créez `gestion_ventes`, puis contrôlez `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME` et `DB_PASSWORD` dans `backend/.env`. Après correction, relancez `php artisan migrate --seed`.
-- **Erreur CORS dans le navigateur** : utilisez les origines locales `http://localhost:5173` ou `http://127.0.0.1:5173` et l’URL API `http://127.0.0.1:8000/api`. Si Vite utilise une autre origine, ajoutez-la à `backend/config/cors.php`, puis redémarrez Laravel.
-- **Port occupé** : lancez `php artisan serve --port=8001` ou `npm run dev -- --port 5174`, puis adaptez `VITE_API_URL` dans `frontend/.env` à l’adresse de l’API. Si Vite change de port, ajoutez aussi son origine (`http://localhost:5174`, par exemple) à `allowed_origins` dans `backend/config/cors.php`.
-- **Clé d’application manquante** : depuis `backend/`, exécutez `php artisan key:generate` après avoir créé `.env`.
-- **Fichier frontend `.env` absent** : depuis `frontend/`, copiez `.env.example` vers `.env`, puis relancez `npm run dev`.
+- **Interface web :** [http://localhost:5173](http://localhost:5173/)
+- **API REST :** [http://127.0.0.1:8000/api](http://127.0.0.1:8000/api)
+- **Tableau de bord API :** [http://127.0.0.1:8000/api/dashboard](http://127.0.0.1:8000/api/dashboard)
