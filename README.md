@@ -1,6 +1,8 @@
 # Gestion des ventes et des stocks
 
-Application web de gestion des produits, des clients, des ventes et des stocks. Le backend expose une API REST Laravel connectée à MySQL et le frontend React consomme cette API. Ce dépôt correspond à un projet académique.
+Application web de gestion commerciale permettant de gérer les produits, les catégories, les clients, les ventes et les mouvements de stock. Une API REST Laravel connectée à MySQL fournit les données à une interface React.
+
+Ce projet académique illustre la gestion des ventes et du stock dans une petite activité commerciale.
 
 ## Démarrage rapide
 
@@ -27,14 +29,32 @@ Ouvrez <http://localhost:5173>. L’API est disponible sur <http://127.0.0.1:800
 
 ## Fonctionnalités
 
-- Gestion des produits et des catégories, avec références uniques et seuils d'alerte.
-- Gestion des clients.
-- Enregistrement des ventes avec vérification du stock, mise à jour des quantités et création des mouvements associés.
-- Historique des ventes avec recherche par client, filtre client et filtres de dates.
-- Enregistrement et consultation des mouvements de stock (entrées et sorties).
-- Alertes pour les produits dont le stock est inférieur ou égal au seuil défini.
-- Tableau de bord alimenté par l'API : chiffre d'affaires, ventes, clients, stock, évolutions, catégories et produits les plus vendus.
-- Interface disponible en français et en anglais, avec thèmes clair, sombre et système.
+### Produits et catégories
+
+- Créer, consulter, modifier et supprimer des produits et des catégories, sous réserve des règles de dépendance.
+- Organiser les produits par catégorie et gérer leurs références, prix, quantités et seuils d'alerte.
+
+### Clients
+
+- Enregistrer, consulter, rechercher, modifier et supprimer les clients lorsque ceux-ci ne sont pas liés à des ventes.
+
+### Ventes et historique
+
+- Enregistrer une vente contenant plusieurs produits, avec calcul serveur des montants et contrôle du stock disponible.
+- Consulter l'historique des ventes, rechercher une vente et filtrer par client ou période.
+- Consulter le détail ou annuler une vente ; l'annulation rétablit le stock.
+
+### Stocks
+
+- Enregistrer et consulter les entrées et sorties de stock.
+- Mettre à jour automatiquement les quantités après une vente ou son annulation.
+- Repérer les produits dont le stock est inférieur ou égal au seuil d'alerte.
+
+### Tableau de bord et interface
+
+- Suivre le chiffre d'affaires, les ventes, les clients et la valeur du stock au moyen d'indicateurs et de graphiques.
+- Consulter l'évolution des ventes, les ventes par catégorie, les produits les plus vendus et les ventes récentes.
+- Utiliser l'interface en français ou en anglais, avec les thèmes clair, sombre ou système, sur ordinateur comme sur mobile.
 
 ## Technologies et versions
 
