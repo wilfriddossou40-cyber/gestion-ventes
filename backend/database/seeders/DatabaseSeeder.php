@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
                 ProductSeeder::class,
                 StockMovementSeeder::class,
                 SaleSeeder::class,
+                ReplenishmentSeeder::class,
             ]);
         });
     }

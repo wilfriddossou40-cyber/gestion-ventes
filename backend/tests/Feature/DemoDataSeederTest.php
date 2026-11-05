@@ -28,6 +28,30 @@ class DemoDataSeederTest extends TestCase
             'motif' => 'Stock initial de démonstration',
             'type' => 'entree',
         ]);
+        $this->assertSame(
+            8,
+            MouvementStock::query()
+                ->where('motif', 'Réapprovisionnement de démonstration')
+                ->count(),
+        );
+        $this->assertSame(
+            24,
+            MouvementStock::query()->where('type', 'entree')->count(),
+        );
+        $this->assertGreaterThan(
+            0,
+            MouvementStock::query()->where('type', 'sortie')->count(),
+        );
+
+        $recentMovements = $this->getJson('/api/mouvements-stock')
+            ->assertOk()
+            ->json();
+        $this->assertSame(
+            8,
+            collect(array_slice($recentMovements, 0, 8))
+                ->where('type', 'entree')
+                ->count(),
+        );
 
         foreach (Produit::query()->get() as $product) {
             $netMovement = (int) MouvementStock::query()
