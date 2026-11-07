@@ -4,14 +4,26 @@ Application web de gestion commerciale permettant de gérer les produits, les cl
 
 Projet académique.
 
+## Équipe
+
+**Groupe n°6**
+
+| N° | Nom et prénom |
+|---|---|
+| 1 | ADJALA Odile |
+| 2 | DOSSOU Wilfrid M. |
+| 3 | MONSOUNDE Igor |
+| 4 | TCHANSI Denis |
+| 5 | VIDEKOU Sabine |
+
 ## Installation et exécution
 
 ### Prérequis
 
-- PHP 8.3 ou supérieur
+- PHP 8.4.1 ou supérieur
 - Composer
 - MySQL 8 ou supérieur
-- Node.js compatible avec Vite 8
+- Node.js compatible avec Vite 8 (testé avec Node 25.6)
 - npm
 - Git
 
@@ -60,13 +72,15 @@ Les seeders installent des données de démonstration pour permettre de découvr
 
 ### 5. Installer les dépendances du frontend
 
-Depuis la racine du projet :
+Depuis le dossier `backend/` :
 
 ```powershell
 cd ../frontend
 npm install
 Copy-Item .env.example .env
 ```
+
+Vérifier dans `frontend/.env` que l'URL de l'API pointe vers `http://127.0.0.1:8000/api`.
 
 ### 6. Démarrer l'application
 
@@ -83,12 +97,6 @@ php artisan serve
 ```powershell
 npm run dev
 ```
-
-## Accès à l'application
-
-- **Interface web :** [http://localhost:5173](http://localhost:5173/)
-- **API REST :** [http://127.0.0.1:8000/api](http://127.0.0.1:8000/api)
-- **Tableau de bord API :** [http://127.0.0.1:8000/api/dashboard](http://127.0.0.1:8000/api/dashboard)
 
 ## Fonctionnalités
 
@@ -132,11 +140,50 @@ npm run dev
 - Thèmes clair, sombre et système.
 - Interface responsive adaptée aux différents écrans.
 
+## Rapport du projet
+
+### Contexte
+
+Projet académique réalisé par le groupe n°6 : une application de gestion
+commerciale qui centralise les produits, les clients, les ventes et les
+mouvements de stock, avec un tableau de bord de suivi.
+
+### Architecture
+
+Le dépôt contient deux applications indépendantes qui communiquent par HTTP :
+
+- **backend/** : API REST Laravel 13, qui porte la logique métier et accède à MySQL.
+- **frontend/** : interface React 19 (Vite 8), qui appelle l'API avec Axios.
+
+En local, l'API est servie sur `http://127.0.0.1:8000/api` et l'interface sur
+`http://localhost:5173`.
+
+### Base de données
+
+La base `gestion_ventes` est créée par 10 migrations. Les tables propres au
+projet sont : `categories`, `clients`, `produits`, `ventes`, `vente_details` et
+la table des mouvements de stock. S'y ajoutent les tables standard de Laravel
+(`users`, `cache`, `jobs`) et `personal_access_tokens` (Laravel Sanctum).
+
+Six seeders alimentent la base de démonstration : catégories, clients, produits,
+mouvements de stock, ventes et réapprovisionnements.
+
+### Déroulement de l'exécution
+
+1. Installation de PHP 8.4, des extensions requises et de Composer.
+2. Installation des dépendances du backend (`composer install`, 111 paquets).
+3. Création de la base, puis `php artisan migrate --seed` : 10 migrations et
+   6 seeders exécutés sans erreur.
+4. Installation des dépendances du frontend (`npm install`, 123 paquets,
+   0 vulnérabilité signalée).
+5. Démarrage de l'API et de l'interface : l'application s'exécute correctement
+   avec les données de démonstration.
+
 ## Technologies utilisées
 
 | Partie | Technologies |
 |---|---|
-| Backend | PHP 8.3+, Laravel 13 |
+| Backend | PHP 8.4+, Laravel 13 |
 | Base de données | MySQL 8+ |
 | Frontend | React 19, Vite 8 |
 | Style | Tailwind CSS 4 |
